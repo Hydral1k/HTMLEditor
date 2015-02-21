@@ -2,6 +2,7 @@
  * HI GUYS HOLY SHIT ITS WORKING
  * @author aac6012
  * @author thn1069
+ * @author jlt8213
  */
 package htmleditor;
 
