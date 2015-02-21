@@ -11,15 +11,20 @@
 package htmleditor;
 
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.Group;
+
 
 /**
  *
@@ -39,20 +44,12 @@ public class HTMLEditor extends Application {
             }
         });
         
-        StackPane root = new StackPane();
         
-        final Menu menu1 = new Menu("File");
-        final Menu menu2 = new Menu("Options");
-        final Menu menu3 = new Menu("Help");
- 
-        MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().addAll(menu1, menu2, menu3);
-        root.getChildren().add(menuBar);
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
+        final Group rootGroup = new Group();
+        final Scene scene = new Scene(rootGroup, 800, 400, Color.WHEAT);
+        final MenuBar menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
+        rootGroup.getChildren().add(menuBar);
+        primaryStage.setTitle("HTML Editor");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -63,5 +60,51 @@ public class HTMLEditor extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
+    private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
+      final MenuBar menuBar = new MenuBar();
+
+      // Prepare left-most 'File' drop-down menu
+      final Menu fileMenu = new Menu("File");
+      fileMenu.getItems().add(new MenuItem("New"));
+      fileMenu.getItems().add(new MenuItem("Open"));
+      fileMenu.getItems().add(new MenuItem("Save"));
+      fileMenu.getItems().add(new MenuItem("Save As"));
+      fileMenu.getItems().add(new SeparatorMenuItem());
+      fileMenu.getItems().add(new MenuItem("Exit"));
+      menuBar.getMenus().add(fileMenu);
+      
+      // Prepare 'Help' drop-down menu
+      final Menu helpMenu = new Menu("Help");
+      final MenuItem searchMenuItem = new MenuItem("Search");
+      searchMenuItem.setDisable(true);
+      helpMenu.getItems().add(searchMenuItem);
+      final MenuItem onlineManualMenuItem = new MenuItem("Online Manual");
+      onlineManualMenuItem.setVisible(false);
+      helpMenu.getItems().add(onlineManualMenuItem);
+      helpMenu.getItems().add(new SeparatorMenuItem());
+      final MenuItem aboutMenuItem =
+         MenuItemBuilder.create()
+                        .text("About")
+                        .onAction(
+                            new EventHandler<ActionEvent>()
+                            {
+                               @Override public void handle(ActionEvent e)
+                               {
+                               
+                               }
+                            })
+                        .accelerator(
+                            new KeyCodeCombination(
+                               KeyCode.A, KeyCombination.CONTROL_DOWN))
+                        .build();             
+      helpMenu.getItems().add(aboutMenuItem);
+      menuBar.getMenus().add(helpMenu);
+
+      // bind width of menu bar to width of associated stage
+      menuBar.prefWidthProperty().bind(menuWidthProperty);
+
+      return menuBar;
+   }
     
 }
