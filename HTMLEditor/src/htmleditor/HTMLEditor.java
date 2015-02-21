@@ -1,7 +1,7 @@
 /*
  * HI GUYS HOLY SHIT ITS WORKING
- * @author 
- * Please remain calm, this is only a test.
+ * @author aac6012
+ * 
  */
 package htmleditor;
 
