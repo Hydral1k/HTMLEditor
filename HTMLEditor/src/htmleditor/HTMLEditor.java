@@ -5,6 +5,8 @@
  * @author aac6012
  * @author thn1069
  * @author jlt8213
+ * @author edf7470
+ * This is another commit test.
  */
 package htmleditor;
 
