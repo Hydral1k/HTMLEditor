@@ -79,5 +79,19 @@ public class tagMethods {
         return list;
         
     }
+    
+    /**
+     * Adds a one-line tag of any type.
+     * 
+     * @param initialTabs the initial indentation for the given line
+     * @param tag         the text inside of the flag, e.g. a, div, span
+     * @return the given tag as a string, with its closing tag
+     */
+    public String addSingleTag( String tag, int initialTabs ){
+        if( tag.equals("br") ){
+            return insertTabs(initialTabs) + "<br />";
+        }
+        return insertTabs(initialTabs) + "<" + tag + "></" + tag + ">\n";
+    }
 
 }
