@@ -22,8 +22,12 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import javafx.scene.Group;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkEvent.EventType;
 
 
 /**
@@ -32,17 +36,12 @@ import javafx.scene.Group;
  */
 public class HTMLEditor extends Application {
     
+    // Version of application
+    final int version = 1;
+    
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+       
         
         
         final Group rootGroup = new Group();
@@ -70,8 +69,19 @@ public class HTMLEditor extends Application {
       fileMenu.getItems().add(new MenuItem("Open"));
       fileMenu.getItems().add(new MenuItem("Save"));
       fileMenu.getItems().add(new MenuItem("Save As"));
+      
+      // Seperator
       fileMenu.getItems().add(new SeparatorMenuItem());
-      fileMenu.getItems().add(new MenuItem("Exit"));
+      
+      // Exit
+      MenuItem exitItem = new MenuItem("Exit", null);
+      exitItem.setMnemonicParsing(true);
+      exitItem.setAccelerator(new KeyCodeCombination(KeyCode.X,KeyCombination.CONTROL_DOWN));
+      exitItem.setOnAction(new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent event) { closeApp(); }
+      });
+      fileMenu.getItems().add(exitItem);
+       
       menuBar.getMenus().add(fileMenu);
       
       // Prepare 'Help' drop-down menu
@@ -86,13 +96,8 @@ public class HTMLEditor extends Application {
       final MenuItem aboutMenuItem =
          MenuItemBuilder.create()
                         .text("About")
-                        .onAction(
-                            new EventHandler<ActionEvent>()
-                            {
-                               @Override public void handle(ActionEvent e)
-                               {
-                               
-                               }
+                        .onAction(new EventHandler<ActionEvent>(){
+                               public void handle(ActionEvent e){ aboutApp(); }
                             })
                         .accelerator(
                             new KeyCodeCombination(
@@ -105,6 +110,45 @@ public class HTMLEditor extends Application {
       menuBar.prefWidthProperty().bind(menuWidthProperty);
 
       return menuBar;
+   }
+
+    
+    
+   public void closeApp(){
+       // we should also cycle through all open documents and check if they were saved.
+       System.exit(0);
+   }
+   
+   public void aboutApp(){
+       
+        double widthAppWindow = 400;
+  
+        Label description = new Label("HTML Editor v." + version
+               + "\n\nSWEN-262 (Group 2)"
+               + "\n\nBy Thomas Heissenberger, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
+               + "\n\nA light weight HTML editor used for editing HTML files.");
+        description.autosize();
+        description.setWrapText(true);
+        description.setMaxWidth(widthAppWindow * .8);
+        description.setTextFill(Paint.valueOf("white"));
+       
+        Button btn = new Button("Close");
+        
+        StackPane aboutUsPane = new StackPane();
+        aboutUsPane.getChildren().add(description);
+        aboutUsPane.setStyle("-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45)); ");
+        final Scene aboutUsScene = new Scene(aboutUsPane, widthAppWindow, 250);
+        final Stage aboutUsStage = new Stage();
+        aboutUsStage.setTitle("About Us");
+        aboutUsStage.setScene(aboutUsScene);
+        aboutUsStage.centerOnScreen();
+        aboutUsStage.show();
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                aboutUsStage.hide();
+            }
+        });
    }
     
 }
