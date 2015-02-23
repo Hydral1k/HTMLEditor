@@ -18,6 +18,8 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -27,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.scene.Group;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javax.swing.event.HyperlinkEvent;
@@ -51,10 +54,15 @@ public class HTMLEditor extends Application {
         final Group rootGroup = new Group();
         final Scene scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         final MenuBar menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
+        
+        BorderPane canvas = new BorderPane();
+        //canvas.getChildren().add(new Label("testicles"));
+        
         scene.getStylesheets().clear();
         scene.getStylesheets().add(STYLE_CSS);
         
         rootGroup.getChildren().add(menuBar);
+        rootGroup.getChildren().add(canvas);
         primaryStage.setTitle("HTML Editor");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -141,23 +149,31 @@ public class HTMLEditor extends Application {
         description.setTextFill(Paint.valueOf("white"));
        
         Button btn = new Button("Close");
+        btn.setAlignment(Pos.BOTTOM_CENTER);
         
-        StackPane aboutUsPane = new StackPane();
-        aboutUsPane.getChildren().add(description);
+        BorderPane aboutUsPane = new BorderPane();
+        aboutUsPane.setMargin(btn, new Insets(8,8,8,8));
+        aboutUsPane.setAlignment(btn, Pos.CENTER);
+        aboutUsPane.setCenter(description);
+        aboutUsPane.setBottom(btn);
         aboutUsPane.setStyle(BACKGROUND_STYLE_CSS);
-        //aboutUsPane.setStyle("-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45)); ");
+        
         final Scene aboutUsScene = new Scene(aboutUsPane, widthAppWindow, 250);
         final Stage aboutUsStage = new Stage();
+        
         aboutUsStage.setTitle("About Us");
         aboutUsStage.setScene(aboutUsScene);
         aboutUsStage.centerOnScreen();
         aboutUsStage.show();
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 aboutUsStage.hide();
             }
         });
+        
+        
    }
     
 }
