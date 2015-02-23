@@ -1,12 +1,13 @@
 /*
- * HI GUYS HOLY SHIT ITS WORKING
+ * A lightweight HTML editor for SWEN-262.
  *
  * 
  * @author aac6012
  * @author thn1069
  * @author jlt8213
  * @author edf7470
- * This is another commit test.
+ * 
+ * @version $Id:$
  */
 package htmleditor;
 
