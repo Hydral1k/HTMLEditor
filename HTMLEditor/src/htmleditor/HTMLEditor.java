@@ -10,6 +10,8 @@
  */
 package htmleditor;
 
+import java.io.File;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import static javafx.application.Application.launch;
@@ -37,16 +39,20 @@ import javax.swing.event.HyperlinkEvent.EventType;
 public class HTMLEditor extends Application {
     
     // Version of application
-    final int version = 1;
+    final int VERSION = 1;
+    final String BACKGROUND_STYLE_CSS = "-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45));";
+    final String STYLE_CSS = HTMLEditor.class.getResource("styles.css").toExternalForm();
+    
     
     @Override
     public void start(Stage primaryStage) {
-       
-        
         
         final Group rootGroup = new Group();
-        final Scene scene = new Scene(rootGroup, 800, 400, Color.WHEAT);
+        final Scene scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         final MenuBar menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(STYLE_CSS);
+        
         rootGroup.getChildren().add(menuBar);
         primaryStage.setTitle("HTML Editor");
         primaryStage.setScene(scene);
@@ -62,9 +68,11 @@ public class HTMLEditor extends Application {
     
     private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
       final MenuBar menuBar = new MenuBar();
+      menuBar.setStyle(STYLE_CSS);
 
       // Prepare left-most 'File' drop-down menu
       final Menu fileMenu = new Menu("File");
+      fileMenu.setStyle("-fx-text-fill: white");
       fileMenu.getItems().add(new MenuItem("New"));
       fileMenu.getItems().add(new MenuItem("Open"));
       fileMenu.getItems().add(new MenuItem("Save"));
@@ -108,7 +116,6 @@ public class HTMLEditor extends Application {
 
       // bind width of menu bar to width of associated stage
       menuBar.prefWidthProperty().bind(menuWidthProperty);
-
       return menuBar;
    }
 
@@ -123,7 +130,7 @@ public class HTMLEditor extends Application {
        
         double widthAppWindow = 400;
   
-        Label description = new Label("HTML Editor v." + version
+        Label description = new Label("HTML Editor v." + VERSION
                + "\n\nSWEN-262 (Group 2)"
                + "\n\nBy Thomas Heissenberger, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
                + "\n\nA light weight HTML editor used for editing HTML files.");
@@ -136,7 +143,8 @@ public class HTMLEditor extends Application {
         
         StackPane aboutUsPane = new StackPane();
         aboutUsPane.getChildren().add(description);
-        aboutUsPane.setStyle("-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45)); ");
+        aboutUsPane.setStyle(BACKGROUND_STYLE_CSS);
+        //aboutUsPane.setStyle("-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45)); ");
         final Scene aboutUsScene = new Scene(aboutUsPane, widthAppWindow, 250);
         final Stage aboutUsStage = new Stage();
         aboutUsStage.setTitle("About Us");
