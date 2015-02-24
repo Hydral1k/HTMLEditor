@@ -32,6 +32,7 @@ import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javax.swing.event.HyperlinkEvent;
