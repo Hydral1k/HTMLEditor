@@ -30,6 +30,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javax.swing.event.HyperlinkEvent;
@@ -55,13 +57,23 @@ public class HTMLEditor extends Application {
         final Scene scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         final MenuBar menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
+        
         BorderPane canvas = new BorderPane();
         //canvas.getChildren().add(new Label("testicles"));
+
+        TabPane tabPane = new TabPane();
+        Tab tab = new Tab();
+        tab.setText("Untitled");
+        tabPane.getTabs().add(tab);
         
+        canvas.setTop(menuBar);
+        canvas.setCenter(tabPane);
+        canvas.prefHeightProperty().bind(scene.heightProperty());
+        canvas.prefWidthProperty().bind(scene.widthProperty());
         scene.getStylesheets().clear();
         scene.getStylesheets().add(STYLE_CSS);
         
-        rootGroup.getChildren().add(menuBar);
+        //rootGroup.getChildren().add(menuBar);
         rootGroup.getChildren().add(canvas);
         primaryStage.setTitle("HTML Editor");
         primaryStage.setScene(scene);
@@ -127,8 +139,6 @@ public class HTMLEditor extends Application {
       menuBar.prefWidthProperty().bind(menuWidthProperty);
       return menuBar;
    }
-
-    
     
    public void closeApp(){
        // we should also cycle through all open documents and check if they were saved.
@@ -141,7 +151,7 @@ public class HTMLEditor extends Application {
   
         Label description = new Label("HTML Editor v." + VERSION
                + "\n\nSWEN-262 (Group 2)"
-               + "\n\nBy Thomas Heissenberger, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
+               + "\n\nBy Thomas Heissenberger, Emily Filmer, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
                + "\n\nA light weight HTML editor used for editing HTML files.");
         description.autosize();
         description.setWrapText(true);
