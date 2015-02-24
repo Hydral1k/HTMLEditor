@@ -33,6 +33,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javax.swing.event.HyperlinkEvent;
@@ -50,34 +51,38 @@ public class HTMLEditor extends Application {
     final String BACKGROUND_STYLE_CSS = "-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45));";
     final String STYLE_CSS = HTMLEditor.class.getResource("styles.css").toExternalForm();
     
+    private Group rootGroup;
+    private Scene scene;
+    private MenuBar menuBar;
+    private BorderPane canvas;
+    private TabPane tabPane;
     
     @Override
     public void start(Stage primaryStage) {
+        this.rootGroup = new Group();
+        this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
+        this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
-        final Group rootGroup = new Group();
-        final Scene scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
-        final MenuBar menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
         
-        BorderPane canvas = new BorderPane();
+        this.canvas = new BorderPane();
         //canvas.getChildren().add(new Label("testicles"));
-
-        TabPane tabPane = new TabPane();
-        Tab tab = new Tab();
-        tab.setText("Untitled");
-        tabPane.getTabs().add(tab);
+        this.tabPane = new TabPane();
+        if (this.tabPane.getTabs().size() == 0){
+            this.addNewTab();
+        }
         
-        canvas.setTop(menuBar);
-        canvas.setCenter(tabPane);
-        canvas.prefHeightProperty().bind(scene.heightProperty());
-        canvas.prefWidthProperty().bind(scene.widthProperty());
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(STYLE_CSS);
+        this.canvas.setTop(this.menuBar);
+        this.canvas.setCenter(this.tabPane);
+        this.canvas.prefHeightProperty().bind(this.scene.heightProperty());
+        this.canvas.prefWidthProperty().bind(this.scene.widthProperty());
+        this.scene.getStylesheets().clear();
+        this.scene.getStylesheets().add(STYLE_CSS);
         
         //rootGroup.getChildren().add(menuBar);
-        rootGroup.getChildren().add(canvas);
+        this.rootGroup.getChildren().add(this.canvas);
         primaryStage.setTitle("HTML Editor");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(this.scene);
         primaryStage.show();
     }
 
@@ -95,11 +100,14 @@ public class HTMLEditor extends Application {
       // Prepare left-most 'File' drop-down menu
       final Menu fileMenu = new Menu("File");
       fileMenu.setStyle("-fx-text-fill: white");
-      
+
       //New File item
       MenuItem newItem = new MenuItem("New") ;
-      NewFileCommand newFileCommand = new NewFileCommand(this) ;
-      newItem.setOnAction(new MyEventHandler(newFileCommand));
+      newItem.setMnemonicParsing(true);
+      newItem.setAccelerator(new KeyCodeCombination(KeyCode.N,KeyCombination.CONTROL_DOWN));
+      newItem.setOnAction(new EventHandler<ActionEvent>(){
+          public void handle(ActionEvent event) {addNewTab();}
+      });
       
       //Open File item
       MenuItem openItem = new MenuItem("Open") ;
@@ -115,6 +123,7 @@ public class HTMLEditor extends Application {
       fileMenu.getItems().add(openItem);
       fileMenu.getItems().add(saveItem);
       fileMenu.getItems().add(saveAsItem);
+
       
       // Seperator
       fileMenu.getItems().add(new SeparatorMenuItem());
@@ -155,6 +164,22 @@ public class HTMLEditor extends Application {
       menuBar.prefWidthProperty().bind(menuWidthProperty);
       return menuBar;
    }
+    
+    public void addNewTab(){
+        Tab tab = new Tab();
+        tab.setText("Untitled");
+        TextArea ta = new TextArea();
+        ta.prefHeightProperty().bind(this.scene.heightProperty());
+        ta.prefWidthProperty().bind(this.scene.widthProperty());
+        tab.setContent(ta);
+        this.tabPane.getTabs().add(tab);
+    }
+    
+    
+    public void closeCurrentTab(){
+        
+    }
+    
     
    public void closeApp(){
        // we should also cycle through all open documents and check if they were saved.
