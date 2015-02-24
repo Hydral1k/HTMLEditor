@@ -167,11 +167,38 @@ public class HTMLEditor extends Application {
     
     public void addNewTab(){
         Tab tab = new Tab();
+        
+        /*
+        if (this.tabPane.getTabs().size() == 0){
+            tab.setId("0");
+            tab.setText("Untitled " + tab.getId());
+        }else{
+            int i = 0;
+            for (Tab t : this.tabPane.getTabs()){
+                if (Integer.parseInt(t.getId()) == i){
+                    i += 1;
+                }
+                else if (Integer.parseInt(t.getId()) > i){
+                    i -= 1;
+                    //System.out.println(this.tabPane.getTabs());
+                    tab.setId(Integer.toString(i));
+                    tab.setText("Untitled " + Integer.toString(i));
+                }
+                else{
+                    i += 1;
+                    tab.setId(Integer.toString(i));
+                    tab.setText("Untitled " + Integer.toString(i));
+                }
+            }
+        }
+        */
+        
         tab.setText("Untitled");
         TextArea ta = new TextArea();
+        tab.setContent(ta);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
-        tab.setContent(ta);
+        
         this.tabPane.getTabs().add(tab);
     }
     
