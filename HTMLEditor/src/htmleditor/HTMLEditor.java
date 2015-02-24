@@ -95,10 +95,26 @@ public class HTMLEditor extends Application {
       // Prepare left-most 'File' drop-down menu
       final Menu fileMenu = new Menu("File");
       fileMenu.setStyle("-fx-text-fill: white");
-      fileMenu.getItems().add(new MenuItem("New"));
-      fileMenu.getItems().add(new MenuItem("Open"));
-      fileMenu.getItems().add(new MenuItem("Save"));
-      fileMenu.getItems().add(new MenuItem("Save As"));
+      
+      //New File item
+      MenuItem newItem = new MenuItem("New") ;
+      NewFileCommand newFileCommand = new NewFileCommand(this) ;
+      newItem.setOnAction(new MyEventHandler(newFileCommand));
+      
+      //Open File item
+      MenuItem openItem = new MenuItem("Open") ;
+      
+      //Save File item
+      MenuItem saveItem = new MenuItem("Save") ;
+      
+      //SaveAs File item
+      MenuItem saveAsItem = new MenuItem("Save As...") ;
+      
+      //Add all items to the left-most dropdown menu
+      fileMenu.getItems().add(newItem);
+      fileMenu.getItems().add(openItem);
+      fileMenu.getItems().add(saveItem);
+      fileMenu.getItems().add(saveAsItem);
       
       // Seperator
       fileMenu.getItems().add(new SeparatorMenuItem());
@@ -107,9 +123,8 @@ public class HTMLEditor extends Application {
       MenuItem exitItem = new MenuItem("Exit", null);
       exitItem.setMnemonicParsing(true);
       exitItem.setAccelerator(new KeyCodeCombination(KeyCode.X,KeyCombination.CONTROL_DOWN));
-      exitItem.setOnAction(new EventHandler<ActionEvent>() {
-        public void handle(ActionEvent event) { closeApp(); }
-      });
+      ExitCommand exitCommand = new ExitCommand(this) ; //Create the necessary Command object.
+      exitItem.setOnAction(new MyEventHandler(exitCommand)) ;
       fileMenu.getItems().add(exitItem);
        
       menuBar.getMenus().add(fileMenu);
