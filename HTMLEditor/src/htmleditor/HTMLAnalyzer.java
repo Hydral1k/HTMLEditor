@@ -2,10 +2,12 @@
  * A model used for analyzing each HTML Editor session and 
  * verify if each is in proper form.
  *
- *
  * @author trh8614
+ * @author mss9627
  */
 package htmleditor;
+
+import java.util.ArrayList;
 
 /**
  * Main Analyzer Class
@@ -13,22 +15,64 @@ package htmleditor;
 public class HTMLAnalyzer {
     
     /**
-     * Some fancy comment about what this does
-     * @param bufferHTML
-     * @return 
+     * Determines whether each HTML tag in the buffer has been properly closed at some point.
+	 *
+     * @param bufferHTML the current input buffer
+     * @return true if no tag is left open throughout the input buffer
      */
     public boolean wellFormed( String bufferHTML ){
         //Must check that every open tag has a corresponding close tag.
-        if(true){ // some sort of stuff to check if the HTML is good, maybe a regex function
-            
-            return true;
-            
-        }else{
-            
-            return false;
-            
-        }
+		
+		int currentLoc = 0;
+		int charToRead = 0;
+		List<String> openingTags = new ArrayList<String>();
+		
+		while( currentLoc < bufferHTML.length() && currentLoc >= 0 ){
+		
+			try {
+				currentLoc = findNextTag( bufferHTML, currentLoc );
+			} catch( NotWellFormedException e ){
+				// This should only be reached if a tag is missing a right angle bracket.
+				return false;
+			}
+			
+		}
+		
+        return openingTags.size() == 0;
     }
+	
+	/**
+	 * Helper function for the wellFormed() check.
+	 * Finds the location of the next closed tag, if there is one.
+	 *
+	 * @param bufferHTML The full HTML buffer from the wellformed() check.
+	 * @param start      The location after the previously found tag. 
+	 * @return the location of the next tag, whether it's an opening or closing tag
+	 */
+	private int findNextTag( String bufferHTML, int start ) throws NotWellFormedException {
+	
+		// Simplify the temporary buffer to make the next bit easier.
+		bufferHTML = bufferHTML.substring( start );
+		int currentLoc = 0;
+		int tempLoc = 0;
+		
+		
+		if( currentLoc >= buferHTML.length() ){
+			return -1; // This will cause the wellFormed check to stop looking for tags.
+		}
+	}
+	
+	/**
+	 * Helper function for the findNextTag() check.
+	 * 
+	 * @param bufferHTML The truncated buffer from the findNextTag() check.
+	 * @param loc        The starting location which needs to be skipped.
+	 * @return the number of characters to skip in the findNextTag() method
+	 */
+	private int skip( String bufferHTML, int loc ){
+		bufferHTML = bufferHTML.substring( loc );
+		loc = 0;
+	}
     
     /**
      * Another fancy comment about what this does
@@ -50,7 +94,9 @@ public class HTMLAnalyzer {
     public int wordCount( String bufferHTML ){
         int count = 0 ;
         //Count the number of words
-        return count ;
+		
+		// This will approximate the right answer for now.
+        return bufferHTML.length() / 5 ;
     }
     
     /**
@@ -60,7 +106,13 @@ public class HTMLAnalyzer {
      */
     public int lineCount( String bufferHTML ){
         int count = 0 ;
-        //Count the number of lines
+        
+		for( int x = 0; x < bufferHTML.length(); x++ ){
+			if( bufferHTML.charAt(x) == '\n' ){
+				count++;
+			}
+		}
+		
         return count ;
     }
     
