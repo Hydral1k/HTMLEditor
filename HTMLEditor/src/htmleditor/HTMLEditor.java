@@ -110,7 +110,7 @@ public class HTMLEditor extends Application {
       menuBar.setStyle(STYLE_CSS);
 
       // Prepare left-most 'File' drop-down menu
-      //final Menu fileMenu = new Menu("File");
+      final Menu fileMenu = new Menu("File");
       fileMenu.setStyle("-fx-text-fill: white");
 
       //New File item
