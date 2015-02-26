@@ -73,15 +73,14 @@ public class HTMLEditor extends Application {
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
-		this.canvas = new BorderPane();
-		//canvas.getChildren().add(new Label("testicles"));
-		this.tabPane = new TabPane();
-		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-		this.tabPane.setSelectionModel(selectionModel);
-		if (this.tabPane.getTabs().size() == 0){
-			this.addNewTab();
-			this.tabPane.getSelectionModel().select(0);
-		}
+        this.canvas = new BorderPane();
+        //canvas.getChildren().add(new Label("testicles"));
+        this.tabPane = new TabPane();
+        if (this.tabPane.getTabs().size() == 0){
+                this.addNewTab();
+                this.tabPane.getSelectionModel().select(0);
+                this.tabPane.getSelectionModel().getSelectedItem().getContent().requestFocus();
+        }
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
@@ -223,7 +222,21 @@ public class HTMLEditor extends Application {
         
         
         tab.setContent(ta);
-        this.tabPane.getTabs().add(tab);
+        
+        /*
+        tab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
+                currentTab.getContent().requestFocus();
+                TextArea currentText = (TextArea)currentTab.getContent();
+                currentText.requestFocus();
+                System.out.println(currentTab.getContent());
+                //tabPane.getTabs().get(VERSION)                
+            }
+        });
+        */
+        this.tabPane.getTabs().add(this.tabPane.getTabs().size(), tab);
         this.tabPane.getSelectionModel().select(tab);
         
         if (tab.isSelected()){
@@ -239,12 +252,12 @@ public class HTMLEditor extends Application {
     
     
     public void closeCurrentTab(){
-        for (Tab t : this.tabPane.getTabs()){
-            if (t.isSelected()){
-                this.tabPane.getTabs().remove(t);
-            }
-        }
+        this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
+        
+        
     }
+    
+   
     
     
    public void closeApp(){
