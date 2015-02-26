@@ -8,6 +8,7 @@
 package htmleditor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main Analyzer Class
@@ -57,9 +58,10 @@ public class HTMLAnalyzer {
 		int tempLoc = 0;
 		
 		
-		if( currentLoc >= buferHTML.length() ){
+		if( currentLoc >= bufferHTML.length() ){
 			return -1; // This will cause the wellFormed check to stop looking for tags.
 		}
+                else return 0; //Prevents a void return 
 	}
 	
 	/**
@@ -72,6 +74,7 @@ public class HTMLAnalyzer {
 	private int skip( String bufferHTML, int loc ){
 		bufferHTML = bufferHTML.substring( loc );
 		loc = 0;
+                return 0; //Replace with necessary return value.
 	}
     
     /**

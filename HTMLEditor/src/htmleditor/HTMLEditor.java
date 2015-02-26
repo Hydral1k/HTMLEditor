@@ -94,7 +94,8 @@ public class HTMLEditor extends Application {
     }
     
     private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
-      final MenuBar menuBar = new MenuBar();
+      //final MenuBar menuBar = new MenuBar();
+      menuBar = new MenuBar() ;
       menuBar.setStyle(STYLE_CSS);
 
       // Prepare left-most 'File' drop-down menu
@@ -105,18 +106,19 @@ public class HTMLEditor extends Application {
       MenuItem newItem = new MenuItem("New") ;
       newItem.setMnemonicParsing(true);
       newItem.setAccelerator(new KeyCodeCombination(KeyCode.N,KeyCombination.CONTROL_DOWN));
-      newItem.setOnAction(new EventHandler<ActionEvent>(){
-          public void handle(ActionEvent event) {addNewTab();}
-      });
+      newItem.setOnAction(new MyEventHandler(new NewFileCommand(this)));
       
       //Open File item
       MenuItem openItem = new MenuItem("Open") ;
+      openItem.setOnAction(new MyEventHandler(new OpenFileCommand(this)));
       
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
+      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
       
       //SaveAs File item
       MenuItem saveAsItem = new MenuItem("Save As...") ;
+      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this)));
       
       //Add all items to the left-most dropdown menu
       fileMenu.getItems().add(newItem);

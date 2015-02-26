@@ -16,7 +16,6 @@ public class NewFileCommand implements Command {
     
     @Override
     public void execute(){
-        //Substitute this for actual implementation
-        System.out.println("Create a new file!") ;
+        editor.addNewTab() ;
     }
 }
