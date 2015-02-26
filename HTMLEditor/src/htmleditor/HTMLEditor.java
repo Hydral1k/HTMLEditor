@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -36,8 +38,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.control.SelectionModel;
+import javafx.event.EventHandler;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkEvent.EventType;
+
 
 
 /**
@@ -51,6 +56,11 @@ public class HTMLEditor extends Application {
     final String BACKGROUND_STYLE_CSS = "-fx-background-color: linear-gradient(to bottom, rgb(98, 98, 98), rgb(45, 45, 45));";
     final String STYLE_CSS = HTMLEditor.class.getResource("styles.css").toExternalForm();
     
+    final private KeyCombination CTRL_S = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+    final private KeyCombination CTRL_X = new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN);
+    final private KeyCombination CTRL_W = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
+
+    
     private Group rootGroup;
     private Scene scene;
     private MenuBar menuBar;
@@ -63,13 +73,15 @@ public class HTMLEditor extends Application {
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
-        
-        
-        this.canvas = new BorderPane();
-        this.tabPane = new TabPane();
-        if (this.tabPane.getTabs().size() == 0){
-            this.addNewTab();
-        }
+		this.canvas = new BorderPane();
+		//canvas.getChildren().add(new Label("testicles"));
+		this.tabPane = new TabPane();
+		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+		this.tabPane.setSelectionModel(selectionModel);
+		if (this.tabPane.getTabs().size() == 0){
+			this.addNewTab();
+			this.tabPane.getSelectionModel().select(0);
+		}
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
@@ -85,6 +97,7 @@ public class HTMLEditor extends Application {
         primaryStage.show();
     }
 
+    
     /**
      * @param args the command line arguments
      */
@@ -93,12 +106,11 @@ public class HTMLEditor extends Application {
     }
     
     private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
-      //final MenuBar menuBar = new MenuBar();
-      menuBar = new MenuBar() ;
+      final MenuBar menuBar = new MenuBar();
       menuBar.setStyle(STYLE_CSS);
 
       // Prepare left-most 'File' drop-down menu
-      final Menu fileMenu = new Menu("File");
+      //final Menu fileMenu = new Menu("File");
       fileMenu.setStyle("-fx-text-fill: white");
 
       //New File item
@@ -110,7 +122,7 @@ public class HTMLEditor extends Application {
       //Open File item
       MenuItem openItem = new MenuItem("Open") ;
       openItem.setOnAction(new MyEventHandler(new OpenFileCommand(this)));
-      
+
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
       saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
@@ -124,7 +136,6 @@ public class HTMLEditor extends Application {
       fileMenu.getItems().add(openItem);
       fileMenu.getItems().add(saveItem);
       fileMenu.getItems().add(saveAsItem);
-
       
       // Seperator
       fileMenu.getItems().add(new SeparatorMenuItem());
@@ -133,8 +144,7 @@ public class HTMLEditor extends Application {
       MenuItem exitItem = new MenuItem("Exit", null);
       exitItem.setMnemonicParsing(true);
       exitItem.setAccelerator(new KeyCodeCombination(KeyCode.X,KeyCombination.CONTROL_DOWN));
-      ExitCommand exitCommand = new ExitCommand(this) ; //Create the necessary Command object.
-      exitItem.setOnAction(new MyEventHandler(exitCommand)) ;
+      exitItem.setOnAction(new MyEventHandler(new ExitCommand(this))) ;
       fileMenu.getItems().add(exitItem);
        
       menuBar.getMenus().add(fileMenu);
@@ -166,6 +176,7 @@ public class HTMLEditor extends Application {
       return menuBar;
    }
     
+    
     public void addNewTab(){
         Tab tab = new Tab();
         
@@ -193,19 +204,46 @@ public class HTMLEditor extends Application {
             }
         }
         */
-        
         tab.setText("Untitled");
         TextArea ta = new TextArea();
         tab.setContent(ta);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
+        ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
+            public void handle(KeyEvent event){
+                if (CTRL_S.match(event)){
+                    saveFile();
+                }else if (CTRL_W.match(event)){
+                    closeCurrentTab();
+                }else if (CTRL_X.match(event)){
+                    System.exit(0);
+                }
+            }
+        });
         
+        
+        tab.setContent(ta);
         this.tabPane.getTabs().add(tab);
+        this.tabPane.getSelectionModel().select(tab);
+        
+        if (tab.isSelected()){
+            tab.getContent().requestFocus();
+        }
+    
+    }
+    
+    
+    public void saveFile(){
+        
     }
     
     
     public void closeCurrentTab(){
-        
+        for (Tab t : this.tabPane.getTabs()){
+            if (t.isSelected()){
+                this.tabPane.getTabs().remove(t);
+            }
+        }
     }
     
     
