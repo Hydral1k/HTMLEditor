@@ -133,6 +133,8 @@ public class HTMLEditor extends Application {
       
       //Open File item
       MenuItem openItem = new MenuItem("Open") ;
+      openItem.setMnemonicParsing(true);
+      openItem.setAccelerator(new KeyCodeCombination(KeyCode.O,KeyCombination.CONTROL_DOWN));
       openItem.setOnAction(new MyEventHandler(new OpenFileCommand(this)));
 
       //Save File item
@@ -218,9 +220,8 @@ public class HTMLEditor extends Application {
         */
         tab.setText("Untitled");
         TextArea ta = new TextArea();
-        ta.setFocusTraversable(false);
         
-        tab.setContent(ta);
+        ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
         ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
@@ -236,7 +237,6 @@ public class HTMLEditor extends Application {
                 }
             }
         });
-        
         
         tab.setContent(ta);
         

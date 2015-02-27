@@ -15,7 +15,6 @@ public class OpenFileCommand implements Command {
     
     @Override
     public void execute(){
-        //Substitute this for actual implementation
-        System.out.println("Open a File!") ;
+        this.editor.openFile();
     }
 }
