@@ -163,6 +163,16 @@ public class HTMLEditor extends Application {
        
       menuBar.getMenus().add(fileMenu);
       
+      // Prepare 'Options' drop-down menu
+      final Menu optionsMenu = new Menu("Options");
+      
+      // Text Wrapping item
+      MenuItem textWrapItem = new MenuItem("Wrap Text (On/Off)");
+      textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(this)));
+      optionsMenu.getItems().add(textWrapItem);
+      
+      menuBar.getMenus().add(optionsMenu);
+      
       // Prepare 'Help' drop-down menu
       final Menu helpMenu = new Menu("Help");
       final MenuItem searchMenuItem = new MenuItem("Search");
@@ -262,7 +272,6 @@ public class HTMLEditor extends Application {
     }
     
     
-    
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
     }
@@ -307,7 +316,7 @@ public class HTMLEditor extends Application {
     
     
     public void saveFile(){
-        
+        //check if well formed, if not, give them ability to cancel save
     }
     
     
@@ -315,6 +324,13 @@ public class HTMLEditor extends Application {
        // we should also cycle through all open documents and check if they were saved.
        System.exit(0);
    }
+    
+    
+    public void wrapTextSwitch(){
+        TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
+        ta.setWrapText(!ta.isWrapText());
+    }
+    
    
    public void aboutApp(){
        
