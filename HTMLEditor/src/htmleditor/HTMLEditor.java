@@ -74,7 +74,6 @@ public class HTMLEditor extends Application {
         this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
         
         this.canvas = new BorderPane();
-        //canvas.getChildren().add(new Label("testicles"));
         this.tabPane = new TabPane();
         if (this.tabPane.getTabs().size() == 0){
                 this.addNewTab();
