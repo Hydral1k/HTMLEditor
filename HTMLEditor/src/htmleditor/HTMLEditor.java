@@ -11,8 +11,11 @@
  */
 package htmleditor;
 
-import java.awt.Desktop;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -73,7 +76,6 @@ public class HTMLEditor extends Application {
     private BorderPane canvas;
     private TabPane tabPane;
     private FileChooser fileChooser;
-    private Desktop desktop = Desktop.getDesktop();
     
     @Override
     public void start(Stage primaryStage) {
@@ -215,7 +217,9 @@ public class HTMLEditor extends Application {
         }
         */
         tab.setText("Untitled");
-        final TextArea ta = new TextArea();
+        TextArea ta = new TextArea();
+        ta.setFocusTraversable(false);
+        
         tab.setContent(ta);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
@@ -244,8 +248,7 @@ public class HTMLEditor extends Application {
                 currentTab.getContent().requestFocus();
                 TextArea currentText = (TextArea)currentTab.getContent();
                 currentText.requestFocus();
-                System.out.println(currentTab.getContent());
-                //tabPane.getTabs().get(VERSION)                
+                System.out.println(currentTab.getContent());            
             }
         });
         */
@@ -262,25 +265,45 @@ public class HTMLEditor extends Application {
     
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
-        
-        
     }
     
     
     public void openFile(){
         File file = this.fileChooser.showOpenDialog(this.stage);
         if (file != null){
-            try{
-                //textArea.setText(readFile(file));
-                this.desktop.open(file);
-            }catch (IOException ex){
-                Logger.getLogger(HTMLEditor.class.getName()).log(
-                    Level.SEVERE, null, ex);
-            }
+            TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
+            ta.setText(this.readFile(file));
         }
         
     }
     
+    
+    private String readFile(File file){
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+         
+        try {
+ 
+            bufferedReader = new BufferedReader(new FileReader(file));
+             
+            String text;
+            while ((text = bufferedReader.readLine()) != null) {
+                stringBuffer.append(text);
+            }
+ 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return stringBuffer.toString();
+    }
     
     
     public void saveFile(){
