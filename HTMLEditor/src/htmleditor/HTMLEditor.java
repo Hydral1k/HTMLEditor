@@ -11,8 +11,12 @@
  */
 package htmleditor;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import static javafx.application.Application.launch;
@@ -59,19 +63,27 @@ public class HTMLEditor extends Application {
     final private KeyCombination CTRL_S = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
     final private KeyCombination CTRL_X = new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN);
     final private KeyCombination CTRL_W = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
+    final private KeyCombination CTRL_O = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
 
     
+    private Stage stage;
     private Group rootGroup;
     private Scene scene;
     private MenuBar menuBar;
     private BorderPane canvas;
     private TabPane tabPane;
+    private FileChooser fileChooser;
+    private Desktop desktop = Desktop.getDesktop();
     
     @Override
     public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
         this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
+        this.fileChooser = new FileChooser();
+        this.fileChooser.setTitle("Select an HTML file...");
+        
         
         this.canvas = new BorderPane();
         this.tabPane = new TabPane();
@@ -90,9 +102,9 @@ public class HTMLEditor extends Application {
         
         //rootGroup.getChildren().add(menuBar);
         this.rootGroup.getChildren().add(this.canvas);
-        primaryStage.setTitle("HTML Editor");
-        primaryStage.setScene(this.scene);
-        primaryStage.show();
+        this.stage.setTitle("HTML Editor");
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 
     
@@ -203,7 +215,7 @@ public class HTMLEditor extends Application {
         }
         */
         tab.setText("Untitled");
-        TextArea ta = new TextArea();
+        final TextArea ta = new TextArea();
         tab.setContent(ta);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
@@ -213,6 +225,8 @@ public class HTMLEditor extends Application {
                     saveFile();
                 }else if (CTRL_W.match(event)){
                     closeCurrentTab();
+                }else if (CTRL_O.match(event)){
+                    openFile();
                 }else if (CTRL_X.match(event)){
                     System.exit(0);
                 }
@@ -245,10 +259,6 @@ public class HTMLEditor extends Application {
     }
     
     
-    public void saveFile(){
-        
-    }
-    
     
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
@@ -256,7 +266,26 @@ public class HTMLEditor extends Application {
         
     }
     
-   
+    
+    public void openFile(){
+        File file = this.fileChooser.showOpenDialog(this.stage);
+        if (file != null){
+            try{
+                //textArea.setText(readFile(file));
+                this.desktop.open(file);
+            }catch (IOException ex){
+                Logger.getLogger(HTMLEditor.class.getName()).log(
+                    Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    
+    
+    
+    public void saveFile(){
+        
+    }
     
     
    public void closeApp(){
