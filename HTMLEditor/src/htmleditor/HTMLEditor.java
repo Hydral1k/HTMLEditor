@@ -197,6 +197,7 @@ public class HTMLEditor extends Application {
       
       //Table item
       MenuItem tableItem = new MenuItem("Table") ;
+      tableItem.setAccelerator(new KeyCodeCombination(KeyCode.T,KeyCombination.CONTROL_DOWN));
       tableItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.TABLE)));
       insertMenu.getItems().add(tableItem);
       
