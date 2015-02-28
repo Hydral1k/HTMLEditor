@@ -164,6 +164,19 @@ public class HTMLEditor extends Application {
       fileMenu.getItems().add(exitItem);
        
       menuBar.getMenus().add(fileMenu);
+
+      // Prepare 'Insert' drop-down menu
+      final Menu insertMenu = new Menu("Insert");
+      fileMenu.setStyle("-fx-text-fill: white");
+
+      //Bold item
+      MenuItem boldItem = new MenuItem("Bold") ;
+      boldItem.setMnemonicParsing(true);
+      boldItem.setAccelerator(new KeyCodeCombination(KeyCode.B,KeyCombination.CONTROL_DOWN));
+      boldItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.BOLD)));
+      insertMenu.getItems().add(boldItem);
+      
+      menuBar.getMenus().add(insertMenu);
       
       // Prepare 'Options' drop-down menu
       final Menu optionsMenu = new Menu("Options");
@@ -273,17 +286,23 @@ public class HTMLEditor extends Application {
     
     }
     
+    /* Returns text string currently in active buffer */
     public String getBuffer(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         TextArea thisTA = (TextArea)thisTab.getContent();
         return thisTA.getText();
     }
     
+    /* Returns file name currently in active buffer */
     public String getFileName(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         return thisTab.getText();
     }
     
+    public TextArea getText(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        return (TextArea)thisTab.getContent();
+    }
     
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
