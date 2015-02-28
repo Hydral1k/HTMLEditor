@@ -171,10 +171,16 @@ public class HTMLEditor extends Application {
 
       //Bold item
       MenuItem boldItem = new MenuItem("Bold") ;
-      boldItem.setMnemonicParsing(true);
       boldItem.setAccelerator(new KeyCodeCombination(KeyCode.B,KeyCombination.CONTROL_DOWN));
       boldItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.BOLD)));
       insertMenu.getItems().add(boldItem);
+
+      //Italics item
+      MenuItem italicsItem = new MenuItem("Italics") ;
+      italicsItem.setAccelerator(new KeyCodeCombination(KeyCode.I,KeyCombination.CONTROL_DOWN));
+      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.ITALICS)));
+      insertMenu.getItems().add(italicsItem);
+      
       
       menuBar.getMenus().add(insertMenu);
       
