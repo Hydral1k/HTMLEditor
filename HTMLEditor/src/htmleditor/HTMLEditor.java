@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -138,10 +139,12 @@ public class HTMLEditor extends Application {
 
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
+      saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
       saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
       
       //SaveAs File item
       MenuItem saveAsItem = new MenuItem("Save As...") ;
+      saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
       saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this)));
       
       //Add all items to the left-most dropdown menu
@@ -270,6 +273,17 @@ public class HTMLEditor extends Application {
     
     }
     
+    public String getBuffer(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        return thisTA.getText();
+    }
+    
+    public String getFileName(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        return thisTab.getText();
+    }
+    
     
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
@@ -281,6 +295,8 @@ public class HTMLEditor extends Application {
         if (file != null){
             TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
             ta.setText(this.readFile(file));
+            Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+            thisTab.setText(file.getName());
         }
         
     }
@@ -311,6 +327,25 @@ public class HTMLEditor extends Application {
             }
         }
         return stringBuffer.toString();
+    }
+    
+    public void saveAsChooser(){
+        String htmlText = getBuffer();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save HTML");
+        FileWriter fileWriter = null;
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try {
+                fileWriter = new FileWriter(file);
+                fileWriter.write(htmlText);
+                fileWriter.close();
+                Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+                thisTab.setText(file.getName());
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+        }
     }
     
     
