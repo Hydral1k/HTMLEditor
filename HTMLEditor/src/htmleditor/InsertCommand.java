@@ -32,7 +32,6 @@ public class InsertCommand implements Command {
         
     }
     
-    
     @Override
     public void execute(){
         String symbol = "";
@@ -56,8 +55,17 @@ public class InsertCommand implements Command {
                 makeTag(new_tag);
                 break;
             case LIST:
-                // TBA
-                symbol = "";
+                if(     details.get("List Type") == "Number" || 
+                        details.get("List Type") == "Dictionary" ){
+                    symbol = "ol";
+                }else if(details.get("List Type") == "Bullet"){
+                    symbol = "li";
+                }
+                
+                //symbol = "hi";
+                new_tag = new Tag(symbol, TagType.LIST, "", new ArrayList<Tag>());
+                
+                makeTag(new_tag);
                 break;
             case TABLE:
                 break;

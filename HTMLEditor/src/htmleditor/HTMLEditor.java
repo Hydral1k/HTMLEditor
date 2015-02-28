@@ -210,7 +210,6 @@ public class HTMLEditor extends Application {
           subListType.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.LIST, dtls)));
           listItem.getItems().add(subListType);
       }
-      listItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.LIST)));
       insertMenu.getItems().add(listItem);
       
       menuBar.getMenus().add(insertMenu);
