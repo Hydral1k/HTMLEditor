@@ -325,6 +325,7 @@ public class HTMLEditor extends Application {
             String text;
             while ((text = bufferedReader.readLine()) != null) {
                 stringBuffer.append(text);
+                stringBuffer.append('\n');
             }
  
         } catch (FileNotFoundException ex) {
