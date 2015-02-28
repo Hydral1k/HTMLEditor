@@ -27,26 +27,5 @@ public class SaveAsCommand implements Command {
         //Substitute this for actual implementation
         System.out.println("Save a new file!") ;
         editor.saveAsChooser();
-        /*
-        MenuItem cmItem2 = new MenuItem("Save Image");
-        cmItem2.setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent e) {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Save Image");
-                    FileWriter fileWriter = null;
-                    File file = fileChooser.showSaveDialog(editor.stage);
-                    if (file != null) {
-                        try {
-                            fileWriter = new FileWriter(file);
-                            fileWriter.write(content);
-                            fileWriter.close();
-                        } catch (IOException ex) {
-                            System.out.println(ex.getMessage());
-                        }
-                    }
-                }
-            }
-        );
-        */
     }
 }

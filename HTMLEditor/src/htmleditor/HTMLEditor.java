@@ -293,10 +293,22 @@ public class HTMLEditor extends Application {
     public void openFile(){
         File file = this.fileChooser.showOpenDialog(this.stage);
         if (file != null){
-            TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
-            ta.setText(this.readFile(file));
+            TextArea ta;
             Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-            thisTab.setText(file.getName());
+            if(getBuffer().trim().equals("")){
+                ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
+                ta.setText(this.readFile(file));
+                thisTab.setText(file.getName());
+            }
+            else{
+                Tab newTab = new Tab();
+                ta = new TextArea();
+                ta.setText(this.readFile(file));
+                newTab.setContent(ta);
+                newTab.setText(file.getName());
+                this.tabPane.getTabs().add(newTab);
+                this.tabPane.getSelectionModel().select(newTab);
+            }
         }
         
     }
