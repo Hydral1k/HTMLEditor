@@ -174,13 +174,13 @@ public class HTMLEditor extends Application {
       //Bold item
       MenuItem boldItem = new MenuItem("Bold") ;
       boldItem.setAccelerator(new KeyCodeCombination(KeyCode.B,KeyCombination.CONTROL_DOWN));
-      boldItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.BOLD)));
+      boldItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.BOLD)));
       insertMenu.getItems().add(boldItem);
 
       //Italics item
       MenuItem italicsItem = new MenuItem("Italics") ;
       italicsItem.setAccelerator(new KeyCodeCombination(KeyCode.I,KeyCombination.CONTROL_DOWN));
-      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.ITALICS)));
+      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.ITALICS)));
       insertMenu.getItems().add(italicsItem);
       
       //Header item
@@ -190,23 +190,27 @@ public class HTMLEditor extends Application {
             MenuItem subHeaderType = new MenuItem("Header "+ i);
             Map<String, String> dtls  = new HashMap<>();
             dtls.put("Header Type", i + "");
-            subHeaderType.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.HEADER, dtls)));
-            headerItem.getItems().add(subHeaderType);
-            
-            
+            subHeaderType.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.HEADER, dtls)));
+            headerItem.getItems().add(subHeaderType); 
       }
-      
-      
       insertMenu.getItems().add(headerItem);
       
       //Table item
       MenuItem tableItem = new MenuItem("Table") ;
-      tableItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.TABLE)));
+      tableItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.TABLE)));
       insertMenu.getItems().add(tableItem);
       
       //List item
-      MenuItem listItem = new MenuItem("List") ;
-      listItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.LIST)));
+      Menu listItem = new Menu("List");
+      String[] listTypes = {"Number", "Bullet", "Dictionary"};
+      for (int i = 0; i < listTypes.length; i++) {
+          MenuItem subListType = new MenuItem(listTypes[i]);
+          Map<String, String> dtls = new HashMap<>();
+          dtls.put("List Type", listTypes[i]);
+          subListType.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.LIST, dtls)));
+          listItem.getItems().add(subListType);
+      }
+      listItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.LIST)));
       insertMenu.getItems().add(listItem);
       
       menuBar.getMenus().add(insertMenu);
