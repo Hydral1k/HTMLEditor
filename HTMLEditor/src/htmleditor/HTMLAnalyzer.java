@@ -9,6 +9,8 @@ package htmleditor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Main Analyzer Class
@@ -22,60 +24,93 @@ public class HTMLAnalyzer {
      * @return true if no tag is left open throughout the input buffer
      */
     public boolean wellFormed( String bufferHTML ){
-        //Must check that every open tag has a corresponding close tag.
+        int nextTagLoc = 1;
+        List<String> allTags = new ArrayList<String>();
+        
+        // This regular expression matches HTML tags.
+        Pattern tagPattern = Pattern.compile("<(\"[^\"]*\"|'[^']*'|[^'\">])*>");
+        Matcher tagFinder = tagPattern.matcher( bufferHTML );
 		
-		int currentLoc = 0;
-		int charToRead = 0;
-		List<String> openingTags = new ArrayList<String>();
+        // Create a list containing all of the HTML tags.
+	while( tagFinder.find() ){
+            allTags.add( tagFinder.group(nextTagLoc) );
+            nextTagLoc++;
+	}
+        
+        String nextTag = "";
+        
+        //  Remove self-closing tags from the list.
+        for( int x = 0; x < allTags.size(); x++ ){
+            nextTag = allTags.get( x );
+            
+            if( nextTag.charAt( nextTag.length() - 2 ) == '/' ){
+                x--;
+                allTags.remove(x + 1);
+            }
+        }
+        
+        int closingLoc = -1;
+        int openTags = 0;
+        String firstTag = "";
+        String lastTag  = "";
+        
+        while( allTags.size() > 0 ){
+        
+            // Store the first tag in the file.
+            firstTag = getTagType( allTags.get( 0 ) );
+            openTags = 1;
+            closingLoc = 1;
+            
+            // Starting from the next tag, find the leftmost possible closing tag.
+            while( openTags > 0 && closingLoc < allTags.size() ){
+            
+                // Add 1 for each matching opening tag.
+                // Subtract 1 for each matching closing tag.
+                lastTag = getTagType( allTags.get( closingLoc ) );
+                if( firstTag.equals( lastTag ) ){
+                    openTags++;
+                } else if( firstTag.equals( lastTag.substring(1) ) &&
+                           lastTag.charAt(0) == '/' ){
+                    openTags--;
+                }
+                closingLoc++;
+                
+            }
+            
+            // If the opening tag has a closing tag, remove both.
+            // If the first tag is a closing tag, this will always return false.
+            if( openTags == 0 ){
+                allTags.remove( closingLoc );
+                allTags.remove( 0 );
+            } else {
+                return false;
+            }
+            
+        }
 		
-		while( currentLoc < bufferHTML.length() && currentLoc >= 0 ){
-		
-			try {
-				currentLoc = findNextTag( bufferHTML, currentLoc );
-			} catch( NotWellFormedException e ){
-				// This should only be reached if a tag is missing a right angle bracket.
-				return false;
-			}
-			
-		}
-		
-        return openingTags.size() == 0;
+        return true;
     }
 	
-	/**
-	 * Helper function for the wellFormed() check.
-	 * Finds the location of the next closed tag, if there is one.
-	 *
-	 * @param bufferHTML The full HTML buffer from the wellformed() check.
-	 * @param start      The location after the previously found tag. 
-	 * @return the location of the next tag, whether it's an opening or closing tag
-	 */
-	private int findNextTag( String bufferHTML, int start ) throws NotWellFormedException {
-	
-		// Simplify the temporary buffer to make the next bit easier.
-		bufferHTML = bufferHTML.substring( start );
-		int currentLoc = 0;
-		int tempLoc = 0;
-		
-		
-		if( currentLoc >= bufferHTML.length() ){
-			return -1; // This will cause the wellFormed check to stop looking for tags.
-		}
-                else return 0; //Prevents a void return 
-	}
-	
-	/**
-	 * Helper function for the findNextTag() check.
-	 * 
-	 * @param bufferHTML The truncated buffer from the findNextTag() check.
-	 * @param loc        The starting location which needs to be skipped.
-	 * @return the number of characters to skip in the findNextTag() method
-	 */
-	private int skip( String bufferHTML, int loc ){
-		bufferHTML = bufferHTML.substring( loc );
-		loc = 0;
-                return 0; //Replace with necessary return value.
-	}
+    /**
+     * Helper function for the wellFormed() check.
+     * Given an HTML tag, extract the type at the beginning of the tag.
+     *
+     * @param tag The HTML tag being tested in the wellFormed() method.
+     * @return the tag type, e.g. all text from the left bracket to the first space
+     */
+    private String getTagType( String tag ){
+        tag = tag.substring(1); // Remove left bracket
+        tag = tag.trim();       // Remove leading whitespace, if any
+        int location = tag.indexOf(" ");
+        
+        // Truncate tag to first space if it exists.
+        // If not, truncate before the right bracket.
+        if( location >= 0 ){
+            return tag.substring( 0, location );
+        } else {
+            return tag.substring( 0, tag.length() - 1) ;
+        }
+    }
     
     /**
      * Another fancy comment about what this does
