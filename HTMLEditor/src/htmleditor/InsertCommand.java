@@ -1,23 +1,34 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Insert Command pattern for inserting HTML tags into the selected
+ * item's buffer.
  */
 package htmleditor;
 
+import java.util.Map;
 import javafx.scene.control.TextArea;
 
 /**
  *
  * @author jlt8213
+ * @author trh8614
  */
 public class InsertCommand implements Command {
     HTMLEditor editor ;
     Tag tag ;
+    Map details;
+    
     
     public InsertCommand(HTMLEditor editor, Tag tag){
         this.editor = editor;
         this.tag = tag;
+    }
+    
+    /* Override if extra piping for tag information is needed */
+    public InsertCommand(HTMLEditor editor, Tag tag, Map details ){
+        this.editor = editor;
+        this.tag = tag;
+        this.details = details;
+        
     }
     
     
@@ -27,6 +38,7 @@ public class InsertCommand implements Command {
         //NOTE - header, list, table require user interactions
         switch (tag){
             case HEADER:
+                symbol = "h" + details.get("Header Type");
                 break;
             case BOLD:
                 symbol = "b";

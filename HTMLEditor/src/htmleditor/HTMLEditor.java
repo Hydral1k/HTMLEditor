@@ -18,6 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -182,8 +184,19 @@ public class HTMLEditor extends Application {
       insertMenu.getItems().add(italicsItem);
       
       //Header item
-      MenuItem headerItem = new MenuItem("Header") ;
-      headerItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.HEADER)));
+      Menu headerItem = new Menu("Header");
+      // Cycle through and add other header types
+      for (int i = 1; i < 7; i++) {
+            MenuItem subHeaderType = new MenuItem("Header "+ i);
+            Map<String, String> dtls  = new HashMap<>();
+            dtls.put("Header Type", i + "");
+            subHeaderType.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.HEADER, dtls)));
+            headerItem.getItems().add(subHeaderType);
+            
+            
+      }
+      
+      
       insertMenu.getItems().add(headerItem);
       
       //Table item
@@ -202,7 +215,7 @@ public class HTMLEditor extends Application {
       final Menu optionsMenu = new Menu("Options");
       
       // Text Wrapping item
-      MenuItem textWrapItem = new MenuItem("Wrap Text (On/Off)");
+      MenuItem textWrapItem = new MenuItem("Wrap Text");
       textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(this)));
       optionsMenu.getItems().add(textWrapItem);
       
