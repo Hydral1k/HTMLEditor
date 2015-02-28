@@ -181,6 +181,20 @@ public class HTMLEditor extends Application {
       italicsItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.ITALICS)));
       insertMenu.getItems().add(italicsItem);
       
+      //Header item
+      MenuItem headerItem = new MenuItem("Header") ;
+      headerItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.HEADER)));
+      insertMenu.getItems().add(headerItem);
+      
+      //Table item
+      MenuItem tableItem = new MenuItem("Table") ;
+      tableItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.TABLE)));
+      insertMenu.getItems().add(tableItem);
+      
+      //List item
+      MenuItem listItem = new MenuItem("List") ;
+      listItem.setOnAction(new MyEventHandler(new InsertCommand(this, Tag.LIST)));
+      insertMenu.getItems().add(listItem);
       
       menuBar.getMenus().add(insertMenu);
       
