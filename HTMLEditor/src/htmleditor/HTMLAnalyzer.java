@@ -126,15 +126,20 @@ public class HTMLAnalyzer {
     
     /**
      * Counts the number of words in a given HTML buffer.
-     * @param bufferHTML
-     * @return count
+     * 
+     * @param bufferHTML The input from the buffer.
+     * @return the number of whitespace separated words outside of HTML tags
      */
     public int wordCount( String bufferHTML ){
-        int count = 0 ;
-        //Count the number of words
-		
-		// This will approximate the right answer for now.
-        return bufferHTML.length() / 5 ;
+	
+        // Remove all HTML tags from the buffer.
+        Pattern tagPattern = Pattern.compile("<(\"[^\"]*\"|'[^']*'|[^'\">])*>");
+        Matcher tagFinder = tagPattern.matcher( bufferHTML );
+        bufferHTML = tagFinder.replaceAll(" ");
+        
+        // Split by whitespace and return the length of the result.
+        String[] words = bufferHTML.split("\\s+");
+        return words.length;
     }
     
     /**
@@ -145,11 +150,11 @@ public class HTMLAnalyzer {
     public int lineCount( String bufferHTML ){
         int count = 0 ;
         
-		for( int x = 0; x < bufferHTML.length(); x++ ){
-			if( bufferHTML.charAt(x) == '\n' ){
-				count++;
-			}
+	for( int x = 0; x < bufferHTML.length(); x++ ){
+		if( bufferHTML.charAt(x) == '\n' ){
+			count++;
 		}
+	}
 		
         return count ;
     }
