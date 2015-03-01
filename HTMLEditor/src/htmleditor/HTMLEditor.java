@@ -142,12 +142,12 @@ public class HTMLEditor extends Application {
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
       saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
-      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
+      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this, this.tabPane, this.stage)));
       
       //SaveAs File item
       MenuItem saveAsItem = new MenuItem("Save As...") ;
       saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this)));
+      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this, this.tabPane, this.stage)));
       
       //Add all items to the left-most dropdown menu
       fileMenu.getItems().add(newItem);
@@ -237,9 +237,7 @@ public class HTMLEditor extends Application {
       final MenuItem aboutMenuItem =
          MenuItemBuilder.create()
                         .text("About")
-                        .onAction(new EventHandler<ActionEvent>(){
-                               public void handle(ActionEvent e){ aboutApp(); }
-                            })
+                        .onAction(new MyEventHandler(new AboutAppCommand(this)))
                         .accelerator(
                             new KeyCodeCombination(
                                KeyCode.A, KeyCombination.CONTROL_DOWN))
@@ -286,7 +284,7 @@ public class HTMLEditor extends Application {
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
-        ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
+        /*ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
             public void handle(KeyEvent event){
                 if (CTRL_S.match(event)){
                     saveFile();
@@ -297,8 +295,8 @@ public class HTMLEditor extends Application {
                 }else if (CTRL_X.match(event)){
                     System.exit(0);
                 }
-            }
-        });
+            } 
+        }); */
         
         tab.setContent(ta);
         
@@ -422,58 +420,9 @@ public class HTMLEditor extends Application {
         //check if well formed, if not, give them ability to cancel save
     }
     
-    
-   public void closeApp(){
-       // we should also cycle through all open documents and check if they were saved.
-       System.exit(0);
-   }
-    
-    
     public void wrapTextSwitch(){
         TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
         ta.setWrapText(!ta.isWrapText());
     }
-    
-   
-   public void aboutApp(){
-       
-        double widthAppWindow = 400;
-  
-        Label description = new Label("HTML Editor v." + VERSION
-               + "\n\nSWEN-262 (Group 2)"
-               + "\n\nBy Thomas Heissenberger, Emily Filmer, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
-               + "\n\nA light weight HTML editor used for editing HTML files.");
-        description.autosize();
-        description.setWrapText(true);
-        description.setMaxWidth(widthAppWindow * .8);
-        description.setTextFill(Paint.valueOf("white"));
-       
-        Button btn = new Button("Close");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-        
-        BorderPane aboutUsPane = new BorderPane();
-        aboutUsPane.setMargin(btn, new Insets(8,8,8,8));
-        aboutUsPane.setAlignment(btn, Pos.CENTER);
-        aboutUsPane.setCenter(description);
-        aboutUsPane.setBottom(btn);
-        aboutUsPane.setStyle(BACKGROUND_STYLE_CSS);
-        
-        final Scene aboutUsScene = new Scene(aboutUsPane, widthAppWindow, 250);
-        final Stage aboutUsStage = new Stage();
-        
-        aboutUsStage.setTitle("About Us");
-        aboutUsStage.setScene(aboutUsScene);
-        aboutUsStage.centerOnScreen();
-        aboutUsStage.show();
-        
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                aboutUsStage.hide();
-            }
-        });
-        
-        
-   }
     
 }

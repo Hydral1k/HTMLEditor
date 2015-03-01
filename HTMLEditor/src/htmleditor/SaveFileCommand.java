@@ -4,31 +4,34 @@
 package htmleditor;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
+
 
 /**
  * @author aac6012
  */
 public class SaveFileCommand implements Command {
     HTMLEditor editor ;
+    TabPane tabPane ;
+    Stage stage ;
     
-    public SaveFileCommand(HTMLEditor editor){
+    public SaveFileCommand(HTMLEditor editor, TabPane tabpane, Stage stage){
         this.editor = editor;
+        this.tabPane = tabpane ;
+        this.stage = stage ;
     }
     
     @Override
     public void execute(){
-        //Substitute this for actual implementation
-        System.out.println("Save an already existing File!") ;
         String fileName = editor.getFileName();
         if (fileName.equals("Untitled")){
-            editor.saveAsChooser();
+            SaveAsCommand saveAs = new SaveAsCommand(editor, tabPane, stage) ;
+            saveAs.execute() ; //If a file has not been saved yet, the user will be prompted to save a new file.
         }
         else{
             String htmlText = editor.getBuffer();
@@ -36,7 +39,9 @@ public class SaveFileCommand implements Command {
             FileWriter fileWriter;
             try {
                 fileWriter = new FileWriter(file);
+                System.out.println("Writing...") ;
                 fileWriter.write(htmlText);
+                System.out.println("Done Writing.") ;
                 fileWriter.close();
             } catch (IOException ex) {
                 Logger.getLogger(SaveFileCommand.class.getName()).log(Level.SEVERE, null, ex);

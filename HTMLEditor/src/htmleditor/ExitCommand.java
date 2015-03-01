@@ -16,6 +16,6 @@ public class ExitCommand implements Command{
     
     @Override
     public void execute(){
-        editor.closeApp();
+        System.exit(0);
     }
 }
