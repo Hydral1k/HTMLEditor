@@ -12,7 +12,8 @@ import java.util.ArrayList;
  * @author trh8614
  */
 public class Tag{
-    
+    static int TableRows = -1;
+    static int TableCols = -1;
     String tag; 
     TagType tag_type;
     String tag_style; // abstract css styling, if so ever in this project

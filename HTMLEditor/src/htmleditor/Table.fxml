@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import htmleditor.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="226.0" prefWidth="345.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htmleditor.TableFXMLController">
+   <children>
+      <Button layoutX="27.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleSubmitAction" prefHeight="45.0" prefWidth="125.0" text="Confirm" />
+      <htmleditor.NumberTextField fx:id="rowCount" layoutX="98.0" layoutY="75.0" prefHeight="38.0" prefWidth="137.0" promptText="Rows" />
+      <Label layoutX="87.0" layoutY="17.0" text="New Table:">
+         <font>
+            <Font name="Khmer OS System" size="31.0" />
+         </font>
+      </Label>
+      
+      <Button cancelButton="true" layoutX="190.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleCancelAction" prefHeight="45.0" prefWidth="125.0" text="Cancel" />
+      <htmleditor.NumberTextField fx:id="colCount" layoutX="98.0" layoutY="125.0" prefHeight="38.0" prefWidth="137.0" promptText="Columns" />
+      <Label layoutX="27.0" layoutY="85.0" text="Rows" />
+      <Label layoutX="27.0" layoutY="135.0" text="Columns" />
+   </children>
+</AnchorPane>
