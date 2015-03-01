@@ -19,7 +19,7 @@ public class WrapTextSwitchCommand implements Command {
     
     @Override
     public void execute(){
-        TextArea ta = (TextArea) editor.tabPane.getSelectionModel().getSelectedItem().getContent();
+        TextArea ta = (TextArea) editor.getTabPane().getSelectionModel().getSelectedItem().getContent();
         ta.setWrapText(!ta.isWrapText());
     }
 }

@@ -350,7 +350,15 @@ public class HTMLEditor extends Application {
         if (file != null){
             TextArea ta;
             Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-            if(getBuffer().trim().equals("")){
+            //This try catch prevents a null pointer when no tabs are open.
+            String buffer ;
+            try{
+                buffer = getBuffer() ;
+            } catch (NullPointerException e){
+                buffer = null ;
+            }
+            
+            if(buffer != null && buffer.trim().equals("")){
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
                 thisTab.setText(file.getName());

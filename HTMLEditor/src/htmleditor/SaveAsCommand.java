@@ -32,7 +32,7 @@ public class SaveAsCommand implements Command {
                 try (FileWriter fileWriter = new FileWriter(file)) {
                     fileWriter.write(htmlText);
                 }
-                Tab thisTab = this.editor.tabPane.getSelectionModel().getSelectedItem();
+                Tab thisTab = this.editor.getTabPane().getSelectionModel().getSelectedItem();
                 thisTab.setText(file.getName());
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
