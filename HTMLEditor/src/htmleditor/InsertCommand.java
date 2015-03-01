@@ -4,9 +4,17 @@
  */
 package htmleditor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 /**
  *
@@ -68,6 +76,22 @@ public class InsertCommand implements Command {
                 makeTag(new_tag);
                 break;
             case TABLE:
+                //Prompts for user input, then makes table after submission
+                Stage stage = new Stage();
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("Table.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.showAndWait();    //should change later to avoid confusion!
+                } catch (IOException ex) {
+                    Logger.getLogger(InsertCommand.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if(Tag.TableRows != -1){ //check for new table data, temporary?
+                    makeTable(Tag.TableRows, Tag.TableCols);
+                    Tag.TableRows = -1;
+                    Tag.TableCols = -1;
+                }
                 break;
             default:
                 System.out.println("wrong tag, ya dingus"); 
@@ -75,6 +99,30 @@ public class InsertCommand implements Command {
         }
         
        
+    }
+    
+    /* Makes an html table at cursor with specified rows and columns */
+    public void makeTable(int rows, int cols){
+        System.out.println("Rows: " + rows + " Cols: " + cols);
+        TextArea thisTA = this.editor.getText();
+        String thisText = thisTA.getText();
+        int position = thisTA.getCaretPosition();
+        String newTable = "<table>\n";
+        for(int i=0; i<rows; i++){
+            newTable += "<tr>\n";
+            for(int j=0; j<cols; j++){
+                newTable += "<td></td>\n";
+            }
+            newTable += "</tr>\n";
+        }
+        newTable += "</table>\n";
+        System.out.println(newTable);
+        thisText = thisText.substring(0, position) 
+            + newTable
+            + thisText.substring(position, thisText.length());
+        thisTA.setText(thisText);
+        
+        return;
     }
     
     
