@@ -17,12 +17,10 @@ import javafx.stage.Stage;
  */
 public class SaveFileCommand implements Command {
     HTMLEditor editor ;
-    TabPane tabPane ;
     Stage stage ;
     
-    public SaveFileCommand(HTMLEditor editor, TabPane tabpane, Stage stage){
+    public SaveFileCommand(HTMLEditor editor, Stage stage){
         this.editor = editor;
-        this.tabPane = tabpane ;
         this.stage = stage ;
     }
     
@@ -30,7 +28,7 @@ public class SaveFileCommand implements Command {
     public void execute(){
         String fileName = editor.getFileName();
         if (fileName.equals("Untitled")){
-            SaveAsCommand saveAs = new SaveAsCommand(editor, tabPane, stage) ;
+            SaveAsCommand saveAs = new SaveAsCommand(editor, stage) ;
             saveAs.execute() ; //If a file has not been saved yet, the user will be prompted to save a new file.
         }
         else{

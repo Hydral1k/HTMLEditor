@@ -76,8 +76,8 @@ public class HTMLEditor extends Application {
     private Scene scene;
     private MenuBar menuBar;
     private BorderPane canvas;
-    private TabPane tabPane;
     private FileChooser fileChooser;
+    TabPane tabPane;
     
     @Override
     public void start(Stage primaryStage) {
@@ -142,12 +142,12 @@ public class HTMLEditor extends Application {
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
       saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
-      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this, this.tabPane, this.stage)));
+      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this, this.stage)));
       
       //SaveAs File item
       MenuItem saveAsItem = new MenuItem("Save As...") ;
       saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this, this.tabPane, this.stage)));
+      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this, this.stage)));
       
       //Add all items to the left-most dropdown menu
       fileMenu.getItems().add(newItem);
@@ -248,7 +248,7 @@ public class HTMLEditor extends Application {
       // bind width of menu bar to width of associated stage
       menuBar.prefWidthProperty().bind(menuWidthProperty);
       return menuBar;
-   }
+    }
     
     
     public void addNewTab(){
@@ -418,11 +418,6 @@ public class HTMLEditor extends Application {
     
     public void saveFile(){
         //check if well formed, if not, give them ability to cancel save
-    }
-    
-    public void wrapTextSwitch(){
-        TextArea ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
-        ta.setWrapText(!ta.isWrapText());
     }
     
 }
