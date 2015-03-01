@@ -142,12 +142,12 @@ public class HTMLEditor extends Application {
       //Save File item
       MenuItem saveItem = new MenuItem("Save") ;
       saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
-      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this, this.stage)));
+      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
       
       //SaveAs File item
       MenuItem saveAsItem = new MenuItem("Save As...") ;
       saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this, this.stage)));
+      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this)));
       
       //Add all items to the left-most dropdown menu
       fileMenu.getItems().add(newItem);
@@ -418,6 +418,14 @@ public class HTMLEditor extends Application {
     
     public void saveFile(){
         //check if well formed, if not, give them ability to cancel save
+    }
+    
+    public TabPane getTabPane(){
+        return this.tabPane ;
+    }
+    
+    public Stage getStage(){
+        return this.stage ;
     }
     
 }

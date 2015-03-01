@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.TabPane;
-import javafx.stage.Stage;
 
 
 /**
@@ -17,18 +15,16 @@ import javafx.stage.Stage;
  */
 public class SaveFileCommand implements Command {
     HTMLEditor editor ;
-    Stage stage ;
     
-    public SaveFileCommand(HTMLEditor editor, Stage stage){
+    public SaveFileCommand(HTMLEditor editor){
         this.editor = editor;
-        this.stage = stage ;
     }
     
     @Override
     public void execute(){
         String fileName = editor.getFileName();
         if (fileName.equals("Untitled")){
-            SaveAsCommand saveAs = new SaveAsCommand(editor, stage) ;
+            SaveAsCommand saveAs = new SaveAsCommand(editor) ;
             saveAs.execute() ; //If a file has not been saved yet, the user will be prompted to save a new file.
         }
         else{

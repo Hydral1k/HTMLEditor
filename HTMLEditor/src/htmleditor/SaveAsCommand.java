@@ -8,9 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
-import javafx.scene.control.TabPane;
-import javafx.stage.Stage;
-
 
 
 /**
@@ -18,11 +15,9 @@ import javafx.stage.Stage;
  */
 public class SaveAsCommand implements Command {
     HTMLEditor editor ;
-    Stage stage ;
 
-    public SaveAsCommand(HTMLEditor editor, Stage stage){
+    public SaveAsCommand(HTMLEditor editor){
         this.editor = editor ;
-        this.stage = stage ;
     }
     
     @Override
@@ -31,7 +26,7 @@ public class SaveAsCommand implements Command {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save HTML");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html")) ;
-        File file = fileChooser.showSaveDialog(stage);
+        File file = fileChooser.showSaveDialog(this.editor.getStage());
         if (file != null) {
             try {
                 try (FileWriter fileWriter = new FileWriter(file)) {
