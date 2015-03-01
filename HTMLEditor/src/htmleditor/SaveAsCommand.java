@@ -25,18 +25,18 @@ public class SaveAsCommand implements Command {
         String htmlText = this.editor.getBuffer();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save HTML");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html")) ;
+        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html")) ;
         File file = fileChooser.showSaveDialog(this.editor.getStage());
         if (file != null) {
-            try {
+            try{
                 try (FileWriter fileWriter = new FileWriter(file)) {
                     fileWriter.write(htmlText);
                 }
                 Tab thisTab = this.editor.getTabPane().getSelectionModel().getSelectedItem();
-                thisTab.setText(file.getName());
-                } catch (IOException ex) {
+                thisTab.setText(file.getAbsolutePath());
+            } catch (IOException ex) {
                     System.out.println(ex.getMessage());
-                }
+            }
         }
     }
 }

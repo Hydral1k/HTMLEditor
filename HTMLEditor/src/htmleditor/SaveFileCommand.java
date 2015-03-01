@@ -30,13 +30,10 @@ public class SaveFileCommand implements Command {
         else{
             String htmlText = editor.getBuffer();
             File file = new File(editor.getFileName());
-            FileWriter fileWriter;
             try {
-                fileWriter = new FileWriter(file);
-                System.out.println("Writing...") ;
-                fileWriter.write(htmlText);
-                System.out.println("Done Writing.") ;
-                fileWriter.close();
+                try (FileWriter fileWriter = new FileWriter(file)) {
+                    fileWriter.write(htmlText);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(SaveFileCommand.class.getName()).log(Level.SEVERE, null, ex);
             }

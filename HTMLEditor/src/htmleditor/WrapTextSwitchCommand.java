@@ -3,7 +3,7 @@
  */
 package htmleditor;
 
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 
 /**
@@ -11,7 +11,6 @@ import javafx.scene.control.TextArea;
  */
 public class WrapTextSwitchCommand implements Command {
     HTMLEditor editor ;
-    TabPane tabPane ;
     
     public WrapTextSwitchCommand(HTMLEditor editor){
         this.editor = editor;
@@ -19,7 +18,11 @@ public class WrapTextSwitchCommand implements Command {
     
     @Override
     public void execute(){
-        TextArea ta = (TextArea) editor.getTabPane().getSelectionModel().getSelectedItem().getContent();
-        ta.setWrapText(!ta.isWrapText());
+        Tab tab = this.editor.getTabPane().getSelectionModel().getSelectedItem() ;
+        //If tab is null it will not attempt to change the text-wrap setting
+        if (tab != null){
+            TextArea ta = (TextArea) tab.getContent();
+            ta.setWrapText(!ta.isWrapText());
+        }
     }
 }

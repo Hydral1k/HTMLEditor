@@ -361,14 +361,14 @@ public class HTMLEditor extends Application {
             if(buffer != null && buffer.trim().equals("")){
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
-                thisTab.setText(file.getName());
+                thisTab.setText(file.getAbsolutePath());
             }
             else{
                 Tab newTab = new Tab();
                 ta = new TextArea();
                 ta.setText(this.readFile(file));
                 newTab.setContent(ta);
-                newTab.setText(file.getName());
+                newTab.setText(file.getAbsolutePath());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
             }
@@ -403,30 +403,6 @@ public class HTMLEditor extends Application {
             }
         }
         return stringBuffer.toString();
-    }
-    
-    public void saveAsChooser(){
-        String htmlText = getBuffer();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save HTML");
-        FileWriter fileWriter = null;
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            try {
-                fileWriter = new FileWriter(file);
-                fileWriter.write(htmlText);
-                fileWriter.close();
-                Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-                thisTab.setText(file.getName());
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-        }
-    }
-    
-    
-    public void saveFile(){
-        //check if well formed, if not, give them ability to cancel save
     }
     
     public TabPane getTabPane(){
