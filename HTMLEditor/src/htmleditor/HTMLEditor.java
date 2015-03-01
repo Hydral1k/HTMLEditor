@@ -73,11 +73,12 @@ public class HTMLEditor extends Application {
     
     private Stage stage;
     private Group rootGroup;
+    private TabPane tabPane;
     private Scene scene;
     private MenuBar menuBar;
     private BorderPane canvas;
     private FileChooser fileChooser;
-    TabPane tabPane;
+    
     
     @Override
     public void start(Stage primaryStage) {
