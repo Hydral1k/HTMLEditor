@@ -103,7 +103,6 @@ public class InsertCommand implements Command {
     
     /* Makes an html table at cursor with specified rows and columns */
     public void makeTable(int rows, int cols){
-        System.out.println("Rows: " + rows + " Cols: " + cols);
         TextArea thisTA = this.editor.getText();
         String thisText = thisTA.getText();
         int position = thisTA.getCaretPosition();
@@ -116,7 +115,6 @@ public class InsertCommand implements Command {
             newTable += "</tr>\n";
         }
         newTable += "</table>\n";
-        System.out.println(newTable);
         thisText = thisText.substring(0, position) 
             + newTable
             + thisText.substring(position, thisText.length());
@@ -132,13 +130,13 @@ public class InsertCommand implements Command {
         String thisText = thisTA.getText();
         int position = thisTA.getCaretPosition();
         thisText = thisText.substring(0, position) 
-            + tag.toString()
+            + tag
             + thisText.substring(position, thisText.length());
         thisTA.setText(thisText);
         
-        // Need's to be rethought somehow.
-        
-        //thisTA.positionCaret(position + 2 + symbol.length()); //sets cursor after opening tag
+        while(thisText.charAt(position)!='>')
+            position++;
+        thisTA.positionCaret(position+1);
         
     };
     
