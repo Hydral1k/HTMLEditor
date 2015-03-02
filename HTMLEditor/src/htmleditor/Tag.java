@@ -32,14 +32,16 @@ public class Tag{
         
         if(tag_style.length() > 0){ // Styles detected
             HTML += " style=\"" + tag_style + "\">";
+            HTML += (tag_type == TagType.LIST) ? "\n": ""; 
         }else{ // No Styles
             HTML += ">";
+            HTML += (tag_type == TagType.LIST) ? "\n": ""; 
         }
         
         for (Tag child_tag : tag_children) {
-            HTML += tag_children.toString();
+            HTML += "    " + child_tag.toString();
         }
-        HTML += "</" + tag + ">";
+        HTML += "</" + tag + ">\n";
         
         return HTML;
     };
@@ -131,5 +133,5 @@ public class Tag{
  * @author jlt8213
  */
 enum TagType {
-    HEADER, BOLD, ITALICS, LIST, TABLE
+    HEADER, BOLD, ITALICS, LIST, LIST_ITEM, TABLE;
 }
