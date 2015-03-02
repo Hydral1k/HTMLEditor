@@ -70,7 +70,7 @@ public class HTMLEditor extends Application {
     final private KeyCombination CTRL_W = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
     final private KeyCombination CTRL_O = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
 
-    
+    private HTMLAnalyzer analyzer;
     private Stage stage;
     private Group rootGroup;
     private TabPane tabPane;
@@ -82,6 +82,7 @@ public class HTMLEditor extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        this.analyzer = new HTMLAnalyzer();
         this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
@@ -396,6 +397,10 @@ public class HTMLEditor extends Application {
                 newTab.setText(file.getAbsolutePath());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
+            }
+            
+            if( buffer != null && !analyzer.wellFormed(buffer) ){
+                AlertDialogBox.show(this.stage, "The HTML file that was opened is not well formed.");
             }
         }
         

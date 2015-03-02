@@ -16,26 +16,37 @@ import javafx.stage.FileChooser;
  */
 public class SaveAsCommand implements Command {
     HTMLEditor editor ;
+    HTMLAnalyzer analyzer;
 
     public SaveAsCommand(HTMLEditor editor){
         this.editor = editor ;
+        this.analyzer = new HTMLAnalyzer();
     }
     
     public void execute(Event t){
         String htmlText = this.editor.getBuffer();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save HTML");
-        //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html")) ;
-        File file = fileChooser.showSaveDialog(this.editor.getStage());
-        if (file != null) {
-            try{
-                try (FileWriter fileWriter = new FileWriter(file)) {
-                    fileWriter.write(htmlText);
-                }
-                Tab thisTab = this.editor.getTabPane().getSelectionModel().getSelectedItem();
-                thisTab.setText(file.getAbsolutePath());
-            } catch (IOException ex) {
+        // Check whether the buffer is well formed.
+        int result;
+        if( !analyzer.wellFormed(htmlText) ){
+            result = YesNoDialogBox.show(editor.getStage(), "The HTML file you are trying to save is not well formed.\nAre you sure that you wish to save?");
+        } else {
+            result = 1;
+        }
+        if( result == 1 ){
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save HTML");
+            //fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HTML", "*.html")) ;
+            File file = fileChooser.showSaveDialog(this.editor.getStage());
+            if (file != null) {
+                try{
+                    try (FileWriter fileWriter = new FileWriter(file)) {
+                        fileWriter.write(htmlText);
+                    }
+                    Tab thisTab = this.editor.getTabPane().getSelectionModel().getSelectedItem();
+                    thisTab.setText(file.getAbsolutePath());
+                } catch (IOException ex) {
                     System.out.println(ex.getMessage());
+                }
             }
         }
     }

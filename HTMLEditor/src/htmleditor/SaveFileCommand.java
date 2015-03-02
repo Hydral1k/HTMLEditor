@@ -16,9 +16,11 @@ import javafx.event.Event;
  */
 public class SaveFileCommand implements Command {
     HTMLEditor editor ;
+    HTMLAnalyzer analyzer;
     
     public SaveFileCommand(HTMLEditor editor){
         this.editor = editor;
+        this.analyzer = new HTMLAnalyzer();
     }
     
     public void execute(Event t){
@@ -28,14 +30,25 @@ public class SaveFileCommand implements Command {
             saveAs.execute(t) ; //If a file has not been saved yet, the user will be prompted to save a new file.
         }
         else{
-            String htmlText = editor.getBuffer();
-            File file = new File(editor.getFileName());
-            try {
-                try (FileWriter fileWriter = new FileWriter(file)) {
-                    fileWriter.write(htmlText);
+            // Check whether the buffer is well formed.
+            int result;
+            if( !analyzer.wellFormed(editor.getBuffer()) ){
+                result = YesNoDialogBox.show(editor.getStage(), "The HTML file you are trying to save is not well formed.\nAre you sure that you wish to save?");
+            } else {
+                result = 1;
+            }
+            
+            // Only save file if the user chooses to.
+            if( result == 1 ){
+                String htmlText = editor.getBuffer();
+                File file = new File(editor.getFileName());
+                try {
+                    try (FileWriter fileWriter = new FileWriter(file)) {
+                        fileWriter.write(htmlText);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(SaveFileCommand.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(SaveFileCommand.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         System.out.println(editor.getBuffer());
