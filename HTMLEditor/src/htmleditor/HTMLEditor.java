@@ -111,6 +111,7 @@ public class HTMLEditor extends Application {
         this.rootGroup.getChildren().add(this.canvas);
         this.stage.setTitle("HTML Editor");
         this.stage.setScene(this.scene);
+        this.stage.setOnCloseRequest(new MyEventHandler(new ExitCommand(this)));
         this.stage.show();
     }
 
