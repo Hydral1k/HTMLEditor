@@ -282,6 +282,7 @@ public class HTMLEditor extends Application {
         tab.setText("Untitled");
         TextArea ta = new TextArea();
         
+        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
@@ -327,6 +328,30 @@ public class HTMLEditor extends Application {
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         TextArea thisTA = (TextArea)thisTab.getContent();
         return thisTA.getText();
+    }
+    
+    public Integer getCarrotPosition(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        return thisTA.getCaretPosition();
+    }
+    
+    public void setCarrotPosition(Integer caretPosition){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.positionCaret(caretPosition);
+    }
+    
+    public void insertIntoBufferAtCarrot(String text, Integer carrotPosition){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.insertText(carrotPosition, text);
+    }
+    
+    public void setBuffer(String text){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.setText(text);
     }
     
     /* Returns file name currently in active buffer */
