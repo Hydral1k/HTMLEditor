@@ -39,11 +39,13 @@ public class HTMLAnalyzer {
         
         String nextTag = "";
         
-        //  Remove self-closing tags from the list.
+        //  Remove self-closing tags and comments from the list.
         for( int x = 0; x < allTags.size(); x++ ){
             nextTag = allTags.get( x );
             
-            if( nextTag.charAt( nextTag.length() - 2 ) == '/' ){
+            if( nextTag.charAt( nextTag.length() - 2 ) == '/' || 
+                nextTag.charAt(1) == '!' ){
+                System.out.println("Removing " + nextTag);
                 x--;
                 allTags.remove(x + 1);
             }
@@ -67,13 +69,11 @@ public class HTMLAnalyzer {
                 // Add 1 for each matching opening tag.
                 // Subtract 1 for each matching closing tag.
                 lastTag = getTagType( allTags.get( closingLoc ) );
-                System.out.println(firstTag + " " + lastTag);
                 if( firstTag.equals( lastTag ) ){
                     openTags++;
                 } else if( firstTag.equals( lastTag.substring(1) ) &&
                            lastTag.charAt(0) == '/' ){
                     openTags--;
-                    System.out.println("Match found.");
                 }
             }
             
