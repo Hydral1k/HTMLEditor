@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,8 +41,7 @@ public class InsertCommand implements Command {
         
     }
     
-    @Override
-    public void execute(){
+    public void execute(Event t){
         String symbol = "";
         //NOTE - header, list, table require user interactions
         Tag new_tag;

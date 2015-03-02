@@ -6,6 +6,7 @@ package htmleditor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import javafx.event.Event;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
 
@@ -20,8 +21,7 @@ public class SaveAsCommand implements Command {
         this.editor = editor ;
     }
     
-    @Override
-    public void execute(){
+    public void execute(Event t){
         String htmlText = this.editor.getBuffer();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save HTML");

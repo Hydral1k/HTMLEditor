@@ -5,6 +5,8 @@
  */
 package htmleditor;
 
+import javafx.event.Event;
+
 /**
  *
  * @author trh8614
@@ -17,7 +19,7 @@ public class TextAnalysisCommand implements Command {
         this.editor = editor;
     }
     
-    public void execute(){
+    public void execute(Event t){
         System.out.println("Text Changed!");
         String buffer = editor.getBuffer();
         Integer carrotPosition = editor.getCarrotPosition();

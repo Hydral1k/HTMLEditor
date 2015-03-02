@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
 
 
 /**
@@ -20,12 +21,11 @@ public class SaveFileCommand implements Command {
         this.editor = editor;
     }
     
-    @Override
-    public void execute(){
+    public void execute(Event t){
         String fileName = editor.getFileName();
         if (fileName.equals("Untitled")){
             SaveAsCommand saveAs = new SaveAsCommand(editor) ;
-            saveAs.execute() ; //If a file has not been saved yet, the user will be prompted to save a new file.
+            saveAs.execute(t) ; //If a file has not been saved yet, the user will be prompted to save a new file.
         }
         else{
             String htmlText = editor.getBuffer();

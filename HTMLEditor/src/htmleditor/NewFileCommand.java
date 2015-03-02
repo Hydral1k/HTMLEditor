@@ -3,6 +3,8 @@
  */
 package htmleditor;
 
+import javafx.event.Event;
+
 /**
  *
  * @author aac6012
@@ -14,8 +16,7 @@ public class NewFileCommand implements Command {
         this.editor = editor;
     }
     
-    @Override
-    public void execute(){
+    public void execute(Event t){
         editor.addNewTab() ;
     }
 }
