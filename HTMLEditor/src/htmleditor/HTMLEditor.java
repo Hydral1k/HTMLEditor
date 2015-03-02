@@ -12,6 +12,7 @@
 package htmleditor;
 
 
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -252,8 +253,11 @@ public class HTMLEditor extends Application {
     }
     
     
+    
+    
     public void addNewTab(){
         Tab tab = new Tab();
+        tab.setOnClosed(new closeListener());
         
         /*
         if (this.tabPane.getTabs().size() == 0){
@@ -362,6 +366,7 @@ public class HTMLEditor extends Application {
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
                 thisTab.setText(file.getName());
+                thisTab.setOnClosed(new closeListener());
             }
             else{
                 Tab newTab = new Tab();
@@ -371,6 +376,8 @@ public class HTMLEditor extends Application {
                 newTab.setText(file.getName());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
+                newTab.setOnClosed(new closeListener());
+                
             }
         }
         
@@ -437,4 +444,46 @@ public class HTMLEditor extends Application {
         return this.stage ;
     }
     
+}
+
+class closeListener implements EventHandler<Event>{
+
+    @Override
+    public void handle(Event t) {
+        boolean changedText = false;
+        Tab closedTab = (Tab) t.getTarget();
+        TextArea thisTA = (TextArea)closedTab.getContent();
+        if(closedTab.getText().equals("Untitled") && !thisTA.getText().equals("")){
+            changedText = true;
+        }
+        else if(!closedTab.getText().equals("Untitled")){
+            String newText = thisTA.getText();
+            File file = new File(closedTab.getText());
+            StringBuilder stringBuffer = new StringBuilder();
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new FileReader(file));
+                String text;
+                while ((text = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(text);
+                    stringBuffer.append('\n');
+                }
+            } catch (FileNotFoundException ex) {
+                changedText = true;
+            } catch (IOException ex) {
+                Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            String oldText = stringBuffer.toString();
+            if(!oldText.equals(newText))
+                changedText = true;
+        }
+        System.out.println("Text has changed: " + changedText);
+    }
+
 }
