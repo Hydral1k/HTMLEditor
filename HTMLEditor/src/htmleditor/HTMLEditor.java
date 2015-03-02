@@ -359,10 +359,10 @@ public class HTMLEditor extends Application {
         thisTA.setText(text);
     }
     
-    /* Returns file name currently in active buffer */
+    /* Returns file name currently in active buffer (complete path) */
     public String getFileName(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        return thisTab.getText();
+        return thisTab.getId();
     }
     
     public TextArea getText(){
@@ -391,18 +391,20 @@ public class HTMLEditor extends Application {
             if(buffer != null && buffer.trim().equals("")){
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
-                thisTab.setText(file.getAbsolutePath());
+                thisTab.setText(file.getName());
                 thisTab.setOnClosed(new closeListener());
+                thisTab.setId(file.getAbsolutePath());
             }
             else{
                 Tab newTab = new Tab();
                 ta = new TextArea();
                 ta.setText(this.readFile(file));
                 newTab.setContent(ta);
-                newTab.setText(file.getAbsolutePath());
+                newTab.setText(file.getName());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
                 newTab.setOnClosed(new closeListener());
+                newTab.setId(file.getAbsolutePath());
                 
             }
         }
@@ -446,20 +448,16 @@ public class HTMLEditor extends Application {
     public Stage getStage(){
         return this.stage ;
     }
-
-    class closeListener implements EventHandler<Event>{
-    @Override
-    public void handle(Event t) {
-        analyzer = new HTMLAnalyzer();
-        boolean changedText = false;
-        Tab closedTab = (Tab) t.getTarget();
-        TextArea thisTA = (TextArea)closedTab.getContent();
-        if(closedTab.getText().equals("Untitled") && !thisTA.getText().equals("")){
+    
+    public boolean hasChanged(Tab tab){
+        boolean changedText=false;
+        TextArea thisTA = (TextArea)tab.getContent();
+        if(tab.getText().equals("Untitled") && !thisTA.getText().equals("")){
             changedText = true;
         }
-        else if(!closedTab.getText().equals("Untitled")){
+        else if(!tab.getText().equals("Untitled")){
             String newText = thisTA.getText();
-            File file = new File(closedTab.getText());
+            File file = new File(tab.getText());
             StringBuilder stringBuffer = new StringBuilder();
             BufferedReader bufferedReader = null;
             try {
@@ -484,18 +482,27 @@ public class HTMLEditor extends Application {
             if(!oldText.equals(newText))
                 changedText = true;
         }
-        if(!changedText) //if nothing changed, let them leave
-            return;
-        int result = YesNoDialogBox.show(HTMLEditor.this.getStage(), "Warning!\nThe file you are closing contained unsaved changes.\nAre you sure you wish to close?");
-        if( result == 1 )
-            return;
-        else{ //restore tab
-            HTMLEditor.this.tabPane.getTabs().add(closedTab);
-            HTMLEditor.this.tabPane.getSelectionModel().select(closedTab);
-        }
+        return changedText;
     }
 
-}
+    class closeListener implements EventHandler<Event>{
+        @Override
+        public void handle(Event t) {
+            analyzer = new HTMLAnalyzer();
+            boolean changedText;
+            Tab closedTab = (Tab) t.getTarget();
+            changedText = hasChanged(closedTab);
+            if(!changedText) //if nothing changed, let them leave
+                return;
+            int result = YesNoDialogBox.show(HTMLEditor.this.getStage(), "Warning!\nThe file you are closing contained unsaved changes.\nAre you sure you wish to close?");
+            if( result == 1 )
+                return;
+            else{ //restore tab
+                HTMLEditor.this.tabPane.getTabs().add(closedTab);
+                HTMLEditor.this.tabPane.getSelectionModel().select(closedTab);
+            }
+        }
+    }
 
     
 }
