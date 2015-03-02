@@ -392,7 +392,6 @@ public class HTMLEditor extends Application {
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
                 thisTab.setText(file.getAbsolutePath());
-                thisTab.setText(file.getName());
                 thisTab.setOnClosed(new closeListener());
             }
             else{
@@ -407,6 +406,7 @@ public class HTMLEditor extends Application {
                 
             }
         }
+        
         
     }
     
@@ -446,13 +446,11 @@ public class HTMLEditor extends Application {
     public Stage getStage(){
         return this.stage ;
     }
-    
-}
 
-class closeListener implements EventHandler<Event>{
-
+    class closeListener implements EventHandler<Event>{
     @Override
     public void handle(Event t) {
+        analyzer = new HTMLAnalyzer();
         boolean changedText = false;
         Tab closedTab = (Tab) t.getTarget();
         TextArea thisTA = (TextArea)closedTab.getContent();
@@ -486,7 +484,19 @@ class closeListener implements EventHandler<Event>{
             if(!oldText.equals(newText))
                 changedText = true;
         }
-        System.out.println("Text has changed: " + changedText);
+        if(!changedText) //if nothing changed, let them leave
+            return;
+        int result = YesNoDialogBox.show(HTMLEditor.this.getStage(), "Warning!\nThe file you are closing contained unsaved changes.\nAre you sure you wish to close?");
+        if( result == 1 )
+            return;
+        else{ //restore tab
+            HTMLEditor.this.tabPane.getTabs().add(closedTab);
+            HTMLEditor.this.tabPane.getSelectionModel().select(closedTab);
+        }
     }
 
 }
+
+    
+}
+
