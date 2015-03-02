@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,8 +41,7 @@ public class InsertCommand implements Command {
         
     }
     
-    @Override
-    public void execute(){
+    public void execute(Event t){
         String symbol = "";
         //NOTE - header, list, table require user interactions
         Tag new_tag;
@@ -63,15 +63,21 @@ public class InsertCommand implements Command {
                 makeTag(new_tag);
                 break;
             case LIST:
-                if(     details.get("List Type") == "Number" || 
-                        details.get("List Type") == "Dictionary" ){
+                
+                ArrayList<Tag> children = new ArrayList<Tag>();
+                children.add(new Tag("li", TagType.LIST_ITEM, "", new ArrayList<Tag>()));
+                children.add(new Tag("li", TagType.LIST_ITEM, "", new ArrayList<Tag>()));
+                children.add(new Tag("li", TagType.LIST_ITEM, "", new ArrayList<Tag>()));
+                
+                if(details.get("List Type") == "Number"){
+                    symbol = "ol";
+                }else if(details.get("List Type") == "Dictionary" ){
                     symbol = "ol";
                 }else if(details.get("List Type") == "Bullet"){
-                    symbol = "li";
+                    symbol = "ul";
                 }
                 
-                //symbol = "hi";
-                new_tag = new Tag(symbol, TagType.LIST, "", new ArrayList<Tag>());
+                new_tag = new Tag(symbol, TagType.LIST, "", children);
                 
                 makeTag(new_tag);
                 break;

@@ -71,7 +71,7 @@ public class HTMLEditor extends Application {
     final private KeyCombination CTRL_W = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
     final private KeyCombination CTRL_O = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
 
-    
+    private HTMLAnalyzer analyzer;
     private Stage stage;
     private Group rootGroup;
     private TabPane tabPane;
@@ -83,6 +83,7 @@ public class HTMLEditor extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        this.analyzer = new HTMLAnalyzer();
         this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
@@ -286,6 +287,7 @@ public class HTMLEditor extends Application {
         tab.setText("Untitled");
         TextArea ta = new TextArea();
         
+        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
@@ -333,6 +335,30 @@ public class HTMLEditor extends Application {
         return thisTA.getText();
     }
     
+    public Integer getCarrotPosition(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        return thisTA.getCaretPosition();
+    }
+    
+    public void setCarrotPosition(Integer caretPosition){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.positionCaret(caretPosition);
+    }
+    
+    public void insertIntoBufferAtCarrot(String text, Integer carrotPosition){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.insertText(carrotPosition, text);
+    }
+    
+    public void setBuffer(String text){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        thisTA.setText(text);
+    }
+    
     /* Returns file name currently in active buffer */
     public String getFileName(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
@@ -365,6 +391,7 @@ public class HTMLEditor extends Application {
             if(buffer != null && buffer.trim().equals("")){
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
                 ta.setText(this.readFile(file));
+                thisTab.setText(file.getAbsolutePath());
                 thisTab.setText(file.getName());
                 thisTab.setOnClosed(new closeListener());
             }
@@ -373,7 +400,7 @@ public class HTMLEditor extends Application {
                 ta = new TextArea();
                 ta.setText(this.readFile(file));
                 newTab.setContent(ta);
-                newTab.setText(file.getName());
+                newTab.setText(file.getAbsolutePath());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
                 newTab.setOnClosed(new closeListener());
@@ -410,30 +437,6 @@ public class HTMLEditor extends Application {
             }
         }
         return stringBuffer.toString();
-    }
-    
-    public void saveAsChooser(){
-        String htmlText = getBuffer();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save HTML");
-        FileWriter fileWriter = null;
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            try {
-                fileWriter = new FileWriter(file);
-                fileWriter.write(htmlText);
-                fileWriter.close();
-                Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-                thisTab.setText(file.getName());
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-        }
-    }
-    
-    
-    public void saveFile(){
-        //check if well formed, if not, give them ability to cancel save
     }
     
     public TabPane getTabPane(){

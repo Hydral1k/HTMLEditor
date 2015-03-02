@@ -4,13 +4,15 @@
  */
 package htmleditor;
 
+import javafx.event.Event;
+
 /**
  * @author aac6012
  */
 public interface Command {
     
     //This is the only method for Command.
-    public void execute() ;
+    public void execute(Event t) ;
     
 }
 

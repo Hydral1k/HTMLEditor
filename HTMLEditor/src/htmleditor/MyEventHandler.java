@@ -20,7 +20,7 @@ public class MyEventHandler implements EventHandler{
     
     @Override
     public void handle(Event t) {
-        command.execute() ;
+        command.execute(t) ;
     }   
 }
 

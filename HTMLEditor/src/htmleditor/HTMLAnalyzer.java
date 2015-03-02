@@ -17,6 +17,8 @@ import java.util.regex.Matcher;
  */
 public class HTMLAnalyzer {
     
+    public HTMLAnalyzer(){}
+    
     /**
      * Determines whether each HTML tag in the buffer has been properly closed at some point.
 	 *
@@ -24,7 +26,6 @@ public class HTMLAnalyzer {
      * @return true if no tag is left open throughout the input buffer
      */
     public boolean wellFormed( String bufferHTML ){
-        int nextTagLoc = 1;
         List<String> allTags = new ArrayList<String>();
         
         // This regular expression matches HTML tags.
@@ -33,17 +34,18 @@ public class HTMLAnalyzer {
 		
         // Create a list containing all of the HTML tags.
 	while( tagFinder.find() ){
-            allTags.add( tagFinder.group(nextTagLoc) );
-            nextTagLoc++;
+            allTags.add( tagFinder.group() );
 	}
         
         String nextTag = "";
         
-        //  Remove self-closing tags from the list.
+        //  Remove self-closing tags and comments from the list.
         for( int x = 0; x < allTags.size(); x++ ){
             nextTag = allTags.get( x );
             
-            if( nextTag.charAt( nextTag.length() - 2 ) == '/' ){
+            if( nextTag.charAt( nextTag.length() - 2 ) == '/' || 
+                nextTag.charAt(1) == '!' ){
+                System.out.println("Removing " + nextTag);
                 x--;
                 allTags.remove(x + 1);
             }
@@ -59,11 +61,11 @@ public class HTMLAnalyzer {
             // Store the first tag in the file.
             firstTag = getTagType( allTags.get( 0 ) );
             openTags = 1;
-            closingLoc = 1;
+            closingLoc = 0;
             
             // Starting from the next tag, find the leftmost possible closing tag.
-            while( openTags > 0 && closingLoc < allTags.size() ){
-            
+            while( openTags > 0 && closingLoc < allTags.size() - 1 ){
+                closingLoc++;
                 // Add 1 for each matching opening tag.
                 // Subtract 1 for each matching closing tag.
                 lastTag = getTagType( allTags.get( closingLoc ) );
@@ -73,14 +75,14 @@ public class HTMLAnalyzer {
                            lastTag.charAt(0) == '/' ){
                     openTags--;
                 }
-                closingLoc++;
-                
             }
             
             // If the opening tag has a closing tag, remove both.
             // If the first tag is a closing tag, this will always return false.
-            if( openTags == 0 ){
+            if( openTags == 0 && closingLoc < allTags.size() ){
+                System.out.println("Removing " + allTags.get(closingLoc));
                 allTags.remove( closingLoc );
+                System.out.println("Removing " + allTags.get(0));
                 allTags.remove( 0 );
             } else {
                 return false;

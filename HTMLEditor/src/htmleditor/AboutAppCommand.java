@@ -1,6 +1,7 @@
 package htmleditor;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +26,7 @@ public class AboutAppCommand implements Command{
         this.editor = editor ;
     }
     
-    @Override
-    public void execute() {
+    public void execute(Event t) {
                
         double widthAppWindow = 400;
   
