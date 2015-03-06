@@ -282,6 +282,7 @@ public class HTMLEditor extends Application {
         }
         */
         tab.setText("Untitled");
+        tab.setId("Untitled");
         TextArea ta = new TextArea();
         
         ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
