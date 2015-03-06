@@ -268,7 +268,7 @@ public class HTMLEditor extends Application {
       });
       indentMenu.getItems().add(indentTypeNone);
       
-      for (int i = 1; i < 8; i++) {
+      for (int i = 1; i <= 8; i++) {
            final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
            indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
                public void handle(ActionEvent t){
@@ -283,15 +283,10 @@ public class HTMLEditor extends Application {
       
       menuBar.getMenus().add(optionsMenu);
       
+      
+      
       // Prepare 'Help' drop-down menu
       final Menu helpMenu = new Menu("Help");
-      final MenuItem searchMenuItem = new MenuItem("Search");
-      searchMenuItem.setDisable(true);
-      helpMenu.getItems().add(searchMenuItem);
-      final MenuItem onlineManualMenuItem = new MenuItem("Online Manual");
-      onlineManualMenuItem.setVisible(false);
-      helpMenu.getItems().add(onlineManualMenuItem);
-      helpMenu.getItems().add(new SeparatorMenuItem());
       final MenuItem aboutMenuItem =
          MenuItemBuilder.create()
                         .text("About")
@@ -304,9 +299,6 @@ public class HTMLEditor extends Application {
       menuBar.prefWidthProperty().bind(menuWidthProperty);
       return menuBar;
     }
-    
-    
-    
     
     public void addNewTab(){
         Tab tab = new Tab();
@@ -345,6 +337,7 @@ public class HTMLEditor extends Application {
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
+        ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
         /*ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
             public void handle(KeyEvent event){
                 if (CTRL_S.match(event)){
@@ -405,6 +398,20 @@ public class HTMLEditor extends Application {
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         TextArea thisTA = (TextArea)thisTab.getContent();
         thisTA.insertText(carrotPosition, text);
+    }
+    
+    public void replaceTabWithSpace(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        TextArea thisTA = (TextArea)thisTab.getContent();
+        
+        if(thisTA.getText().contains("\t")){
+            int temp = getCarrotPosition();
+            thisTA.setText(thisTA.getText().replace("\t", 
+                new String(new char[HTMLEditor.this.indent_size]).replace("\0", " ")
+                )
+            );
+            setCarrotPosition(temp + HTMLEditor.this.indent_size);
+        }
     }
     
     public void setBuffer(String text){
