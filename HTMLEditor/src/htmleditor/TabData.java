@@ -11,6 +11,8 @@ package htmleditor;
 public class TabData {
 
     private boolean wordWrap = true;
+    private boolean autoIndent = true;
+    private int indentSpace = 4; //default indent length
 
     public void setWordWrap(boolean wordWrap) {
         this.wordWrap = wordWrap;

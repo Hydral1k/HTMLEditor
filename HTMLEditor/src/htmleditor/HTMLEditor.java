@@ -313,8 +313,7 @@ public class HTMLEditor extends Application {
         tab.setUserData(new TabData());
         TextArea ta = new TextArea();
         
-        //ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
-        ta.setOnKeyReleased(new KeyboardListener());
+        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());

@@ -5,6 +5,7 @@
  */
 package htmleditor;
 
+import java.util.Scanner;
 import javafx.event.Event;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -58,8 +59,41 @@ public class TextAnalysisCommand implements Command {
             editor.setCarrotPosition(carrotPosition + depth);
             System.out.println("Inserting Tab");
         }
+        else{
+            HTMLEditor editor = HTMLEditor.getInstance();
+            KeyEvent key = (KeyEvent)t;
+            if(key.getCode() == KeyCode.ENTER){
+                String indent = "";
+                String str = editor.getText().getText();
+                int caretPos = editor.getCarrotPosition();
+                String prevLine = getPrevLine(str, caretPos);
+                int i=0;
+                while(i<prevLine.length()){
+                    char thisChar = prevLine.charAt(i);
+                    if(thisChar != ' ' && thisChar != '\t')
+                        break;
+                    indent+=thisChar;
+                    i++;
+                }
+                String thisText = editor.getText().getText();
+                thisText = thisText.substring(0, editor.getText().getCaretPosition()) 
+                + indent
+                + thisText.substring(editor.getText().getCaretPosition(), thisText.length());
+                editor.getText().setText(thisText);
+                editor.getText().positionCaret(caretPos + indent.length());
+            }
+        }
     }
 
+        private String getPrevLine(String str, int caretPos){
+        str = str.substring(0, caretPos);
+        Scanner sc = new Scanner(str);
+        String returnString = "";
+        while(sc.hasNextLine())
+            returnString = sc.nextLine();
+        return returnString;
+    }
+        
     private Integer getDepthOfBuffer(String text){
         
         Integer depth = 0;
