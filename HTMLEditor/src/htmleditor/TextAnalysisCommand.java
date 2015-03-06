@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package htmleditor;
 
 import java.util.Scanner;
@@ -102,36 +97,4 @@ public class TextAnalysisCommand implements Command {
         return depth;
     };
     
-    private String getClosingTagType(String text) {
-        Boolean closingBracket = false;
-        Boolean endTagFlag = false;
-        Boolean openingBracket = false;
-            
-        System.out.println("Looking for closing tag...");
-        while( text.length() > 0 ){
-            String lastChar = text.substring(text.length() - 1, text.length());
-            System.out.println("Last character: " + lastChar +", Text:" + text);
-  
-            if( closingBracket == false && ( !lastChar.equals(">") && !lastChar.equals("<") && !lastChar.equals("/") && !lastChar.equals("\n") ) ){
-                return "Unknown";
-            }
-            
-            if( closingBracket == false && ">".equals(lastChar) ){
-                closingBracket = true;
-            }
-                
-            if( endTagFlag == false && closingBracket == true && "/".equals(lastChar) ){
-                endTagFlag = true;
-            }
-                
-            if( openingBracket == false && closingBracket == true && endTagFlag == true && "<".equals(lastChar) ){
-                return "Closing";
-            }else if(openingBracket == false && closingBracket == true && "<".equals(lastChar)){
-                return "Opening";
-            }
-                
-            text = text.substring(0, text.length() - 1);
-        }
-        return "Unknown";
-    }
 }
