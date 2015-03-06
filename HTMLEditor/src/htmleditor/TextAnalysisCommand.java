@@ -31,80 +31,51 @@ public class TextAnalysisCommand implements Command {
         System.out.println("Carrot Position: "+ carrotPosition + " Buffer: " + buffer);
         KeyCode keyType = ((KeyEvent)t).getCode();
         
-        // Auto Indent
         
-        if( getClosingTagType(buffer) == "Opening" && 
-            keyType != KeyCode.BACK_SPACE &&
-            ((buffer.length() >= 5 && // tag is type of ul, ol, tr
-                (   buffer.substring(carrotPosition - 5, carrotPosition).matches("<ul>\n") ||
-                    buffer.substring(carrotPosition - 5, carrotPosition).matches("<ol>\n") ||
-                    buffer.substring(carrotPosition - 5, carrotPosition).matches("<tr>\n")
+        // Only non-navigation characters
+        if( keyType != KeyCode.ENTER){
+            return;
+        }
+        
+        // Auto Indent
+        if((buffer.length() >= 5 && // tag is type of ul, ol, tr
+                (   buffer.substring(carrotPosition - 5, carrotPosition).toLowerCase().matches("<ul>\n") ||
+                    buffer.substring(carrotPosition - 5, carrotPosition).toLowerCase().matches("<ol>\n") ||
+                    buffer.substring(carrotPosition - 5, carrotPosition).toLowerCase().matches("<tr>\n")
                 )
             ) || // tag is type of table
-                ( buffer.length() >= 8 && buffer.substring(carrotPosition - 8, carrotPosition).matches("<table>\n"))
-            )
+                ( buffer.length() >= 8 && buffer.substring(carrotPosition - 8, carrotPosition).toLowerCase().matches("<table>\n"))
+            
           ){ 
-            // we want the user to be able to delete the indenting via BACK_SPACE
+            
             System.out.println("Adding newline with new indent with respect to previous line");
             String indent = "";
-            Integer previous_indent_size = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
+            Integer previous_indent_size = getDepthOfBuffer( getPrevLine(buffer, editor.getCarrotPosition()) );
             Integer indent_size = editor.indent_size;
             
             if( previous_indent_size % editor.indent_size != 0){ // the user changed the depth of the indentation
+                System.out.println("User set his own indent size from the previous line");
                 indent_size = previous_indent_size;
             }
             
-            for (int i = 0; i < (indent_size * 2); i++) {
+            for (int i = 0; i < (indent_size + previous_indent_size); i++) {
                 indent += " ";
             }
             
             editor.insertIntoBufferAtCarrot(indent, carrotPosition);
-            editor.setCarrotPosition(carrotPosition + (indent_size * 2));
+            editor.setCarrotPosition(carrotPosition + indent_size + previous_indent_size);
         }else if(   buffer.length() >= 4 &&  
-                    buffer.substring(carrotPosition - 1, carrotPosition).matches("\n") &&
-                    getClosingTagType(buffer) == "Closing" && 
-                    keyType != KeyCode.BACK_SPACE){
+                    buffer.substring(carrotPosition - 1, carrotPosition).matches("\n")){
             System.out.println("Adding newline with respect to previous line");
             String indent = "";
-            Integer previous_indent_size = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
-            Integer indent_size = editor.indent_size;
-            if( previous_indent_size % editor.indent_size != 0){ // the user changed the depth of the indentation
-                indent_size = previous_indent_size;
-            }
-            
-            for (int i = 0; i < indent_size; i++) {
+            Integer previous_indent_size = getDepthOfBuffer( getPrevLine(buffer, editor.getCarrotPosition()) );
+            for (int i = 0; i < previous_indent_size; i++) {
                 indent += " ";
             }
             
             editor.insertIntoBufferAtCarrot(indent, carrotPosition);
-            editor.setCarrotPosition(carrotPosition + indent_size);
-            
+            editor.setCarrotPosition(carrotPosition + previous_indent_size);
         }
-        /*
-        else{
-            HTMLEditor editor = HTMLEditor.getInstance();
-            KeyEvent key = (KeyEvent)t;
-            if(key.getCode() == KeyCode.ENTER){
-                String indent = "";
-                String str = editor.getText().getText();
-                int caretPos = editor.getCarrotPosition();
-                String prevLine = getPrevLine(str, caretPos);
-                int i=0;
-                while(i<prevLine.length()){
-                    char thisChar = prevLine.charAt(i);
-                    if(thisChar != ' ' && thisChar != '\t')
-                        break;
-                    indent+=thisChar;
-                    i++;
-                }
-                String thisText = editor.getText().getText();
-                thisText = thisText.substring(0, editor.getText().getCaretPosition()) 
-                + indent
-                + thisText.substring(editor.getText().getCaretPosition(), thisText.length());
-                editor.getText().setText(thisText);
-                editor.getText().positionCaret(caretPos + indent.length());
-            }
-        */
     }
     
 
@@ -117,28 +88,8 @@ public class TextAnalysisCommand implements Command {
         return returnString;
     }
         
-    private Integer getDepthOfBuffer(String text){
-        
-        Integer depth = 0;
-        Integer lengthToNewLine = 0;
-        String previousLine = "";
-        
-        while( text.length() > 0 ){
-            String lastChar = text.substring(text.length() - 1, text.length());
-            
-            text = text.substring(0, text.length() - 1);
-            System.out.println("Last character: " + lastChar +", Text:" + text);
-            lengthToNewLine ++;
-            
-            if( lastChar.equals("\n")){
-                System.out.println("End of previous line found.");
-                break;
-            }else{
-                previousLine = lastChar + previousLine;
-            }
-           
-        }
-        
+    private Integer getDepthOfBuffer(String previousLine){
+        int depth = 0;
         while( previousLine.length() > 0){
             String currChar = previousLine.substring(0, 1);
             previousLine = previousLine.substring(1, previousLine.length());
