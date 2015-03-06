@@ -26,7 +26,7 @@ public class TextAnalysisCommand implements Command {
         Integer carrotPosition = editor.getCarrotPosition();
         String buffer = editor.getBuffer().substring(0, carrotPosition);
         
-        System.out.println("Carrot Position: "+ carrotPosition );
+        System.out.println("Carrot Position: "+ carrotPosition + " Buffer: " + buffer);
         KeyCode keyType = ((KeyEvent)t).getCode();
         
         // Auto Indent

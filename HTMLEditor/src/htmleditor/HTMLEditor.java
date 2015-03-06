@@ -81,8 +81,11 @@ public class HTMLEditor extends Application {
     private MenuBar menuBar;
     private BorderPane canvas;
     private FileChooser fileChooser;
-    private boolean autoindent = true;
     private MenuItem wrapText;
+    
+    public boolean autoindent = true;
+    public Integer indent_size = 4;  
+    
     
     private static HTMLEditor instance = null;
     public static HTMLEditor getInstance() {
