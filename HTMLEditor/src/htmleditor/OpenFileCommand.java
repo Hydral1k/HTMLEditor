@@ -16,6 +16,6 @@ public class OpenFileCommand implements Command {
     }
     
     public void execute(Event t){
-        this.editor.openFile();
+        this.editor.openFile(editor.requestFile());
     }
 }

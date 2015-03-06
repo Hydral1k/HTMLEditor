@@ -20,6 +20,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -142,6 +143,16 @@ public class HTMLEditor extends Application {
         this.stage.setScene(this.scene);
         this.stage.setOnCloseRequest(new MyEventHandler(new ExitCommand(this)));
         this.stage.show();
+        
+        
+        //This is the command line parameters
+        final Parameters param = getParameters() ;
+        List<String> paramList = param.getRaw() ;
+        if (!paramList.isEmpty()) {
+            File f = new File(paramList.get(0)) ;
+            openFile(f) ;
+        }
+        
     }
 
     
@@ -153,7 +164,7 @@ public class HTMLEditor extends Application {
     }
     
     private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
-      final MenuBar menuBar = new MenuBar();
+      menuBar = new MenuBar();
       menuBar.setStyle(STYLE_CSS);
 
       // Prepare left-most 'File' drop-down menu
@@ -483,10 +494,21 @@ public class HTMLEditor extends Application {
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
     }
     
+    /**
+     * This 
+     * @return The file that the user selects in the explorer window.
+     */
+    public File requestFile(){
+        return this.fileChooser.showOpenDialog(this.stage) ;
+    }
     
-    public void openFile(){
-        File file = this.fileChooser.showOpenDialog(this.stage);
-        if (file != null){
+    /**
+     * @param f - The file to be opened in a new tab
+     * pre-conditions: f is a non-null file
+     * post-conditions: f has been opened in a new tab
+     */
+    public void openFile(File f){
+        if (f != null){
             TextArea ta;
             Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
             //This try catch prevents a null pointer when no tabs are open.
@@ -499,21 +521,21 @@ public class HTMLEditor extends Application {
             
             if(buffer != null && buffer.trim().equals("")){
                 ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
-                ta.setText(this.readFile(file));
-                thisTab.setText(file.getName());
+                ta.setText(this.readFile(f));
+                thisTab.setText(f.getName());
                 thisTab.setOnClosed(new closeListener());
-                thisTab.setId(file.getAbsolutePath());
+                thisTab.setId(f.getAbsolutePath());
             }
             else{
                 Tab newTab = new Tab();
                 ta = new TextArea();
-                ta.setText(this.readFile(file));
+                ta.setText(this.readFile(f));
                 newTab.setContent(ta);
-                newTab.setText(file.getName());
+                newTab.setText(f.getName());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
                 newTab.setOnClosed(new closeListener());
-                newTab.setId(file.getAbsolutePath());
+                newTab.setId(f.getAbsolutePath());
                 
             }
         }
@@ -537,7 +559,8 @@ public class HTMLEditor extends Application {
             }
  
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            return "" ;
+            //Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -545,6 +568,8 @@ public class HTMLEditor extends Application {
                 bufferedReader.close();
             } catch (IOException ex) {
                 Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NullPointerException ex){
+                Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, "bufferedReader was never instantiated.", ex);
             }
         }
         return stringBuffer.toString();
@@ -583,7 +608,7 @@ public class HTMLEditor extends Application {
             } finally {
                 try {
                     bufferedReader.close();
-                } catch (IOException ex) {
+                } catch (IOException | NullPointerException ex) {
                     Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
