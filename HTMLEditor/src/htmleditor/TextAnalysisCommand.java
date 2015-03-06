@@ -23,42 +23,62 @@ public class TextAnalysisCommand implements Command {
     }
     
     public void execute(Event t){
-        String buffer = editor.getBuffer();
         Integer carrotPosition = editor.getCarrotPosition();
+        String buffer = editor.getBuffer().substring(0, carrotPosition);
         
         System.out.println("Carrot Position: "+ carrotPosition );
         KeyCode keyType = ((KeyEvent)t).getCode();
+        
         // Auto Indent
-        if( buffer.length() >= 4 && 
-            buffer.substring(carrotPosition - 1, carrotPosition).matches("\n") &&
-            getClosingTagType(buffer) == "Opening" &&
-            keyType != KeyCode.BACK_SPACE ){
+        
+        if( getClosingTagType(buffer) == "Opening" && 
+            keyType != KeyCode.BACK_SPACE &&
+            ((buffer.length() >= 5 && // tag is type of ul, ol, tr
+                (   buffer.substring(carrotPosition - 5, carrotPosition).matches("<ul>\n") ||
+                    buffer.substring(carrotPosition - 5, carrotPosition).matches("<ol>\n") ||
+                    buffer.substring(carrotPosition - 5, carrotPosition).matches("<tr>\n")
+                )
+            ) || // tag is type of table
+                ( buffer.length() >= 8 && buffer.substring(carrotPosition - 8, carrotPosition).matches("<table>\n"))
+            )
+          ){ 
+            // we want the user to be able to delete the indenting via BACK_SPACE
+            System.out.println("Adding newline with new indent with respect to previous line");
             String indent = "";
-            Integer depth = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
+            Integer previous_indent_size = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
+            Integer indent_size = editor.indent_size;
             
-            for (int i = 0; i < (4 + depth); i++) {
+            if( previous_indent_size % editor.indent_size != 0){ // the user changed the depth of the indentation
+                indent_size = previous_indent_size;
+            }
+            
+            for (int i = 0; i < (indent_size * 2); i++) {
                 indent += " ";
             }
             
-            
             editor.insertIntoBufferAtCarrot(indent, carrotPosition);
-            editor.setCarrotPosition(carrotPosition + 4 + depth);
-            System.out.println("Inserting Tab");
-        }else if(   buffer.length() >= 4 && 
+            editor.setCarrotPosition(carrotPosition + (indent_size * 2));
+        }else if(   buffer.length() >= 4 &&  
                     buffer.substring(carrotPosition - 1, carrotPosition).matches("\n") &&
                     getClosingTagType(buffer) == "Closing" && 
                     keyType != KeyCode.BACK_SPACE){
-            Integer depth = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
+            System.out.println("Adding newline with respect to previous line");
             String indent = "";
+            Integer previous_indent_size = getDepthOfBuffer( buffer.substring( 0, buffer.length() - 1 ) );
+            Integer indent_size = editor.indent_size;
+            if( previous_indent_size % editor.indent_size != 0){ // the user changed the depth of the indentation
+                indent_size = previous_indent_size;
+            }
             
-            for (int i = 0; i < (depth); i++) {
+            for (int i = 0; i < indent_size; i++) {
                 indent += " ";
             }
             
             editor.insertIntoBufferAtCarrot(indent, carrotPosition);
-            editor.setCarrotPosition(carrotPosition + depth);
-            System.out.println("Inserting Tab");
+            editor.setCarrotPosition(carrotPosition + indent_size);
+            
         }
+        /*
         else{
             HTMLEditor editor = HTMLEditor.getInstance();
             KeyEvent key = (KeyEvent)t;
@@ -82,10 +102,11 @@ public class TextAnalysisCommand implements Command {
                 editor.getText().setText(thisText);
                 editor.getText().positionCaret(caretPos + indent.length());
             }
-        }
+        */
     }
+    
 
-        private String getPrevLine(String str, int caretPos){
+    private String getPrevLine(String str, int caretPos){
         str = str.substring(0, caretPos);
         Scanner sc = new Scanner(str);
         String returnString = "";
@@ -139,7 +160,6 @@ public class TextAnalysisCommand implements Command {
             System.out.println("Last character: " + lastChar +", Text:" + text);
   
             if( closingBracket == false && ( !lastChar.equals(">") && !lastChar.equals("<") && !lastChar.equals("/") && !lastChar.equals("\n") ) ){
-              
                 return "Unknown";
             }
             
@@ -154,7 +174,6 @@ public class TextAnalysisCommand implements Command {
             if( openingBracket == false && closingBracket == true && endTagFlag == true && "<".equals(lastChar) ){
                 return "Closing";
             }else if(openingBracket == false && closingBracket == true && "<".equals(lastChar)){
-                // This is a <hi> tag, an opening tag.
                 return "Opening";
             }
                 
@@ -162,7 +181,4 @@ public class TextAnalysisCommand implements Command {
         }
         return "Unknown";
     }
-    
-
-
 }
