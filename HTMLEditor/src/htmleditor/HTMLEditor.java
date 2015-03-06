@@ -256,6 +256,31 @@ public class HTMLEditor extends Application {
       optionsMenu.getItems().add(textWrapItem);
       this.wrapText = textWrapItem;
       
+      
+      // Indent Option Menu
+      final Menu indentMenu = new Menu("Auto Indent (On: " + HTMLEditor.this.indent_size + " Spaces)");
+      final MenuItem indentTypeNone = new MenuItem("None");
+      indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
+          public void handle(ActionEvent t){
+              indentMenu.setText("Auto Indent (Off)");
+              HTMLEditor.this.indent_size = 0;
+          }
+      });
+      indentMenu.getItems().add(indentTypeNone);
+      
+      for (int i = 1; i < 8; i++) {
+           final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
+           indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
+               public void handle(ActionEvent t){
+                   int width = Integer.parseInt(indentTypeNumbers.getText().substring(0,1)); // because js is cooler
+                   indentMenu.setText("Auto Indent (On: " + width + " Spaces)");
+                   HTMLEditor.this.indent_size = width;
+               }
+           });
+           indentMenu.getItems().add(indentTypeNumbers);
+      }
+      optionsMenu.getItems().add(indentMenu);
+      
       menuBar.getMenus().add(optionsMenu);
       
       // Prepare 'Help' drop-down menu
