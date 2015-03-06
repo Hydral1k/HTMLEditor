@@ -408,11 +408,21 @@ public class HTMLEditor extends Application {
     }
     
     
+    public String getPrevLine(Integer caretPosition){
+        TextArea thisTA = getTextArea();
+        String[] lines = thisTA.getText().substring(0, caretPosition).split("\n");
+        
+        if(lines.length >= 2){
+            return lines[lines.length - 2];
+        }
+        return "";
+    }
     
-    public String getBufferPrevLine(){
+    
+    public String getCurrLine(Integer caretPosition){
         TextArea thisTA = getTextArea();
         
-        String str = thisTA.getText().substring(0, thisTA.getCaretPosition());
+        String str = thisTA.getText().substring(0, caretPosition);
         Scanner sc = new Scanner(str);
         String returnString = "";
         while(sc.hasNextLine())
