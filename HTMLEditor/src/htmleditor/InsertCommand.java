@@ -109,16 +109,17 @@ public class InsertCommand implements Command {
     
     /* Makes an html table at cursor with specified rows and columns */
     public void makeTable(int rows, int cols){
+        String indent = new String(new char[editor.indent_size]).replace("\0", " ");
         TextArea thisTA = this.editor.getText();
         String thisText = thisTA.getText();
         int position = thisTA.getCaretPosition();
         String newTable = "<table>\n";
         for(int i=0; i<rows; i++){
-            newTable += "<tr>\n";
+            newTable += indent + "<tr>\n";
             for(int j=0; j<cols; j++){
-                newTable += "<td></td>\n";
+                newTable += indent + indent +"<td></td>\n";
             }
-            newTable += "</tr>\n";
+            newTable += indent + "</tr>\n";
         }
         newTable += "</table>\n";
         thisText = thisText.substring(0, position) 

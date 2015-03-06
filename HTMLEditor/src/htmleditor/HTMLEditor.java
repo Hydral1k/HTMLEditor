@@ -258,6 +258,17 @@ public class HTMLEditor extends Application {
       
       menuBar.getMenus().add(insertMenu);
       
+      // Indent Menu
+      final Menu indentBufferMenu = new Menu("Indent");
+      final MenuItem indentCurrentLine = new MenuItem("Ident Current Line");
+      indentCurrentLine.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_CURRENT_LINE)));
+      final MenuItem indentSelection = new MenuItem("Indent Selection");
+      indentSelection.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_SELECTION)));
+      final MenuItem indentAll = new MenuItem("Indent All");
+      indentAll.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_ALL)));
+      indentBufferMenu.getItems().addAll(indentCurrentLine, indentSelection, indentAll);
+      menuBar.getMenus().add(indentBufferMenu);
+      
       // Prepare 'Options' drop-down menu
       final Menu optionsMenu = new Menu("Options");
       
@@ -386,34 +397,73 @@ public class HTMLEditor extends Application {
     
     }
     
-    /* Returns text string currently in active buffer */
-    public String getBuffer(){
+    /**
+     * Gets the current selected tabs text area.
+     * @return TextArea object
+     */
+    public TextArea getTextArea(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         TextArea thisTA = (TextArea)thisTab.getContent();
-        return thisTA.getText();
+        return thisTA;
+    }
+    
+    
+    
+    public String getBufferPrevLine(){
+        TextArea thisTA = getTextArea();
+        
+        String str = thisTA.getText().substring(0, thisTA.getCaretPosition());
+        Scanner sc = new Scanner(str);
+        String returnString = "";
+        while(sc.hasNextLine())
+            returnString = sc.nextLine();
+        return returnString;
+    }
+    
+    /**
+     * Finds the index number of the \n character in the buffer
+     * @return IndexPosition
+     */
+    public Integer getCurrentLineStartPosition(){
+        TextArea thisTA = getTextArea();
+        Integer old_length = thisTA.getCaretPosition();
+        String str = thisTA.getText().substring(0, thisTA.getCaretPosition());
+        
+        return str.lastIndexOf("\n");
+        
+    }
+    
+
+    /* Returns text string currently in active buffer */
+    public String getBuffer(){
+        return getTextArea().getText();
+    }
+    
+    public String getBufferSelection(){
+        return getTextArea().getSelectedText();
     }
     
     public Integer getCarrotPosition(){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
-        return thisTA.getCaretPosition();
+        return getTextArea().getCaretPosition();
     }
     
     public void setCarrotPosition(Integer caretPosition){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
-        thisTA.positionCaret(caretPosition);
+        getTextArea().positionCaret(caretPosition);
     }
     
+    // Redundant, should be removed in next release or refactored
     public void insertIntoBufferAtCarrot(String text, Integer carrotPosition){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
-        thisTA.insertText(carrotPosition, text);
+        insertIntoBufferAtPos( text, carrotPosition);
+    }
+    
+    
+    
+    public void insertIntoBufferAtPos(String text, Integer position){
+        getTextArea().insertText(position, text);
     }
     
     public void replaceTabWithSpace(){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
+        TextArea thisTA = getTextArea();
         
         if(thisTA.getText().contains("\t")){
             int temp = getCarrotPosition();
@@ -426,9 +476,7 @@ public class HTMLEditor extends Application {
     }
     
     public void setBuffer(String text){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
-        thisTA.setText(text);
+        getTextArea().setText(text);
     }
     
     /* Returns file name currently in active buffer (complete path) */
