@@ -23,13 +23,13 @@ import javafx.stage.Stage;
  * @author trh8614
  */
 public class InsertCommand implements Command {
-    HTMLEditor editor ;
+    HTMLEditor editor;
     TagType tag ;
     Map details;
     
     
-    public InsertCommand(HTMLEditor editor, TagType tag){
-        this.editor = editor;
+    public InsertCommand(TagType tag){
+        this.editor = HTMLEditor.getInstance();
         this.tag = tag;
     }
     

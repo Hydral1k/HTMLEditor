@@ -80,9 +80,17 @@ public class HTMLEditor extends Application {
     private BorderPane canvas;
     private FileChooser fileChooser;
     
+    private static HTMLEditor instance = null;
+    public static HTMLEditor getInstance() {
+       if(instance == null) {
+          System.err.println("ERROR! - UNINITIALIZED EDITOR");
+       }
+       return instance;
+    }
     
     @Override
     public void start(Stage primaryStage) {
+        instance = this;
         this.analyzer = new HTMLAnalyzer();
         this.stage = primaryStage;
         this.rootGroup = new Group();
@@ -177,13 +185,13 @@ public class HTMLEditor extends Application {
       //Bold item
       MenuItem boldItem = new MenuItem("Bold") ;
       boldItem.setAccelerator(new KeyCodeCombination(KeyCode.B,KeyCombination.CONTROL_DOWN));
-      boldItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.BOLD)));
+      boldItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.BOLD)));
       insertMenu.getItems().add(boldItem);
 
       //Italics item
       MenuItem italicsItem = new MenuItem("Italics") ;
       italicsItem.setAccelerator(new KeyCodeCombination(KeyCode.I,KeyCombination.CONTROL_DOWN));
-      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.ITALICS)));
+      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.ITALICS)));
       insertMenu.getItems().add(italicsItem);
       
       //Header item
@@ -201,7 +209,7 @@ public class HTMLEditor extends Application {
       //Table item
       MenuItem tableItem = new MenuItem("Table") ;
       tableItem.setAccelerator(new KeyCodeCombination(KeyCode.T,KeyCombination.CONTROL_DOWN));
-      tableItem.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.TABLE)));
+      tableItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.TABLE)));
       insertMenu.getItems().add(tableItem);
       
       //List item
@@ -285,7 +293,8 @@ public class HTMLEditor extends Application {
         tab.setId("Untitled");
         TextArea ta = new TextArea();
         
-        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
+        //ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
+        ta.setOnKeyReleased(new KeyboardListener());
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
