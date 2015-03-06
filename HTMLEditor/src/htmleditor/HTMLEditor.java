@@ -26,6 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -79,6 +81,8 @@ public class HTMLEditor extends Application {
     private MenuBar menuBar;
     private BorderPane canvas;
     private FileChooser fileChooser;
+    private boolean autoindent = true;
+    private MenuItem wrapText;
     
     private static HTMLEditor instance = null;
     public static HTMLEditor getInstance() {
@@ -107,6 +111,20 @@ public class HTMLEditor extends Application {
                 this.tabPane.getSelectionModel().select(0);
                 this.tabPane.getSelectionModel().getSelectedItem().getContent().requestFocus();
         }
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+            new ChangeListener<Tab>() {
+                @Override
+                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                    TextArea ta = HTMLEditor.getInstance().getText();
+                    MenuItem wrapMenu = HTMLEditor.getInstance().wrapText;
+                    if(ta.isWrapText())
+                        wrapMenu.setText("Wrap Text (On)");
+                    else{
+                        wrapMenu.setText("Wrap Text (Off)");
+                    }
+                }
+            }
+        );
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
@@ -230,9 +248,10 @@ public class HTMLEditor extends Application {
       final Menu optionsMenu = new Menu("Options");
       
       // Text Wrapping item
-      MenuItem textWrapItem = new MenuItem("Wrap Text");
+      MenuItem textWrapItem = new MenuItem("Wrap Text (On)");
       textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(this)));
       optionsMenu.getItems().add(textWrapItem);
+      this.wrapText = textWrapItem;
       
       menuBar.getMenus().add(optionsMenu);
       
@@ -291,6 +310,7 @@ public class HTMLEditor extends Application {
         */
         tab.setText("Untitled");
         tab.setId("Untitled");
+        tab.setUserData(new TabData());
         TextArea ta = new TextArea();
         
         //ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
@@ -510,7 +530,7 @@ public class HTMLEditor extends Application {
             }
         }
     }
-
+    
     
 }
 

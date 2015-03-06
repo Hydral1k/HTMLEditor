@@ -4,6 +4,7 @@
 package htmleditor;
 
 import javafx.event.Event;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 
@@ -23,6 +24,15 @@ public class WrapTextSwitchCommand implements Command {
         if (tab != null){
             TextArea ta = (TextArea) tab.getContent();
             ta.setWrapText(!ta.isWrapText());
+            //set wrap status
+            TabData tData = (TabData)editor.getTabPane().getSelectionModel().getSelectedItem().getUserData();
+            tData.setWordWrap(ta.isWrapText());
+            MenuItem wrapMenu = (MenuItem)t.getTarget();
+            if(ta.isWrapText())
+                wrapMenu.setText("Wrap Text (On)");
+            else{
+                wrapMenu.setText("Wrap Text (Off)");
+            }
         }
     }
 }

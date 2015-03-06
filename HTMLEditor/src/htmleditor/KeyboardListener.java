@@ -22,6 +22,35 @@ public class KeyboardListener implements EventHandler<Event>{
         System.out.println(key.getCode() == KeyCode.ENTER);
         if(key.getCode() == KeyCode.ENTER){
             HTMLEditor.getInstance();
+            /*if (!this.performAutoIndent)
+                return;
+            HTextPane htp = EditorWindow.getInstance().getPane()
+            .getCurrentTextPane();
+            String s = htp.getText().replace("\r", "");
+            int caretPos = htp.getCaretPosition();
+            int indexPreviousLineStart = s.lastIndexOf('\n', caretPos - 2) + 1;
+            String lastLine = s.substring(indexPreviousLineStart, caretPos - 1);
+            Matcher m = BEGINNING_SPACE_PAT.matcher(lastLine);
+            String indentation = (m.matches() ? m.group(1) : "");
+            // figure out if we need to increase indent for an opening tag
+            Matcher start_matcher = START_TAG_PAT.matcher(lastLine);
+            if (start_matcher.matches()
+            && !start_matcher.group(start_matcher.groupCount())
+            .equals("/>")) {
+            // this is a start tag... add some more indentation
+            for (int i = 0; i < this.numSpacesForIndent; i++)
+            indentation += " ";
+            }
+            }
+            Document doc = htp.getDocument();
+            if (doc instanceof HDocument) {
+            HDocument hdoc = (HDocument) doc;
+            try {
+            hdoc.insertString(caretPos, indentation, null);
+            } catch (BadLocationException e) {
+            e.printStackTrace();
+            }
+            }*/
         }
     }
     
