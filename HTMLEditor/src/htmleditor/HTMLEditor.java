@@ -165,7 +165,6 @@ public class HTMLEditor extends Application {
       // Exit
       MenuItem exitItem = new MenuItem("Exit", null);
       exitItem.setMnemonicParsing(true);
-      exitItem.setAccelerator(new KeyCodeCombination(KeyCode.X,KeyCombination.CONTROL_DOWN));
       exitItem.setOnAction(new MyEventHandler(new ExitCommand(this))) ;
       fileMenu.getItems().add(exitItem);
        
@@ -242,9 +241,6 @@ public class HTMLEditor extends Application {
          MenuItemBuilder.create()
                         .text("About")
                         .onAction(new MyEventHandler(new AboutAppCommand(this)))
-                        .accelerator(
-                            new KeyCodeCombination(
-                               KeyCode.A, KeyCombination.CONTROL_DOWN))
                         .build();             
       helpMenu.getItems().add(aboutMenuItem);
       menuBar.getMenus().add(helpMenu);
