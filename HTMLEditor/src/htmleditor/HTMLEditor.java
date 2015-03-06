@@ -322,6 +322,9 @@ public class HTMLEditor extends Application {
       return menuBar;
     }
     
+    /**
+     * This method creates a new tab in the HTMLEditor window.
+     */
     public void addNewTab(){
         Tab tab = new Tab();
         tab.setOnClosed(new closeListener());
@@ -439,14 +442,17 @@ public class HTMLEditor extends Application {
         return getTextArea().getText();
     }
     
+    /* Returns the text in the textArea that is currently selected */
     public String getBufferSelection(){
         return getTextArea().getSelectedText();
     }
     
+    /* Returns the position of the caret */
     public Integer getCarrotPosition(){
         return getTextArea().getCaretPosition();
     }
     
+    /* Sets the position of the caret to the provided integer index */
     public void setCarrotPosition(Integer caretPosition){
         getTextArea().positionCaret(caretPosition);
     }
@@ -475,6 +481,10 @@ public class HTMLEditor extends Application {
         }
     }
     
+    /**
+     * Replaces the text inside the textArea with the provided String.
+     * @param text - The String that is replacing the current text.
+     */
     public void setBuffer(String text){
         getTextArea().setText(text);
     }
@@ -485,17 +495,19 @@ public class HTMLEditor extends Application {
         return thisTab.getId();
     }
     
+    /* Returns the TextArea object of the current tab. */
     public TextArea getText(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         return (TextArea)thisTab.getContent();
     }
     
+    /* Closes the current tab */
     public void closeCurrentTab(){
         this.tabPane.getTabs().remove(this.tabPane.getSelectionModel().getSelectedItem());
     }
     
     /**
-     * This 
+     * Prompts the user to select a file via the default file explorer.
      * @return The file that the user selects in the explorer window.
      */
     public File requestFile(){
@@ -503,9 +515,8 @@ public class HTMLEditor extends Application {
     }
     
     /**
+     * Opens the provided file inside a new tab.
      * @param f - The file to be opened in a new tab
-     * pre-conditions: f is a non-null file
-     * post-conditions: f has been opened in a new tab
      */
     public void openFile(File f){
         if (f != null){
@@ -543,7 +554,11 @@ public class HTMLEditor extends Application {
         
     }
     
-    
+    /**
+     * Reads in and returns the text from the provided file.
+     * @param file - The file that will be read in.
+     * @return A String with the text of the entire file.
+     */
     private String readFile(File file){
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
@@ -575,14 +590,21 @@ public class HTMLEditor extends Application {
         return stringBuffer.toString();
     }
     
+    /* Returns the tabPane of HTMLEditor */
     public TabPane getTabPane(){
         return this.tabPane ;
     }
     
+    /* Returns the stage of HTMLEditor */
     public Stage getStage(){
         return this.stage ;
     }
     
+    /**
+     * Checks the provided tab if any changes have been made to the tab since the last save.
+     * @param tab - The tab to check for changes.
+     * @return True if the text in the provided tab has changed.
+     */
     public boolean hasChanged(Tab tab){
         boolean changedText=false;
         TextArea thisTA = (TextArea)tab.getContent();
@@ -618,7 +640,12 @@ public class HTMLEditor extends Application {
         }
         return changedText;
     }
-
+    
+    /** 
+     * Custom listener to handle the closing of a tab. 
+     * The purpose of this is make sure the file is saved before closing in the buffer,
+     * otherwise all the work since the last save will be lost.
+     */
     class closeListener implements EventHandler<Event>{
         @Override
         public void handle(Event t) {
