@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 
 /**
  *
@@ -56,6 +57,24 @@ public class IndentCommand implements Command{
         }else if( type == IndentType.INDENT_SELECTION){     
             
             System.out.println("Indenting selection...");
+            
+            TextArea ta = editor.getTextArea();
+            
+            String lside = ta.getText(0, ta.getSelection().getStart());
+            String selection = ta.getText(ta.getSelection().getStart(), ta.getSelection().getEnd());
+            String rside = ta.getText(ta.getSelection().getEnd(), ta.getText().length());
+            
+            String[] lines = selection.split("\n");
+            String buffer_out = "";
+            for (int i = 0; i < lines.length; i++) {
+                buffer_out += indent + lines[i];
+                if( i < lines.length - 1){
+                    buffer_out += "\n"; 
+                }
+                
+            }
+            
+            editor.setBuffer(lside + buffer_out + rside);
             
         }
     }
