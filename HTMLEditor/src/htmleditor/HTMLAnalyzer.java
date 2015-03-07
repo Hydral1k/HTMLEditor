@@ -115,18 +115,6 @@ public class HTMLAnalyzer {
     }
     
     /**
-     * Another fancy comment about what this does
-     * @param bufferHTML
-     * @return 
-     */
-    public String autoIndent( String bufferHTML ){
-        
-        // we return bufferHTML after it has been properly indented. 
-        
-        return bufferHTML;
-    }
-    
-    /**
      * Counts the number of words in a given HTML buffer.
      * 
      * @param bufferHTML The input from the buffer.
