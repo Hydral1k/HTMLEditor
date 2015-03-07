@@ -1,23 +1,21 @@
 /*
  * A lightweight HTML editor for SWEN-262.
  *
- * 
+ * @author trh8614
  * @author aac6012
  * @author thn1069
  * @author jlt8213
  * @author edf7470
  * 
- * @version $Id:$
+ * @version RELEASE 1
  */
 package htmleditor;
 
 
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,37 +29,21 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.control.SelectionModel;
 import javafx.event.EventHandler;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkEvent.EventType;
 
-
-
-/**
- *
- * @author trh8614
- */
+// Main class
 public class HTMLEditor extends Application {
     
     // Version of application
@@ -152,10 +134,8 @@ public class HTMLEditor extends Application {
             File f = new File(paramList.get(0)) ;
             openFile(f) ;
         }
-        
     }
 
-    
     /**
      * @param args the command line arguments
      */
@@ -255,7 +235,6 @@ public class HTMLEditor extends Application {
           listItem.getItems().add(subListType);
       }
       insertMenu.getItems().add(listItem);
-      
       menuBar.getMenus().add(insertMenu);
       
       // Indent Menu
@@ -304,9 +283,6 @@ public class HTMLEditor extends Application {
       optionsMenu.getItems().add(indentMenu);
       
       menuBar.getMenus().add(optionsMenu);
-      
-      
-      
       // Prepare 'Help' drop-down menu
       final Menu helpMenu = new Menu("Help");
       final MenuItem aboutMenuItem =
@@ -328,31 +304,6 @@ public class HTMLEditor extends Application {
     public void addNewTab(){
         Tab tab = new Tab();
         tab.setOnClosed(new closeListener());
-        
-        /*
-        if (this.tabPane.getTabs().size() == 0){
-            tab.setId("0");
-            tab.setText("Untitled " + tab.getId());
-        }else{
-            int i = 0;
-            for (Tab t : this.tabPane.getTabs()){
-                if (Integer.parseInt(t.getId()) == i){
-                    i += 1;
-                }
-                else if (Integer.parseInt(t.getId()) > i){
-                    i -= 1;
-                    //System.out.println(this.tabPane.getTabs());
-                    tab.setId(Integer.toString(i));
-                    tab.setText("Untitled " + Integer.toString(i));
-                }
-                else{
-                    i += 1;
-                    tab.setId(Integer.toString(i));
-                    tab.setText("Untitled " + Integer.toString(i));
-                }
-            }
-        }
-        */
         tab.setText("Untitled");
         tab.setId("Untitled");
         tab.setUserData(new TabData());
@@ -363,34 +314,9 @@ public class HTMLEditor extends Application {
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
         ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
-        /*ta.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
-            public void handle(KeyEvent event){
-                if (CTRL_S.match(event)){
-                    saveFile();
-                }else if (CTRL_W.match(event)){
-                    closeCurrentTab();
-                }else if (CTRL_O.match(event)){
-                    openFile();
-                }else if (CTRL_X.match(event)){
-                    System.exit(0);
-                }
-            } 
-        }); */
         
         tab.setContent(ta);
         
-        /*
-        tab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event t) {
-                Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
-                currentTab.getContent().requestFocus();
-                TextArea currentText = (TextArea)currentTab.getContent();
-                currentText.requestFocus();
-                System.out.println(currentTab.getContent());            
-            }
-        });
-        */
         this.tabPane.getTabs().add(this.tabPane.getTabs().size(), tab);
         this.tabPane.getSelectionModel().select(tab);
         
@@ -410,7 +336,11 @@ public class HTMLEditor extends Application {
         return thisTA;
     }
     
-    
+    /**
+     * Gets the previous line with respect to the carets position
+     * @param caretPosition
+     * @return String (Previous line)
+     */
     public String getPrevLine(Integer caretPosition){
         TextArea thisTA = getTextArea();
         String[] lines = thisTA.getText().substring(0, caretPosition).split("\n");
@@ -421,7 +351,11 @@ public class HTMLEditor extends Application {
         return "";
     }
     
-    
+    /**
+     * Gets the curr line with respect to the carets position.
+     * @param caretPosition
+     * @return String (Current line)
+     */
     public String getCurrLine(Integer caretPosition){
         TextArea thisTA = getTextArea();
         
@@ -472,12 +406,15 @@ public class HTMLEditor extends Application {
         insertIntoBufferAtPos( text, carrotPosition);
     }
     
-    
-    
     public void insertIntoBufferAtPos(String text, Integer position){
         getTextArea().insertText(position, text);
     }
     
+    /**
+     * An overwatch method that replaces all instances of tabs with the specified
+     * indentation as per the requirements. If a tab is removed, the function
+     * attempts to reposition the caret properly.
+     */
     public void replaceTabWithSpace(){
         TextArea thisTA = getTextArea();
         

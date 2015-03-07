@@ -115,7 +115,10 @@ public class TextAnalysisCommand implements Command {
      * Checks a line for the trailing tag type.
      * If the tag type is a closing tag, it returns "Closing"
      * If the tag type is opening tag, it returns "Opening"
-     * If unknown, "Unkown
+     * If unknown, "Unkown"
+     * 
+     * ATTN: This function should eventually be refactored and properly rewritten
+     * 
      * @param text
      * @return String TagType
      */
@@ -129,7 +132,13 @@ public class TextAnalysisCommand implements Command {
             String lastChar = text.substring(text.length() - 1, text.length());
             System.out.println("Last character: " + lastChar +", Text:" + text);
   
-            if( closingBracket == false && ( !lastChar.equals(">") && !lastChar.equals("<") && !lastChar.equals("/") && !lastChar.equals("\n") ) ){
+            if( closingBracket == false && 
+                    ( !lastChar.equals(">") && 
+                    !lastChar.equals("<") && 
+                    !lastChar.equals("/") && 
+                    !lastChar.equals("\n") 
+                    ) 
+                ){
                 return "Unknown";
             }
             

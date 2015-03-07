@@ -12,11 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
-/*
- * This is the command to open the About window.
- */
-
 /**
+ * This is the command to open the About window.
  * @author aac6012
  */
 public class AboutAppCommand implements Command{
