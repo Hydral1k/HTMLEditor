@@ -35,9 +35,10 @@ public class IndentCommand implements Command{
 
     
     public void execute(Event t) {
-        String indent = new String(new char[editor.indent_size]).replace("\0", " ");
+        
+        
         if(type == IndentType.INDENT_ALL){
-            
+            String indent = new String(new char[editor.indent_size]).replace("\0", " ");
             System.out.println("Indenting entire buffer...");
             
             String[] lines = editor.getBuffer().split("\n");
@@ -47,20 +48,29 @@ public class IndentCommand implements Command{
             }
             editor.setBuffer(buffer_out);
         }else if( type == IndentType.INDENT_CURRENT_LINE){
-            
-            System.out.println("Indenting current line...");
-            
+            System.out.println("Indenting current line..." + editor.getPrevLine(editor.getCarrotPosition()));
+            Integer depth = getDepthOfBuffer(editor.getPrevLine(editor.getCarrotPosition()));
+            String indent = new String(new char[editor.indent_size]).replace("\0", " ");
+            if(depth > 0){
+                indent = new String(new char[depth]).replace("\0", " ");
+            }
+             
             editor.insertIntoBufferAtPos(indent, editor.getCurrentLineStartPosition() + 1);
             
-            
-            
         }else if( type == IndentType.INDENT_SELECTION){     
-            
+           
             System.out.println("Indenting selection...");
             
             TextArea ta = editor.getTextArea();
             
             String lside = ta.getText(0, ta.getSelection().getStart());
+            Integer depth = getDepthOfBuffer(editor.getPrevLine(ta.getSelection().getStart()));
+            String indent = new String(new char[editor.indent_size]).replace("\0", " ");
+            
+            if( depth > 0){
+                indent = new String(new char[depth]).replace("\0", " ");
+            }
+            
             String selection = ta.getText(ta.getSelection().getStart(), ta.getSelection().getEnd());
             String rside = ta.getText(ta.getSelection().getEnd(), ta.getText().length());
             
@@ -78,6 +88,20 @@ public class IndentCommand implements Command{
             
         }
     }
+
+    public Integer getDepthOfBuffer(String previousLine){
+        int depth = 0;
+        while( previousLine.length() > 0){
+            String currChar = previousLine.substring(0, 1);
+            previousLine = previousLine.substring(1, previousLine.length());
+            if( currChar.equals(" ") ){
+                depth ++;
+            }else{
+                return depth;
+            }
+        }
+        return depth;
+    }; 
 }
 
 enum IndentType{
