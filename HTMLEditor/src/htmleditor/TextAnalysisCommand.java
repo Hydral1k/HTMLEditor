@@ -6,7 +6,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
- *
+ * TextAnalysisCommand class, used to modify the HTMLEditor
+ * as well as watch it's buffer during changes. Event handeled by a hook
+ * that is on the TextArea for KeyPress
  * @author trh8614
  */
 public class TextAnalysisCommand implements Command {
@@ -74,7 +76,12 @@ public class TextAnalysisCommand implements Command {
         }
     }
     
-
+    /**
+     * Gets the last line in the string
+     * @param str
+     * @param caretPos
+     * @return String of lastline
+     */
     private String getPrevLine(String str, int caretPos){
         str = str.substring(0, caretPos);
         Scanner sc = new Scanner(str);
@@ -83,7 +90,12 @@ public class TextAnalysisCommand implements Command {
             returnString = sc.nextLine();
         return returnString;
     }
-        
+    
+    /**
+     * Gets the indentation depth of a line
+     * @param previousLine
+     * @return Integer # of spaces (indents)
+     */
     private Integer getDepthOfBuffer(String previousLine){
         int depth = 0;
         while( previousLine.length() > 0){
@@ -98,6 +110,14 @@ public class TextAnalysisCommand implements Command {
         return depth;
     };
     
+    /**
+     * Checks a line for the trailing tag type.
+     * If the tag type is a closing tag, it returns "Closing"
+     * If the tag type is opening tag, it returns "Opening"
+     * If unknown, "Unkown
+     * @param text
+     * @return String TagType
+     */
     private String getClosingTagType(String text) {
         Boolean closingBracket = false;
         Boolean endTagFlag = false;
