@@ -1,18 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package htmleditor;
-
-/**
- *
- * @author Thomas Heissenberger (trh8614@rit.edu)
- */
-/*
- * The Command to close the editor.
- */
-
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -20,7 +7,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 
 /**
- *
+ * IndentCommand class used for indenting the current textarea buffers.
+ * 
+ * @author trh8614
  * @author aac6012
  */
 public class IndentCommand implements Command{
@@ -33,10 +22,9 @@ public class IndentCommand implements Command{
         this.type = t;
     }
 
-    
     public void execute(Event t) {
         
-        
+        /** For indenting the entire buffer **/
         if(type == IndentType.INDENT_ALL){
             String indent = new String(new char[editor.indent_size]).replace("\0", " ");
             System.out.println("Indenting entire buffer...");
@@ -47,6 +35,8 @@ public class IndentCommand implements Command{
                 buffer_out += indent + lines[i] + "\n"; 
             }
             editor.setBuffer(buffer_out);
+            
+        /** For indenting the current line **/
         }else if( type == IndentType.INDENT_CURRENT_LINE){
             System.out.println("Indenting current line..." + editor.getPrevLine(editor.getCarrotPosition()));
             Integer depth = getDepthOfBuffer(editor.getPrevLine(editor.getCarrotPosition()));
@@ -56,7 +46,8 @@ public class IndentCommand implements Command{
             }
              
             editor.insertIntoBufferAtPos(indent, editor.getCurrentLineStartPosition() + 1);
-            
+        
+        /** For indenting the current highlighted selection **/
         }else if( type == IndentType.INDENT_SELECTION){     
            
             System.out.println("Indenting selection...");
@@ -89,6 +80,11 @@ public class IndentCommand implements Command{
         }
     }
 
+    /**
+     * Gets the indent depth of previousLine
+     * @param previousLine
+     * @return 
+     */
     public Integer getDepthOfBuffer(String previousLine){
         int depth = 0;
         while( previousLine.length() > 0){
@@ -103,6 +99,7 @@ public class IndentCommand implements Command{
         return depth;
     }; 
 }
+
 
 enum IndentType{
     INDENT_CURRENT_LINE, INDENT_SELECTION, INDENT_ALL;

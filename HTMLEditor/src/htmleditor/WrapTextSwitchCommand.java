@@ -9,6 +9,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 
 /**
+ * WrapTextSwitchCommand, used for toggling wrapping on the TextArea
  * @author aac6012
  */
 public class WrapTextSwitchCommand implements Command {

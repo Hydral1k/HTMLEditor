@@ -19,6 +19,7 @@ public class TextAnalysisCommand implements Command {
         this.editor = editor;
     }
     
+    
     public void execute(Event t){
         
         editor.replaceTabWithSpace();

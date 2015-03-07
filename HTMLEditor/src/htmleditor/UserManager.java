@@ -19,8 +19,9 @@ import org.w3c.dom.Element;
  
 
 /**
- *
- * @author Student
+ *  Currently NOT IMPLEMENTED. Possibly in the future?
+ * 
+ * @author trh8614
  */
 public class UserManager {
     
