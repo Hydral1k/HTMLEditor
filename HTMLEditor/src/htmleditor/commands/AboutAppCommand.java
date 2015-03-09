@@ -1,5 +1,6 @@
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -27,7 +28,7 @@ public class AboutAppCommand implements Command{
                
         double widthAppWindow = 400;
   
-        Label description = new Label("HTML Editor v." + editor.VERSION
+        Label description = new Label("HTML Editor v." + editor.getVersion()
                + "\n\nSWEN-262 (Group 2)"
                + "\n\nBy Thomas Heissenberger, Emily Filmer, Jordan Tice, Michael Schug, Austin Cook, David Thong Nguyen"
                + "\n\nA light weight HTML editor used for editing HTML files.");
@@ -44,7 +45,7 @@ public class AboutAppCommand implements Command{
         BorderPane.setAlignment(btn, Pos.CENTER);
         aboutUsPane.setCenter(description);
         aboutUsPane.setBottom(btn);
-        aboutUsPane.setStyle(editor.BACKGROUND_STYLE_CSS);
+        aboutUsPane.setStyle(editor.getBackgroundStyleCss());
         
         final Scene aboutUsScene = new Scene(aboutUsPane, widthAppWindow, 250);
         final Stage aboutUsStage = new Stage();

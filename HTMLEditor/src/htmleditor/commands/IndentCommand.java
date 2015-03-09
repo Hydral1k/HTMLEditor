@@ -1,5 +1,8 @@
 
-package htmleditor;
+package htmleditor.commands;
+
+import htmleditor.HTMLEditor;
+import htmleditor.IndentType;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -98,9 +101,4 @@ public class IndentCommand implements Command{
         }
         return depth;
     }; 
-}
-
-
-enum IndentType{
-    INDENT_CURRENT_LINE, INDENT_SELECTION, INDENT_ALL;
 }

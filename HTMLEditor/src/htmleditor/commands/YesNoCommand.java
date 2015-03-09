@@ -1,5 +1,6 @@
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.YesNoDialogBox;
 import javafx.event.Event;
 
 /**

@@ -1,8 +1,11 @@
 /*
  * The Command to open a file.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLAnalyzer;
+import htmleditor.HTMLEditor;
+import htmleditor.YesNoDialogBox;
 import javafx.event.Event;
 
 /**

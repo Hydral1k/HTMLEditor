@@ -1,8 +1,11 @@
 /*
  * The Command to save an alredy existing file.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLAnalyzer;
+import htmleditor.HTMLEditor;
+import htmleditor.YesNoDialogBox;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

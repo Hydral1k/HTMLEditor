@@ -1,8 +1,10 @@
 /*
  * The Command to toggle text wrapping.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
+import htmleditor.TabData;
 import javafx.event.Event;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;

@@ -1,5 +1,6 @@
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.AlertDialogBox;
 import javafx.event.Event;
 
 /**

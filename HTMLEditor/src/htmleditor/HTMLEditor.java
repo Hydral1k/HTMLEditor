@@ -12,6 +12,16 @@
 package htmleditor;
 
 
+import htmleditor.commands.NewFileCommand;
+import htmleditor.commands.OpenFileCommand;
+import htmleditor.commands.TextAnalysisCommand;
+import htmleditor.commands.InsertCommand;
+import htmleditor.commands.SaveFileCommand;
+import htmleditor.commands.AboutAppCommand;
+import htmleditor.commands.WrapTextSwitchCommand;
+import htmleditor.commands.ExitCommand;
+import htmleditor.commands.SaveAsCommand;
+import htmleditor.commands.IndentCommand;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -546,6 +556,21 @@ public class HTMLEditor extends Application {
     public Stage getStage(){
         return this.stage ;
     }
+    
+    /* Returns the background style CSS */
+    public String getBackgroundStyleCss(){
+        return this.BACKGROUND_STYLE_CSS;
+    }
+    
+    /* Returns the background style CSS */
+    public String getStyleCss(){
+        return this.STYLE_CSS;
+    }
+    /* Returns the background style CSS */
+    public int getVersion(){
+        return this.VERSION;
+    }
+    
     
     /**
      * Checks the provided tab if any changes have been made to the tab since the last save.

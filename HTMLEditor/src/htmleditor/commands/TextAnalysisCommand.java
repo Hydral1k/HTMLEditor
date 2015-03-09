@@ -1,5 +1,6 @@
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
 import java.util.Scanner;
 import javafx.event.Event;
 import javafx.scene.input.KeyCode;

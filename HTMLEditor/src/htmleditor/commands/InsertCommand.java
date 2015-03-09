@@ -2,8 +2,11 @@
  * Insert Command pattern for inserting HTML tags into the selected
  * item's buffer.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
+import htmleditor.Tag;
+import htmleditor.TagType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -86,7 +89,7 @@ public class InsertCommand implements Command {
                 Stage stage = new Stage();
                 Parent root;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("Table.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("/htmleditor/Table.fxml"));
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.showAndWait();    //should change later to avoid confusion!

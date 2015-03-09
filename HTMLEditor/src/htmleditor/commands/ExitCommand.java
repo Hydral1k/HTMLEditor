@@ -1,8 +1,10 @@
 /*
  * The Command to close the editor.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
+import htmleditor.YesNoDialogBox;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.Event;

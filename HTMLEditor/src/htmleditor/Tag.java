@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * @author trh8614
  */
 public class Tag{
-    static int TableRows = -1;
-    static int TableCols = -1;
+    public static int TableRows = -1;
+    public static int TableCols = -1;
     String tag; 
     TagType tag_type;
     String tag_style; // abstract css styling, if so ever in this project
@@ -126,12 +126,4 @@ public class Tag{
         }
         return insertTabs(initialTabs) + "<" + tag + "></" + tag + ">\n";
     }
-}
-
-/**
- *
- * @author jlt8213
- */
-enum TagType {
-    HEADER, BOLD, ITALICS, LIST, LIST_ITEM, TABLE;
 }

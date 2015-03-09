@@ -1,8 +1,9 @@
 /*
  * The Command to create a new file.
  */
-package htmleditor;
+package htmleditor.commands;
 
+import htmleditor.HTMLEditor;
 import javafx.event.Event;
 
 /**

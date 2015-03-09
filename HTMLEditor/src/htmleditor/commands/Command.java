@@ -2,7 +2,7 @@
  * This the base Command interface that all
  * concrete commands implement.
  */
-package htmleditor;
+package htmleditor.commands;
 
 import javafx.event.Event;
 
