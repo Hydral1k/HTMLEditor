@@ -12,6 +12,17 @@
 package htmleditor;
 
 
+import htmleditor.commands.SaveAsCommand;
+import htmleditor.commands.InsertCommand;
+import htmleditor.commands.TextAnalysisCommand;
+import htmleditor.commands.IndentCommand;
+import htmleditor.commands.SaveFileCommand;
+import htmleditor.commands.NewFileCommand;
+import htmleditor.commands.OpenFileCommand;
+import htmleditor.IndentType;
+import htmleditor.commands.WrapTextSwitchCommand;
+import htmleditor.commands.ExitCommand;
+import htmleditor.commands.AboutAppCommand;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -545,6 +556,21 @@ public class HTMLEditor extends Application {
     /* Returns the stage of HTMLEditor */
     public Stage getStage(){
         return this.stage ;
+    }
+    
+    /* Returns the version of HTMLEditor */
+    public int getVersion(){
+        return this.VERSION;
+    }
+    
+    /* Returns the background of HTMLEditor */
+    public String getBackgroundStyleCss(){
+        return this.BACKGROUND_STYLE_CSS;
+    }
+    
+    /* Returns the Style CSS of HTMLEditor */
+    public String getStyleCss(){
+        return this.STYLE_CSS;
     }
     
     /**
