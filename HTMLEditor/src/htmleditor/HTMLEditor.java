@@ -637,6 +637,24 @@ public class HTMLEditor extends Application {
         }
     }
     
+    /* This is the memento for the memento pattern.
+     * Note that this may need to be changed since it must save
+     * the current tabs state.
+     * 
+     * Still need to implement a save function for HTMLEditor or tab
+     * depending on where we save each undoManager.
+     */
+    private class Memento {
+        private String htmlBuffer ;
+        private int cursorPos ;
+        
+        public Memento(String buffer, int pos) {
+            this.htmlBuffer = buffer ;
+            this.cursorPos = pos ;
+        }
+        
+    }
+    
+    
     
 }
-
