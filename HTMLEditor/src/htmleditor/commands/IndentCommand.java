@@ -55,7 +55,7 @@ public class IndentCommand implements Command{
            
             System.out.println("Indenting selection...");
             
-            TextArea ta = editor.getTextArea();
+            TextArea ta = editor.getText();
             
             String lside = ta.getText(0, ta.getSelection().getStart());
             Integer depth = getDepthOfBuffer(editor.getPrevLine(ta.getSelection().getStart()));

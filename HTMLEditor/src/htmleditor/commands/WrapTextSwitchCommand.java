@@ -25,7 +25,7 @@ public class WrapTextSwitchCommand implements Command {
         Tab tab = this.editor.getTabPane().getSelectionModel().getSelectedItem() ;
         //If tab is null it will not attempt to change the text-wrap setting
         if (tab != null){
-            TextArea ta = (TextArea) tab.getContent();
+            TextArea ta = (TextArea) this.editor.getText();
             ta.setWrapText(!ta.isWrapText());
             //set wrap status
             TabData tData = (TabData)editor.getTabPane().getSelectionModel().getSelectedItem().getUserData();
