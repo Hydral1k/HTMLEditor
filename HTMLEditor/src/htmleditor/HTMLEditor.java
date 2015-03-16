@@ -52,6 +52,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.event.EventHandler;
+import javafx.scene.layout.GridPane;
 
 // Main class
 public class HTMLEditor extends Application {
@@ -323,12 +324,23 @@ public class HTMLEditor extends Application {
         
         BorderPane tabBorderContent = new BorderPane();
         
+        // line numbers
+        /*
         TextArea lineNumbers = new TextArea("1");
         lineNumbers.setDisable(true);
         lineNumbers.setWrapText(true);
         lineNumbers.setPrefWidth(20);
         tabBorderContent.setLeft(lineNumbers);
+        */
+        GridPane lineNumbers = new GridPane();
+        Label lineno = new Label(" 1 ");
+        GridPane.setConstraints(lineno, 3, 1); // column=3 row=1
+
+        lineNumbers.getChildren().addAll(lineno);
+        tabBorderContent.setLeft(lineNumbers);
         
+        
+        // text area
         TextArea ta = new TextArea();
         ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
         ta.setWrapText(true);
