@@ -52,11 +52,15 @@ public class NewFileCommand implements Command {
         
         // text area
         TextArea ta = new TextArea();
+        ta.setStyle("-fx-text-fill: black;"+
+                    "-fx-background-color: white;"+
+                    "-fx-font: Courier New;"+
+                    "-fx-font-family: monospace;"+
+                    "-fx-font-size: 12;");
         ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this.editor)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.editor.getScene().heightProperty());
         ta.prefWidthProperty().bind(this.editor.getScene().widthProperty());
-        ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
         tabBorderContent.setRight(ta);
         
         

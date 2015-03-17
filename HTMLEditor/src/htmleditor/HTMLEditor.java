@@ -492,6 +492,11 @@ public class HTMLEditor extends Application {
             else{
                 Tab newTab = new Tab();
                 ta = new TextArea();
+                ta.setStyle("-fx-text-fill: black;"+
+                            "-fx-background-color: white;"+
+                            "-fx-font: Courier New;"+
+                            "-fx-font-family: monospace;"+
+                            "-fx-font-size: 12;");
                 ta.setText(this.readFile(f));
                 newTab.setContent(ta);
                 newTab.setText(f.getName());
