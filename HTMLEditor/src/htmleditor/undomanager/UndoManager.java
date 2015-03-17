@@ -3,6 +3,7 @@
  */
 package htmleditor.undomanager;
 
+import htmleditor.HTMLEditor;
 import java.util.Stack;
 import javafx.scene.control.Tab;
 
@@ -11,14 +12,23 @@ import javafx.scene.control.Tab;
  */
 public class UndoManager {
     
+    /*
+     * The purpose of lastUndo: when you hit undo after you previously
+     * hit undo, undo will work correctly.  If you previously hit redo
+     * then undo will not work correctly (you must hit it one more time).  
+     * If lastUndo is true then the last operation was an undo operation.
+     */
+    
+    private boolean lastUndo ;
     private Stack<Object> undoStack ;
     private Stack<Object> redoStack ;
-    private Tab tab ;
+    private HTMLEditor editor ;
     
-    public UndoManager (Tab t) {
+    public UndoManager (HTMLEditor e) {
         this.undoStack = new Stack() ;
         this.redoStack = new Stack() ;
-        this.tab = t ;
+        this.editor = e ;
+        this.lastUndo = false ;
     }
     
     /**
@@ -30,8 +40,12 @@ public class UndoManager {
      * is a private class in HTMLEditor (encapsulation).
      */
     public void save(Object m) {
+        //Pushes a new state onto the undoStack.
         this.undoStack.push(m) ;
+        
+        //Clear the redoStack after a new operation happens.
         this.redoStack.clear() ;
+        
     }
     
     /**
@@ -39,11 +53,26 @@ public class UndoManager {
      * and updates the stacks accordingly.
      */
     public void undo() {
+        //If undoStack is empty, no undo operation can be performed.
+        if (this.undoStack.isEmpty()){
+            
+            System.out.println("No more commands to undo!") ;
+            return ;
+        }
+        
+        /* If the last operation was redo, you must do move the top of 
+         * redoStack to undoStack before trying to undo normally.      */
+        if (!this.lastUndo && this.undoStack.size() > 1) {
+            this.redoStack.push(this.undoStack.pop()) ;
+            this.lastUndo = true ;
+        }
+        
         //Set tab state back to top of undoStack
-        //tab.setState(undoStack.peek()) ;
+        this.editor.setState(undoStack.peek()) ;
         
         //Then push the top of undoStack to top of redoStack.
         this.redoStack.push(this.undoStack.pop()) ;
+        
     }
     
     /**
@@ -51,10 +80,25 @@ public class UndoManager {
      * and updates the stacks accordingly.
      */
     public void redo() {
+        //If redoStack is empty, do nothing.
+        if (this.redoStack.isEmpty()){
+            System.out.println("No more commands to redo!") ;
+            //Redo stack is empty.
+            return ;
+        }
+        
+        /* If the last operation was undo, you must do move the top of 
+         * undoStack to redoStack before trying to redo normally.      */
+        if (this.lastUndo && this.redoStack.size() > 1) {
+            this.undoStack.push(this.redoStack.pop()) ;
+            this.lastUndo = false ;
+        }
+        
         //Set tab state back to top of redoStack
-        //tab.setState(redoStack.peek()) ;
+        this.editor.setState(redoStack.peek()) ;
         
         //Then push the top of redoStack to top of undoStack.
         this.undoStack.push(this.redoStack.pop()) ;
+        
     }   
 }
