@@ -46,8 +46,6 @@ public class UndoManager {
         //Clear the redoStack after a new operation happens.
         this.redoStack.clear() ;
         
-        System.out.println(this.undoStack) ;
-        System.out.println(this.redoStack) ;
     }
     
     /**
@@ -57,7 +55,8 @@ public class UndoManager {
     public void undo() {
         //If undoStack is empty, no undo operation can be performed.
         if (this.undoStack.isEmpty()){
-            System.out.println("Undo Stack empty") ;
+            
+            System.out.println("No more commands to undo!") ;
             return ;
         }
         
@@ -74,8 +73,6 @@ public class UndoManager {
         //Then push the top of undoStack to top of redoStack.
         this.redoStack.push(this.undoStack.pop()) ;
         
-        System.out.println(this.undoStack) ;
-        System.out.println(this.redoStack) ;
     }
     
     /**
@@ -85,7 +82,7 @@ public class UndoManager {
     public void redo() {
         //If redoStack is empty, do nothing.
         if (this.redoStack.isEmpty()){
-            System.out.println("Redo Stack empty") ;
+            System.out.println("No more commands to redo!") ;
             //Redo stack is empty.
             return ;
         }
@@ -103,8 +100,5 @@ public class UndoManager {
         //Then push the top of redoStack to top of undoStack.
         this.undoStack.push(this.redoStack.pop()) ;
         
-        
-        System.out.println(this.undoStack) ;
-        System.out.println(this.redoStack) ;
     }   
 }

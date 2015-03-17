@@ -19,7 +19,6 @@ public class UndoCommand implements Command {
 
     @Override
     public void execute(Event t) {
-        System.out.println("Reverting state...") ;
         TabData tabdata = (TabData)this.editor.getCurrentTab().getUserData() ;
         tabdata.getUndoManager().undo() ;
     }

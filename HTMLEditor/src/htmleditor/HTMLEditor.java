@@ -54,6 +54,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.event.EventHandler;
+import javafx.scene.layout.GridPane;
 
 // Main class
 public class HTMLEditor extends Application {
@@ -109,7 +110,9 @@ public class HTMLEditor extends Application {
                 this.tabPane.getSelectionModel().select(0);
                 this.tabPane.getSelectionModel().getSelectedItem().getContent().requestFocus();
         }
-        tabPane.getSelectionModel().selectedItemProperty().addListener(
+        /*
+        tabPane.getSelectionModel().selectedItemProperty().
+                addListener(
             new ChangeListener<Tab>() {
                 @Override
                 public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
@@ -123,6 +126,7 @@ public class HTMLEditor extends Application {
                 }
             }
         );
+        */
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
@@ -339,37 +343,51 @@ public class HTMLEditor extends Application {
         tab.setText("Untitled");
         tab.setId("Untitled");
         tab.setUserData(new TabData(this));
-        TextArea ta = new TextArea();
         
+        BorderPane tabBorderContent = new BorderPane();
+        
+        // line numbers
+        /*
+        TextArea lineNumbers = new TextArea("1");
+        lineNumbers.setDisable(true);
+        lineNumbers.setWrapText(true);
+        lineNumbers.setPrefWidth(20);
+        tabBorderContent.setLeft(lineNumbers);
+        */
+        GridPane lineNumbers = new GridPane();
+        Label lineno = new Label(" 1 ");
+        GridPane.setConstraints(lineno, 3, 1); // column=3 row=1
+
+        lineNumbers.getChildren().addAll(lineno);
+        tabBorderContent.setLeft(lineNumbers);
+        
+        
+        // text area
+        TextArea ta = new TextArea();
         ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
         ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
+        tabBorderContent.setRight(ta);
         
-        tab.setContent(ta);
         
+        tab.setContent(tabBorderContent);
         this.tabPane.getTabs().add(this.tabPane.getTabs().size(), tab);
         this.tabPane.getSelectionModel().select(tab);
         
+        /*
         if (tab.isSelected()){
             tab.getContent().requestFocus();
         }
+        */
+        
         
         //This saves the initial state to the newly created tab's undoManager.
         ((TabData)tab.getUserData()).getUndoManager().save(this.createMemento());
         
     }
-    
-    /**
-     * Gets the current selected tabs text area.
-     * @return TextArea object
-     */
-    public TextArea getTextArea(){
-        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        TextArea thisTA = (TextArea)thisTab.getContent();
-        return thisTA;
-    }
+   
     
     /**
      * Gets the previous line with respect to the carets position
@@ -377,7 +395,7 @@ public class HTMLEditor extends Application {
      * @return String (Previous line)
      */
     public String getPrevLine(Integer caretPosition){
-        TextArea thisTA = getTextArea();
+        TextArea thisTA = getText();
         String[] lines = thisTA.getText().substring(0, caretPosition).split("\n");
         
         if(lines.length >= 2){
@@ -392,7 +410,7 @@ public class HTMLEditor extends Application {
      * @return String (Current line)
      */
     public String getCurrLine(Integer caretPosition){
-        TextArea thisTA = getTextArea();
+        TextArea thisTA = getText();
         
         String str = thisTA.getText().substring(0, caretPosition);
         Scanner sc = new Scanner(str);
@@ -407,7 +425,7 @@ public class HTMLEditor extends Application {
      * @return IndexPosition
      */
     public Integer getCurrentLineStartPosition(){
-        TextArea thisTA = getTextArea();
+        TextArea thisTA = getText();
         Integer old_length = thisTA.getCaretPosition();
         String str = thisTA.getText().substring(0, thisTA.getCaretPosition());
         
@@ -418,22 +436,22 @@ public class HTMLEditor extends Application {
 
     /* Returns text string currently in active buffer */
     public String getBuffer(){
-        return getTextArea().getText();
+        return getText().getText();
     }
     
     /* Returns the text in the textArea that is currently selected */
     public String getBufferSelection(){
-        return getTextArea().getSelectedText();
+        return getText().getSelectedText();
     }
     
     /* Returns the position of the caret */
     public Integer getCarrotPosition(){
-        return getTextArea().getCaretPosition();
+        return getText().getCaretPosition();
     }
     
     /* Sets the position of the caret to the provided integer index */
     public void setCarrotPosition(Integer caretPosition){
-        getTextArea().positionCaret(caretPosition);
+        getText().positionCaret(caretPosition);
     }
     
     // Redundant, should be removed in next release or refactored
@@ -442,7 +460,7 @@ public class HTMLEditor extends Application {
     }
     
     public void insertIntoBufferAtPos(String text, Integer position){
-        getTextArea().insertText(position, text);
+        getText().insertText(position, text);
     }
     
     /**
@@ -451,7 +469,7 @@ public class HTMLEditor extends Application {
      * attempts to reposition the caret properly.
      */
     public void replaceTabWithSpace(){
-        TextArea thisTA = getTextArea();
+        TextArea thisTA = getText();
         
         if(thisTA.getText().contains("\t")){
             int temp = getCarrotPosition();
@@ -468,7 +486,7 @@ public class HTMLEditor extends Application {
      * @param text - The String that is replacing the current text.
      */
     public void setBuffer(String text){
-        getTextArea().setText(text);
+        getText().setText(text);
     }
     
     /* Returns file name currently in active buffer (complete path) */
@@ -480,7 +498,9 @@ public class HTMLEditor extends Application {
     /* Returns the TextArea object of the current tab. */
     public TextArea getText(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
-        return (TextArea)thisTab.getContent();
+        BorderPane content = (BorderPane)thisTab.getContent();
+        TextArea thisTA = (TextArea)content.getRight();
+        return thisTA;
     }
     
     /* Closes the current tab */
@@ -513,7 +533,7 @@ public class HTMLEditor extends Application {
             }
             
             if(buffer != null && buffer.trim().equals("")){
-                ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
+                ta = getText();
                 ta.setText(this.readFile(f));
                 thisTab.setText(f.getName());
                 thisTab.setOnClosed(new closeListener());
@@ -554,6 +574,7 @@ public class HTMLEditor extends Application {
                 stringBuffer.append(text);
                 stringBuffer.append('\n');
             }
+            stringBuffer.deleteCharAt(stringBuffer.length()-1);
  
         } catch (FileNotFoundException ex) {
             return "" ;
@@ -605,10 +626,12 @@ public class HTMLEditor extends Application {
      * Checks the provided tab if any changes have been made to the tab since the last save.
      * @param tab - The tab to check for changes.
      * @return True if the text in the provided tab has changed.
+     * ***Consider moving to HTMLAnalyzer or similar for blob reduction
      */
     public boolean hasChanged(Tab tab){
         boolean changedText=false;
-        TextArea thisTA = (TextArea)tab.getContent();
+        BorderPane thisPane = (BorderPane)tab.getContent();
+        TextArea thisTA = (TextArea)thisPane.getRight();
         if(tab.getText().equals("Untitled") && !thisTA.getText().equals("")){
             changedText = true;
         }
@@ -624,6 +647,7 @@ public class HTMLEditor extends Application {
                     stringBuffer.append(text);
                     stringBuffer.append('\n');
                 }
+                stringBuffer.deleteCharAt(stringBuffer.length()-1);
             } catch (FileNotFoundException ex) {
                 changedText = true;
             } catch (IOException ex) {
