@@ -69,5 +69,9 @@ public class NewFileCommand implements Command {
             tab.getContent().requestFocus();
         }
         */
+        
+        //This saves the initial state to the newly created tab's undoManager.
+        ((TabData)tab.getUserData()).getUndoManager().save(this.editor.createMemento());
+        
     }
 }
