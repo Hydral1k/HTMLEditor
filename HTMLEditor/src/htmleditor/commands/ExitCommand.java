@@ -27,12 +27,12 @@ public class ExitCommand implements Command{
         ArrayList<String> changedTabs = new ArrayList<String>();
         ObservableList<Tab> tabs = this.editor.getTabPane().getTabs();
         for( Tab thisTab : tabs ){
-            if (editor.hasChanged(thisTab))
-                    changedTabs.add(thisTab.getText());
+            if (editor.hasChanged(thisTab)){
+                changedTabs.add(thisTab.getText());
+            }
         }
 
         if (changedTabs.size() > 0){
-
             for(int i=0; i<changedTabs.size(); i++){
                 message += changedTabs.get(i);
                 if (changedTabs.size() > 1 && i < changedTabs.size()-1)
@@ -41,14 +41,15 @@ public class ExitCommand implements Command{
             message += "\nAre you sure you wish to close?";
             boolean changedText;
             int result = YesNoDialogBox.show(editor.getStage(), message);
-            if( result == 1 )
+            if( result == 1 ){
+                System.exit(0);
                 return;
+            }
             else{ //cancel close
                 System.out.println("CANCEL EXIT");
                 t.consume();
                 return;
             }
         }
-        System.exit(0);
     }
 }

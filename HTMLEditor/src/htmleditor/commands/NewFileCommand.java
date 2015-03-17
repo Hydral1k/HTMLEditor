@@ -3,8 +3,16 @@
  */
 package htmleditor.commands;
 
+import htmleditor.CloseListener;
 import htmleditor.HTMLEditor;
+import htmleditor.MyEventHandler;
+import htmleditor.TabData;
 import javafx.event.Event;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 
 /**
  *
@@ -18,6 +26,49 @@ public class NewFileCommand implements Command {
     }
     
     public void execute(Event t){
-        editor.addNewTab() ;
+        Tab tab = new Tab();
+        tab.setOnClosed(new CloseListener(this.editor));
+        tab.setText("Untitled");
+        tab.setId("Untitled");
+        tab.setUserData(new TabData());
+        
+        BorderPane tabBorderContent = new BorderPane();
+        
+        // line numbers
+        /*
+        TextArea lineNumbers = new TextArea("1");
+        lineNumbers.setDisable(true);
+        lineNumbers.setWrapText(true);
+        lineNumbers.setPrefWidth(20);
+        tabBorderContent.setLeft(lineNumbers);
+        */
+        GridPane lineNumbers = new GridPane();
+        Label lineno = new Label(" 1 ");
+        GridPane.setConstraints(lineno, 3, 1); // column=3 row=1
+
+        lineNumbers.getChildren().addAll(lineno);
+        tabBorderContent.setLeft(lineNumbers);
+        
+        
+        // text area
+        TextArea ta = new TextArea();
+        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this.editor)));
+        ta.setWrapText(true);
+        ta.prefHeightProperty().bind(this.editor.getScene().heightProperty());
+        ta.prefWidthProperty().bind(this.editor.getScene().widthProperty());
+        ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
+        tabBorderContent.setRight(ta);
+        
+        
+        tab.setContent(tabBorderContent);
+        this.editor.getTabPane().getTabs().add(tab);
+        this.editor.getTabPane().getSelectionModel().select(tab);
+        
+        /*
+        if (tab.isSelected()){
+            tab.getContent().requestFocus();
+        }
+        */
+    
     }
 }

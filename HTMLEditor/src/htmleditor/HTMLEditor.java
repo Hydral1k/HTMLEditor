@@ -18,6 +18,7 @@ import htmleditor.commands.TextAnalysisCommand;
 import htmleditor.commands.InsertCommand;
 import htmleditor.commands.SaveFileCommand;
 import htmleditor.commands.AboutAppCommand;
+import htmleditor.commands.Command;
 import htmleditor.commands.WrapTextSwitchCommand;
 import htmleditor.commands.ExitCommand;
 import htmleditor.commands.SaveAsCommand;
@@ -103,11 +104,15 @@ public class HTMLEditor extends Application {
         
         this.canvas = new BorderPane();
         this.tabPane = new TabPane();
+        
         if (this.tabPane.getTabs().size() == 0){
-                this.addNewTab();
+                new NewFileCommand(this).execute(null);
                 this.tabPane.getSelectionModel().select(0);
-                this.tabPane.getSelectionModel().getSelectedItem().getContent().requestFocus();
+                this.getText().requestFocus();
         }
+        this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        
+        
         /*
         tabPane.getSelectionModel().selectedItemProperty().
                 addListener(
@@ -311,56 +316,6 @@ public class HTMLEditor extends Application {
       menuBar.prefWidthProperty().bind(menuWidthProperty);
       return menuBar;
     }
-    
-    /**
-     * This method creates a new tab in the HTMLEditor window.
-     */
-    public void addNewTab(){
-        Tab tab = new Tab();
-        tab.setOnClosed(new closeListener());
-        tab.setText("Untitled");
-        tab.setId("Untitled");
-        tab.setUserData(new TabData());
-        
-        BorderPane tabBorderContent = new BorderPane();
-        
-        // line numbers
-        /*
-        TextArea lineNumbers = new TextArea("1");
-        lineNumbers.setDisable(true);
-        lineNumbers.setWrapText(true);
-        lineNumbers.setPrefWidth(20);
-        tabBorderContent.setLeft(lineNumbers);
-        */
-        GridPane lineNumbers = new GridPane();
-        Label lineno = new Label(" 1 ");
-        GridPane.setConstraints(lineno, 3, 1); // column=3 row=1
-
-        lineNumbers.getChildren().addAll(lineno);
-        tabBorderContent.setLeft(lineNumbers);
-        
-        
-        // text area
-        TextArea ta = new TextArea();
-        ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this)));
-        ta.setWrapText(true);
-        ta.prefHeightProperty().bind(this.scene.heightProperty());
-        ta.prefWidthProperty().bind(this.scene.widthProperty());
-        ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
-        tabBorderContent.setRight(ta);
-        
-        
-        tab.setContent(tabBorderContent);
-        this.tabPane.getTabs().add(this.tabPane.getTabs().size(), tab);
-        this.tabPane.getSelectionModel().select(tab);
-        
-        /*
-        if (tab.isSelected()){
-            tab.getContent().requestFocus();
-        }
-        */
-    
-    }
    
     
     /**
@@ -510,7 +465,7 @@ public class HTMLEditor extends Application {
                 ta = getText();
                 ta.setText(this.readFile(f));
                 thisTab.setText(f.getName());
-                thisTab.setOnClosed(new closeListener());
+                thisTab.setOnClosed(new CloseListener(this));
                 thisTab.setId(f.getAbsolutePath());
             }
             else{
@@ -521,7 +476,7 @@ public class HTMLEditor extends Application {
                 newTab.setText(f.getName());
                 this.tabPane.getTabs().add(newTab);
                 this.tabPane.getSelectionModel().select(newTab);
-                newTab.setOnClosed(new closeListener());
+                newTab.setOnClosed(new CloseListener(this));
                 newTab.setId(f.getAbsolutePath());
                 
             }
@@ -577,6 +532,11 @@ public class HTMLEditor extends Application {
         return this.stage ;
     }
     
+    /* Returns the scene of HTMLEditor */
+    public Scene getScene(){
+        return this.scene ;
+    }
+    
     /* Returns the background style CSS */
     public String getBackgroundStyleCss(){
         return this.BACKGROUND_STYLE_CSS;
@@ -602,37 +562,39 @@ public class HTMLEditor extends Application {
         boolean changedText=false;
         BorderPane thisPane = (BorderPane)tab.getContent();
         TextArea thisTA = (TextArea)thisPane.getRight();
+        
+        // user can still name the file "Untitled"
+        /*
         if(tab.getText().equals("Untitled") && !thisTA.getText().equals("")){
             changedText = true;
-        }
-        else if(!tab.getText().equals("Untitled")){
-            String newText = thisTA.getText();
-            File file = new File(tab.getText());
-            StringBuilder stringBuffer = new StringBuilder();
-            BufferedReader bufferedReader = null;
-            try {
-                bufferedReader = new BufferedReader(new FileReader(file));
-                String text;
-                while ((text = bufferedReader.readLine()) != null) {
-                    stringBuffer.append(text);
-                    stringBuffer.append('\n');
-                }
-                stringBuffer.deleteCharAt(stringBuffer.length()-1);
-            } catch (FileNotFoundException ex) {
-                changedText = true;
-            } catch (IOException ex) {
-                Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    bufferedReader.close();
-                } catch (IOException | NullPointerException ex) {
-                    Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        }*/
+        String newText = thisTA.getText();
+        File file = new File(tab.getText());
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(file));
+            String text;
+            while ((text = bufferedReader.readLine()) != null) {
+                stringBuffer.append(text);
+                stringBuffer.append('\n');
             }
-            String oldText = stringBuffer.toString();
-            if(!oldText.equals(newText))
-                changedText = true;
+            stringBuffer.deleteCharAt(stringBuffer.length()-1);
+        } catch (FileNotFoundException ex) {
+            changedText = true;
+        } catch (IOException ex) {
+            Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException | NullPointerException ex) {
+                Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        String oldText = stringBuffer.toString();
+        if(!oldText.equals(newText))
+            changedText = true;
+        
         return changedText;
     }
     
@@ -641,25 +603,7 @@ public class HTMLEditor extends Application {
      * The purpose of this is make sure the file is saved before closing in the buffer,
      * otherwise all the work since the last save will be lost.
      */
-    class closeListener implements EventHandler<Event>{
-        @Override
-        public void handle(Event t) {
-            analyzer = new HTMLAnalyzer();
-            boolean changedText;
-            Tab closedTab = (Tab) t.getTarget();
-            changedText = hasChanged(closedTab);
-            if(!changedText) //if nothing changed, let them leave
-                return;
-            int result = YesNoDialogBox.show(HTMLEditor.this.getStage(), "Warning!\nThe file you are closing contained unsaved changes.\nAre you sure you wish to close?");
-            if( result == 1 )
-                return;
-            else{ //restore tab
-                HTMLEditor.this.tabPane.getTabs().add(closedTab);
-                HTMLEditor.this.tabPane.getSelectionModel().select(closedTab);
-            }
-        }
-    }
-    
+
     /* This is the memento for the memento pattern.
      * Note that this may need to be changed since it must save
      * the current tabs state.
