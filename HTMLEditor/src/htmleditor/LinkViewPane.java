@@ -82,7 +82,7 @@ public class LinkViewPane extends VBox {
      * @param buffer the current buffer
      */
     public final void updateLinks( String buffer ){
-        links = extractLinks( analyzer.extractTags( buffer ) );
+        //links = extractLinks( analyzer.extractTags( buffer ) );
         createAlphabetical( links );
     }
     

@@ -22,6 +22,8 @@ import htmleditor.commands.WrapTextSwitchCommand;
 import htmleditor.commands.ExitCommand;
 import htmleditor.commands.SaveAsCommand;
 import htmleditor.commands.IndentCommand;
+import htmleditor.commands.RedoCommand;
+import htmleditor.commands.UndoCommand;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -203,6 +205,25 @@ public class HTMLEditor extends Application {
       fileMenu.getItems().add(exitItem);
        
       menuBar.getMenus().add(fileMenu);
+      
+      // Prepare 'Edit' drop-down menu
+      final Menu editMenu = new Menu("Edit") ;
+      editMenu.setStyle("-fx-text-fill: white");
+      
+      //Undo item
+      MenuItem undoItem = new MenuItem("Undo") ;
+      undoItem.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN)) ;
+      undoItem.setOnAction(new MyEventHandler(new UndoCommand(this))) ;
+      editMenu.getItems().add(undoItem) ;
+      
+      //Redo item
+      MenuItem redoItem = new MenuItem("Redo") ;
+      redoItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN)) ;
+      redoItem.setOnAction(new MyEventHandler(new RedoCommand(this))) ;
+      editMenu.getItems().add(redoItem) ;
+      
+      //Add Edit menu to menu bar
+      menuBar.getMenus().add(editMenu) ;
 
       // Prepare 'Insert' drop-down menu
       final Menu insertMenu = new Menu("Insert");
@@ -320,7 +341,7 @@ public class HTMLEditor extends Application {
         tab.setOnClosed(new closeListener());
         tab.setText("Untitled");
         tab.setId("Untitled");
-        tab.setUserData(new TabData());
+        tab.setUserData(new TabData(this));
         
         BorderPane tabBorderContent = new BorderPane();
         
@@ -359,6 +380,9 @@ public class HTMLEditor extends Application {
             tab.getContent().requestFocus();
         }
         */
+        
+        //This saves the initial state to the newly created tab's undoManager.
+        ((TabData)tab.getUserData()).getUndoManager().save(this.createMemento());
     
     }
    
@@ -577,6 +601,11 @@ public class HTMLEditor extends Application {
         return this.stage ;
     }
     
+    /* Returns the current tab */
+    public Tab getCurrentTab() {
+        return this.getTabPane().getSelectionModel().getSelectedItem() ;
+    }
+    
     /* Returns the background style CSS */
     public String getBackgroundStyleCss(){
         return this.BACKGROUND_STYLE_CSS;
@@ -663,9 +692,6 @@ public class HTMLEditor extends Application {
     /* This is the memento for the memento pattern.
      * Note that this may need to be changed since it must save
      * the current tabs state.
-     * 
-     * Still need to implement a save function for HTMLEditor or tab
-     * depending on where we save each undoManager.
      */
     private class Memento {
         private String htmlBuffer ;
@@ -676,8 +702,23 @@ public class HTMLEditor extends Application {
             this.cursorPos = pos ;
         }
         
+        public String getBuffer(){
+            return this.htmlBuffer ;
+    }
+        
+        public int getCurserPos(){
+            return this.cursorPos ;
+}
+        
     }
     
+    public void setState(Object o){
+        Memento m = (Memento)o ; //Converting object from UndoManager.
+        this.getText().setText(m.getBuffer()) ;
+        this.setCarrotPosition(m.getCurserPos()) ;
+    }
     
-    
+    public Object createMemento(){
+        return new Memento(this.getText().getText(), this.getCarrotPosition()) ;
+    }
 }
