@@ -12,19 +12,7 @@
 package htmleditor;
 
 
-import htmleditor.commands.NewFileCommand;
-import htmleditor.commands.OpenFileCommand;
-import htmleditor.commands.TextAnalysisCommand;
-import htmleditor.commands.InsertCommand;
-import htmleditor.commands.SaveFileCommand;
-import htmleditor.commands.AboutAppCommand;
-import htmleditor.commands.Command;
-import htmleditor.commands.WrapTextSwitchCommand;
-import htmleditor.commands.ExitCommand;
-import htmleditor.commands.SaveAsCommand;
-import htmleditor.commands.IndentCommand;
-import htmleditor.commands.RedoCommand;
-import htmleditor.commands.UndoCommand;
+import htmleditor.commands.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -226,6 +214,13 @@ public class HTMLEditor extends Application {
       redoItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN)) ;
       redoItem.setOnAction(new MyEventHandler(new RedoCommand(this))) ;
       editMenu.getItems().add(redoItem) ;
+      
+      //Objectify ** TEMPORARY **
+      MenuItem objectItem = new MenuItem("Objectify") ;
+      objectItem.setAccelerator(new KeyCodeCombination(KeyCode.J, KeyCombination.CONTROL_DOWN)) ;
+      objectItem.setOnAction(new MyEventHandler(new ObjectCommand(this))) ;
+      editMenu.getItems().add(objectItem) ;
+      
       
       //Add Edit menu to menu bar
       menuBar.getMenus().add(editMenu) ;
