@@ -507,7 +507,7 @@ public class HTMLEditor extends Application {
             }
             
             if(buffer != null && buffer.trim().equals("")){
-                ta = (TextArea) this.tabPane.getSelectionModel().getSelectedItem().getContent();
+                ta = getText();
                 ta.setText(this.readFile(f));
                 thisTab.setText(f.getName());
                 thisTab.setOnClosed(new closeListener());
@@ -598,7 +598,8 @@ public class HTMLEditor extends Application {
      */
     public boolean hasChanged(Tab tab){
         boolean changedText=false;
-        TextArea thisTA = (TextArea)tab.getContent();
+        BorderPane thisPane = (BorderPane)tab.getContent();
+        TextArea thisTA = (TextArea)thisPane.getRight();
         if(tab.getText().equals("Untitled") && !thisTA.getText().equals("")){
             changedText = true;
         }
