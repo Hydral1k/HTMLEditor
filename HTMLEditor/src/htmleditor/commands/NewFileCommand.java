@@ -30,7 +30,7 @@ public class NewFileCommand implements Command {
         tab.setOnClosed(new CloseListener(this.editor));
         tab.setText("Untitled");
         tab.setId("Untitled");
-        tab.setUserData(new TabData());
+        tab.setUserData(new TabData(this.editor));
         
         BorderPane tabBorderContent = new BorderPane();
         
@@ -69,6 +69,5 @@ public class NewFileCommand implements Command {
             tab.getContent().requestFocus();
         }
         */
-    
     }
 }

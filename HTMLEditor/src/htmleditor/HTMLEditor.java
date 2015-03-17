@@ -556,6 +556,8 @@ public class HTMLEditor extends Application {
     /* Returns the scene of HTMLEditor */
     public Scene getScene(){
         return this.scene ;
+    }
+    
     /* Returns the current tab */
     public Tab getCurrentTab() {
         return this.getTabPane().getSelectionModel().getSelectedItem() ;
