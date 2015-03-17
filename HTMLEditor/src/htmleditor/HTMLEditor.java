@@ -548,6 +548,7 @@ public class HTMLEditor extends Application {
                 stringBuffer.append(text);
                 stringBuffer.append('\n');
             }
+            stringBuffer.deleteCharAt(stringBuffer.length()-1);
  
         } catch (FileNotFoundException ex) {
             return "" ;
@@ -595,6 +596,7 @@ public class HTMLEditor extends Application {
      * Checks the provided tab if any changes have been made to the tab since the last save.
      * @param tab - The tab to check for changes.
      * @return True if the text in the provided tab has changed.
+     * ***Consider moving to HTMLAnalyzer or similar for blob reduction
      */
     public boolean hasChanged(Tab tab){
         boolean changedText=false;
@@ -615,6 +617,7 @@ public class HTMLEditor extends Application {
                     stringBuffer.append(text);
                     stringBuffer.append('\n');
                 }
+                stringBuffer.deleteCharAt(stringBuffer.length()-1);
             } catch (FileNotFoundException ex) {
                 changedText = true;
             } catch (IOException ex) {
