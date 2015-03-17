@@ -5,6 +5,7 @@
 package htmleditor.commands;
 
 import htmleditor.HTMLEditor;
+import htmleditor.TabData;
 import htmleditor.Tag;
 import htmleditor.TagType;
 import java.io.IOException;
@@ -25,8 +26,7 @@ import javafx.stage.Stage;
  * @author jlt8213
  * @author trh8614
  */
-public class InsertCommand implements Command {
-    HTMLEditor editor;
+public class InsertCommand extends UndoableCommand {
     TagType tag ;
     Map details;
     
@@ -44,6 +44,7 @@ public class InsertCommand implements Command {
         
     }
     
+    @Override
     public void execute(Event t){
         String symbol = "";
         //NOTE - header, list, table require user interactions
@@ -104,10 +105,12 @@ public class InsertCommand implements Command {
                 break;
             default:
                 System.out.println("wrong tag, ya dingus"); 
-                return;
+                break;
         }
         
-       
+        /* Memento pattern, saves the state after
+         * the operation has been performed.*/
+        this.saveState() ;
     }
     
     /* Makes an html table at cursor with specified rows and columns */
