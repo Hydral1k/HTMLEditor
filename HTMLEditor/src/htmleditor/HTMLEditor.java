@@ -367,7 +367,11 @@ public class HTMLEditor extends Application {
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.scene.heightProperty());
         ta.prefWidthProperty().bind(this.scene.widthProperty());
-        ta.setStyle("-fx-font: \"Segoe UI Semibold\"; ");
+        ta.setStyle("-fx-text-fill: black;"+
+                    "-fx-background-color: white;"+
+                    "-fx-font: Courier New;"+
+                    "-fx-font-family: monospace;"+
+                    "-fx-font-size: 12;");
         tabBorderContent.setRight(ta);
         
         
