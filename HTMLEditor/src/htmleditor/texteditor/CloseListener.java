@@ -39,8 +39,10 @@ public class CloseListener implements EventHandler<Event>{
         this.editor = editor;
     }
 
+    @Override
     public void handle(Event t) {
         boolean changedText;
+        
         Tab closedTab = (Tab) t.getTarget();
         changedText = this.editor.hasChanged(closedTab);
         if(!changedText) //if nothing changed, let them leave

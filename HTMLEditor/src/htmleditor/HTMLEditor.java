@@ -45,6 +45,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 // Main class
@@ -142,13 +144,14 @@ public class HTMLEditor extends Application {
         
         this.canvas = new BorderPane();
         this.tabPane = new TabPane();
-        
         if (this.tabPane.getTabs().size() == 0){
                 new NewFileCommand(this).execute(null);
                 this.tabPane.getSelectionModel().select(0);
                 this.getText().requestFocus();
         }
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+  
+        /*
         this.tabPane.getSelectionModel().selectedItemProperty().
                 addListener(
             new ChangeListener<Tab>() {
@@ -163,7 +166,7 @@ public class HTMLEditor extends Application {
                     }
                 }
             }
-        );
+        );*/
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
