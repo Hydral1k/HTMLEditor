@@ -87,7 +87,7 @@ public class HTMLEditor extends Application {
         this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
-        this.menuBar = buildMenuBarWithMenus(primaryStage.widthProperty());
+        this.menuBar = new MenuBuilder().buildMenuBarWithMenus(this, primaryStage.widthProperty(), this.getStyleCss());
         this.fileChooser = new FileChooser();
         this.fileChooser.setTitle("Select an HTML file...");
         
@@ -152,186 +152,6 @@ public class HTMLEditor extends Application {
         launch(args);
     }
     
-    private MenuBar buildMenuBarWithMenus(final ReadOnlyDoubleProperty menuWidthProperty){
-      menuBar = new MenuBar();
-      menuBar.setStyle(STYLE_CSS);
-
-      // Prepare left-most 'File' drop-down menu
-      final Menu fileMenu = new Menu("File");
-      fileMenu.setStyle("-fx-text-fill: white");
-
-      //New File item
-      MenuItem newItem = new MenuItem("New") ;
-      newItem.setMnemonicParsing(true);
-      newItem.setAccelerator(new KeyCodeCombination(KeyCode.N,KeyCombination.CONTROL_DOWN));
-      newItem.setOnAction(new MyEventHandler(new NewFileCommand(this)));
-      
-      //Open File item
-      MenuItem openItem = new MenuItem("Open") ;
-      openItem.setMnemonicParsing(true);
-      openItem.setAccelerator(new KeyCodeCombination(KeyCode.O,KeyCombination.CONTROL_DOWN));
-      openItem.setOnAction(new MyEventHandler(new OpenFileCommand(this)));
-
-      //Save File item
-      MenuItem saveItem = new MenuItem("Save") ;
-      saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
-      saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(this)));
-      
-      //SaveAs File item
-      MenuItem saveAsItem = new MenuItem("Save As...") ;
-      saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-      saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(this)));
-      
-      //Add all items to the left-most dropdown menu
-      fileMenu.getItems().add(newItem);
-      fileMenu.getItems().add(openItem);
-      fileMenu.getItems().add(saveItem);
-      fileMenu.getItems().add(saveAsItem);
-      
-      // Seperator
-      fileMenu.getItems().add(new SeparatorMenuItem());
-      
-      // Exit
-      MenuItem exitItem = new MenuItem("Exit", null);
-      exitItem.setMnemonicParsing(true);
-      exitItem.setOnAction(new MyEventHandler(new ExitCommand(this))) ;
-      fileMenu.getItems().add(exitItem);
-       
-      menuBar.getMenus().add(fileMenu);
-      
-      // Prepare 'Edit' drop-down menu
-      final Menu editMenu = new Menu("Edit") ;
-      editMenu.setStyle("-fx-text-fill: white");
-      
-      //Undo item
-      MenuItem undoItem = new MenuItem("Undo") ;
-      undoItem.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN)) ;
-      undoItem.setOnAction(new MyEventHandler(new UndoCommand(this))) ;
-      editMenu.getItems().add(undoItem) ;
-      
-      //Redo item
-      MenuItem redoItem = new MenuItem("Redo") ;
-      redoItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN)) ;
-      redoItem.setOnAction(new MyEventHandler(new RedoCommand(this))) ;
-      editMenu.getItems().add(redoItem) ;
-      
-      //Objectify ** TEMPORARY **
-      MenuItem objectItem = new MenuItem("Objectify") ;
-      objectItem.setAccelerator(new KeyCodeCombination(KeyCode.J, KeyCombination.CONTROL_DOWN)) ;
-      objectItem.setOnAction(new MyEventHandler(new ObjectCommand(this))) ;
-      editMenu.getItems().add(objectItem) ;
-      
-      
-      //Add Edit menu to menu bar
-      menuBar.getMenus().add(editMenu) ;
-
-      // Prepare 'Insert' drop-down menu
-      final Menu insertMenu = new Menu("Insert");
-      fileMenu.setStyle("-fx-text-fill: white");
-
-      //Bold item
-      MenuItem boldItem = new MenuItem("Bold") ;
-      boldItem.setAccelerator(new KeyCodeCombination(KeyCode.B,KeyCombination.CONTROL_DOWN));
-      boldItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.BOLD)));
-      insertMenu.getItems().add(boldItem);
-
-      //Italics item
-      MenuItem italicsItem = new MenuItem("Italics") ;
-      italicsItem.setAccelerator(new KeyCodeCombination(KeyCode.I,KeyCombination.CONTROL_DOWN));
-      italicsItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.ITALICS)));
-      insertMenu.getItems().add(italicsItem);
-      
-      //Header item
-      Menu headerItem = new Menu("Header");
-      // Cycle through and add other header types
-      for (int i = 1; i < 7; i++) {
-            MenuItem subHeaderType = new MenuItem("Header "+ i);
-            Map<String, String> dtls  = new HashMap<>();
-            dtls.put("Header Type", i + "");
-            subHeaderType.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.HEADER, dtls)));
-            headerItem.getItems().add(subHeaderType); 
-      }
-      insertMenu.getItems().add(headerItem);
-      
-      //Table item
-      MenuItem tableItem = new MenuItem("Table") ;
-      tableItem.setAccelerator(new KeyCodeCombination(KeyCode.T,KeyCombination.CONTROL_DOWN));
-      tableItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.TABLE)));
-      insertMenu.getItems().add(tableItem);
-      
-      //List item
-      Menu listItem = new Menu("List");
-      String[] listTypes = {"Number", "Bullet", "Dictionary"};
-      for (int i = 0; i < listTypes.length; i++) {
-          MenuItem subListType = new MenuItem(listTypes[i]);
-          Map<String, String> dtls = new HashMap<>();
-          dtls.put("List Type", listTypes[i]);
-          subListType.setOnAction(new MyEventHandler(new InsertCommand(this, TagType.LIST, dtls)));
-          listItem.getItems().add(subListType);
-      }
-      insertMenu.getItems().add(listItem);
-      menuBar.getMenus().add(insertMenu);
-      
-      // Indent Menu
-      final Menu indentBufferMenu = new Menu("Indent");
-      final MenuItem indentCurrentLine = new MenuItem("Ident Current Line");
-      indentCurrentLine.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_CURRENT_LINE)));
-      final MenuItem indentSelection = new MenuItem("Indent Selection");
-      indentSelection.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_SELECTION)));
-      final MenuItem indentAll = new MenuItem("Indent All");
-      indentAll.setOnAction(new MyEventHandler(new IndentCommand(this, IndentType.INDENT_ALL)));
-      indentBufferMenu.getItems().addAll(indentCurrentLine, indentSelection, indentAll);
-      menuBar.getMenus().add(indentBufferMenu);
-      
-      // Prepare 'Options' drop-down menu
-      final Menu optionsMenu = new Menu("Options");
-      
-      // Text Wrapping item
-      MenuItem textWrapItem = new MenuItem("Wrap Text (On)");
-      textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(this)));
-      optionsMenu.getItems().add(textWrapItem);
-      this.wrapText = textWrapItem;
-      
-      
-      // Indent Option Menu
-      final Menu indentMenu = new Menu("Auto Indent (On: " + HTMLEditor.this.indent_size + " Spaces)");
-      final MenuItem indentTypeNone = new MenuItem("None");
-      indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
-          public void handle(ActionEvent t){
-              indentMenu.setText("Auto Indent (Off)");
-              HTMLEditor.this.indent_size = 0;
-          }
-      });
-      indentMenu.getItems().add(indentTypeNone);
-      
-      for (int i = 1; i <= 8; i++) {
-           final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
-           indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
-               public void handle(ActionEvent t){
-                   int width = Integer.parseInt(indentTypeNumbers.getText().substring(0,1)); // because js is cooler
-                   indentMenu.setText("Auto Indent (On: " + width + " Spaces)");
-                   HTMLEditor.this.indent_size = width;
-               }
-           });
-           indentMenu.getItems().add(indentTypeNumbers);
-      }
-      optionsMenu.getItems().add(indentMenu);
-      
-      menuBar.getMenus().add(optionsMenu);
-      // Prepare 'Help' drop-down menu
-      final Menu helpMenu = new Menu("Help");
-      final MenuItem aboutMenuItem =
-         MenuItemBuilder.create()
-                        .text("About")
-                        .onAction(new MyEventHandler(new AboutAppCommand(this)))
-                        .build();             
-      helpMenu.getItems().add(aboutMenuItem);
-      menuBar.getMenus().add(helpMenu);
-
-      // bind width of menu bar to width of associated stage
-      menuBar.prefWidthProperty().bind(menuWidthProperty);
-      return menuBar;
-    }
    
     
     /**
@@ -561,6 +381,11 @@ public class HTMLEditor extends Application {
     /* Returns the current tab */
     public Tab getCurrentTab() {
         return this.getTabPane().getSelectionModel().getSelectedItem() ;
+    }
+    
+    /* Returns the Wrap Text Menu Item */
+    public MenuItem getWrapTextMenu() {
+        return this.wrapText;
     }
     
     /* Returns the background style CSS */
