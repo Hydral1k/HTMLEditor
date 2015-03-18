@@ -9,7 +9,7 @@
 package htmleditor.commands;
 
 import htmleditor.HTMLEditor;
-import htmleditor.TabData;
+import htmleditor.texteditor.TabData;
 
 /**
  * @author aac6012

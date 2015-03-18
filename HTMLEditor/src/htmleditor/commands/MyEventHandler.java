@@ -2,7 +2,7 @@
  * This is the handler for buttons.
  * Necessary for the Command pattern.
  */
-package htmleditor;
+package htmleditor.commands;
 
 import htmleditor.commands.Command;
 import javafx.event.Event;

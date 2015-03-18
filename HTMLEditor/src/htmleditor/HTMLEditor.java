@@ -12,6 +12,8 @@
 package htmleditor;
 
 
+import htmleditor.commands.MyEventHandler;
+import htmleditor.texteditor.CloseListener;
 import htmleditor.commands.*;
 import java.io.BufferedReader;
 import java.io.File;

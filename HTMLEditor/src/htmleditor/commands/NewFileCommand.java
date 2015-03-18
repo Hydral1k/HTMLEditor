@@ -3,10 +3,9 @@
  */
 package htmleditor.commands;
 
-import htmleditor.CloseListener;
+import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
-import htmleditor.MyEventHandler;
-import htmleditor.TabData;
+import htmleditor.texteditor.TabData;
 import javafx.event.Event;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;

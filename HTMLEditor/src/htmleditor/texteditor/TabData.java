@@ -2,8 +2,9 @@
  * Stores data about each tab
  * This can be very useful! Would've made things easier if I'd thought of it earlier
  */
-package htmleditor;
+package htmleditor.texteditor;
 
+import htmleditor.HTMLEditor;
 import htmleditor.undomanager.UndoManager;
 import javafx.scene.control.Tab;
 

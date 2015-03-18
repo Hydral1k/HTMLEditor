@@ -5,9 +5,9 @@
 package htmleditor.commands;
 
 import htmleditor.HTMLEditor;
-import htmleditor.TabData;
-import htmleditor.Tag;
-import htmleditor.TagType;
+import htmleditor.texteditor.TabData;
+import htmleditor.texteditor.Tag;
+import htmleditor.texteditor.TagType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;

@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package htmleditor;
+package htmleditor.texteditor;
 
 /**
-*
-* @author jlt8213
-*/
-public enum TagType {
-    HEADER, BOLD, ITALICS, LIST, LIST_ITEM, TABLE;
+ *
+ * @author thn1069
+ */
+public enum IndentType{
+    INDENT_CURRENT_LINE, INDENT_SELECTION, INDENT_ALL;
 }
-

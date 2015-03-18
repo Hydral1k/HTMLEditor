@@ -1,5 +1,6 @@
 package htmleditor;
 
+import htmleditor.commands.MyEventHandler;
 import htmleditor.commands.AlertCommand;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

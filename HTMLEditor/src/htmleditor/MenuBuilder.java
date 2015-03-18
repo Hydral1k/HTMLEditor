@@ -5,6 +5,9 @@
  */
 package htmleditor;
 
+import htmleditor.commands.MyEventHandler;
+import htmleditor.texteditor.IndentType;
+import htmleditor.texteditor.TagType;
 import htmleditor.commands.AboutAppCommand;
 import htmleditor.commands.ExitCommand;
 import htmleditor.commands.IndentCommand;

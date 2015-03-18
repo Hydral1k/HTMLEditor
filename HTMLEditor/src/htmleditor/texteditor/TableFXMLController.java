@@ -1,4 +1,4 @@
-package htmleditor;
+package htmleditor.texteditor;
 
 import java.net.URL;
 import java.util.ResourceBundle;

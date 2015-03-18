@@ -4,7 +4,7 @@
  *
  * @author mss9627
  */
-package htmleditor;
+package htmleditor.texteditor;
 
 public class NotWellFormedException extends Exception {
 	
