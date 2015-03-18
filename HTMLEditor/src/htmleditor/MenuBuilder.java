@@ -166,52 +166,8 @@ public class MenuBuilder {
         indentAll.setOnAction(new MyEventHandler(new IndentCommand(editor, IndentType.INDENT_ALL)));
         indentBufferMenu.getItems().addAll(indentCurrentLine, indentSelection, indentAll);
         menuBar.getMenus().add(indentBufferMenu);
-
-        // Prepare 'Options' drop-down menu
-        final Menu optionsMenu = new Menu("Options");
-
-        // Text Wrapping item
-        MenuItem textWrapItem = new MenuItem("Wrap Text (On)");
-        textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(editor)));
-        optionsMenu.getItems().add(textWrapItem);
-        editor.getWrapTextMenu() = textWrapItem;
-
-
-        // Indent Option Menu
-        final Menu indentMenu = new Menu("Auto Indent (On: " + HTMLEditor.this.indent_size + " Spaces)");
-        final MenuItem indentTypeNone = new MenuItem("None");
-        indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent t){
-                indentMenu.setText("Auto Indent (Off)");
-                HTMLEditor.this.indent_size = 0;
-            }
-        });
-        indentMenu.getItems().add(indentTypeNone);
-
-        for (int i = 1; i <= 8; i++) {
-             final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
-             indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
-                 public void handle(ActionEvent t){
-                     int width = Integer.parseInt(indentTypeNumbers.getText().substring(0,1)); // because js is cooler
-                     indentMenu.setText("Auto Indent (On: " + width + " Spaces)");
-                     HTMLEditor.this.indent_size = width;
-                 }
-             });
-             indentMenu.getItems().add(indentTypeNumbers);
-        }
-        optionsMenu.getItems().add(indentMenu);
-
-        menuBar.getMenus().add(optionsMenu);
-        // Prepare 'Help' drop-down menu
-        final Menu helpMenu = new Menu("Help");
-        final MenuItem aboutMenuItem =
-           MenuItemBuilder.create()
-                          .text("About")
-                          .onAction(new MyEventHandler(new AboutAppCommand(this)))
-                          .build();             
-        helpMenu.getItems().add(aboutMenuItem);
-        menuBar.getMenus().add(helpMenu);
-
+        
+        
         // bind width of menu bar to width of associated stage
         menuBar.prefWidthProperty().bind(menuWidthProperty);
         return menuBar;

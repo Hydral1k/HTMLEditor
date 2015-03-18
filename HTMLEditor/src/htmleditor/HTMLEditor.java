@@ -87,10 +87,56 @@ public class HTMLEditor extends Application {
         this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
+        
+        
+        // General Menu
         this.menuBar = new MenuBuilder().buildMenuBarWithMenus(this, primaryStage.widthProperty(), this.getStyleCss());
+        
+        // Prepare 'Options' drop-down menu
+        final Menu optionsMenu = new Menu("Options");
+        // Text Wrapping item
+        MenuItem textWrapItem = new MenuItem("Wrap Text (On)");
+        textWrapItem.setOnAction(new MyEventHandler(new WrapTextSwitchCommand(this)));
+        optionsMenu.getItems().add(textWrapItem);
+        this.wrapText = textWrapItem;
+        
+        // Indent Option Menu
+        final Menu indentMenu = new Menu("Auto Indent (On: " + this.indent_size + " Spaces)");
+        final MenuItem indentTypeNone = new MenuItem("None");
+        indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent t){
+                indentMenu.setText("Auto Indent (Off)");
+                HTMLEditor.this.indent_size = 0;
+            }
+        });
+        indentMenu.getItems().add(indentTypeNone);
+        for (int i = 1; i <= 8; i++) {
+            final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
+            indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
+                public void handle(ActionEvent t){
+                    int width = Integer.parseInt(indentTypeNumbers.getText().substring(0,1)); // because js is cooler
+                    indentMenu.setText("Auto Indent (On: " + width + " Spaces)");
+                    HTMLEditor.this.indent_size = width;
+                }
+            });
+            indentMenu.getItems().add(indentTypeNumbers);
+        }
+        optionsMenu.getItems().add(indentMenu);
+        menuBar.getMenus().add(optionsMenu);
+        
+        // Prepare 'Help' drop-down menu
+        final Menu helpMenu = new Menu("Help");
+        final MenuItem aboutMenuItem =
+           MenuItemBuilder.create()
+                          .text("About")
+                          .onAction(new MyEventHandler(new AboutAppCommand(this)))
+                          .build();             
+        helpMenu.getItems().add(aboutMenuItem);
+        menuBar.getMenus().add(helpMenu);
+        
+        
         this.fileChooser = new FileChooser();
         this.fileChooser.setTitle("Select an HTML file...");
-        
         
         this.canvas = new BorderPane();
         this.tabPane = new TabPane();
@@ -101,10 +147,7 @@ public class HTMLEditor extends Application {
                 this.getText().requestFocus();
         }
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        
-        
-        /*
-        tabPane.getSelectionModel().selectedItemProperty().
+        this.tabPane.getSelectionModel().selectedItemProperty().
                 addListener(
             new ChangeListener<Tab>() {
                 @Override
@@ -119,7 +162,6 @@ public class HTMLEditor extends Application {
                 }
             }
         );
-        */
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
