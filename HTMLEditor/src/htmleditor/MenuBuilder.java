@@ -9,12 +9,15 @@ import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.IndentType;
 import htmleditor.texteditor.TagType;
 import htmleditor.commands.AboutAppCommand;
+import htmleditor.commands.CopyCommand;
+import htmleditor.commands.CutCommand;
 import htmleditor.commands.ExitCommand;
 import htmleditor.commands.IndentCommand;
 import htmleditor.commands.InsertCommand;
 import htmleditor.commands.NewFileCommand;
 import htmleditor.commands.ObjectCommand;
 import htmleditor.commands.OpenFileCommand;
+import htmleditor.commands.PasteCommand;
 import htmleditor.commands.RedoCommand;
 import htmleditor.commands.SaveAsCommand;
 import htmleditor.commands.SaveFileCommand;
@@ -89,6 +92,24 @@ public class MenuBuilder {
         // Prepare 'Edit' drop-down menu
         final Menu editMenu = new Menu("Edit") ;
         editMenu.setStyle("-fx-text-fill: white");
+        
+        //Copy item
+        MenuItem copyItem = new MenuItem("Copy") ;
+        copyItem.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN)) ;
+        copyItem.setOnAction(new MyEventHandler(new CopyCommand(editor))) ;
+        editMenu.getItems().add(copyItem) ;
+        
+        //Cut item
+        MenuItem cutItem = new MenuItem("Cut") ;
+        cutItem.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN)) ;
+        cutItem.setOnAction(new MyEventHandler(new CutCommand(editor))) ;
+        editMenu.getItems().add(cutItem) ;
+        
+        //Paste item
+        MenuItem pasteItem = new MenuItem("Paste") ;
+        pasteItem.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN)) ;
+        pasteItem.setOnAction(new MyEventHandler(new PasteCommand(editor))) ;
+        editMenu.getItems().add(pasteItem) ;
 
         //Undo item
         MenuItem undoItem = new MenuItem("Undo") ;

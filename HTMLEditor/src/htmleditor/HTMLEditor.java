@@ -75,6 +75,8 @@ public class HTMLEditor extends Application {
     public boolean autoindent = true;
     public Integer indent_size = 4;  
     
+    private String clipboard ;
+    
     
     private static HTMLEditor instance = null;
     public static HTMLEditor getInstance() {
@@ -91,6 +93,9 @@ public class HTMLEditor extends Application {
         this.stage = primaryStage;
         this.rootGroup = new Group();
         this.scene = new Scene(rootGroup, 800, 400, Color.DARKGREY);
+        
+        //This is for copy/cut/paste commands.
+        this.clipboard = "" ;
         
         
         // General Menu
@@ -533,5 +538,15 @@ public class HTMLEditor extends Application {
     
     public Object createMemento(){
         return new Memento(this.getText().getText(), this.getCarrotPosition()) ;
+    }
+    
+    //Sets the clipboard for copy/cut/paste
+    public void setClipboard(String st) {
+        this.clipboard = st ;
+    }
+    
+    //Gets the clipboard for paste
+    public String getClipboard() {
+        return this.clipboard ;
     }
 }
