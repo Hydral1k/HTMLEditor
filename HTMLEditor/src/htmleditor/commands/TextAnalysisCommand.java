@@ -30,7 +30,6 @@ public class TextAnalysisCommand implements Command {
         System.out.println("Carrot Position: "+ carrotPosition + " Buffer: " + buffer);
         KeyCode keyType = ((KeyEvent)t).getCode();
         
-        
         // Only non-navigation characters
         if( keyType != KeyCode.ENTER){
             return;
@@ -44,7 +43,6 @@ public class TextAnalysisCommand implements Command {
                 )
             ) || // tag is type of table
                 ( buffer.length() >= 8 && buffer.substring(carrotPosition - 8, carrotPosition).toLowerCase().matches("<table>\n"))
-            
           ){ 
             
             System.out.println("Adding newline with new indent with respect to previous line");
@@ -69,6 +67,7 @@ public class TextAnalysisCommand implements Command {
             System.out.println("Adding newline with respect to previous line");
             String indent = "";
             Integer previous_indent_size = getDepthOfBuffer( getPrevLine(buffer, editor.getCarrotPosition()) );
+            
             for (int i = 0; i < previous_indent_size; i++) {
                 indent += " ";
             }
