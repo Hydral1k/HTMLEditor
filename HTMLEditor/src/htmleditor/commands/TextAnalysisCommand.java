@@ -1,5 +1,6 @@
 package htmleditor.commands;
 
+import htmleditor.HTMLAnalyzer;
 import htmleditor.HTMLEditor;
 import java.util.Scanner;
 import javafx.event.Event;
@@ -29,6 +30,11 @@ public class TextAnalysisCommand implements Command {
         
         System.out.println("Carrot Position: "+ carrotPosition + " Buffer: " + buffer);
         KeyCode keyType = ((KeyEvent)t).getCode();
+        
+        
+        // Line counting
+        HTMLAnalyzer analyzer = editor.getAnalyzer();
+        int lineno = analyzer.lineCount(editor.getBuffer());
         
         
         // Only non-navigation characters

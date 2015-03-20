@@ -7,6 +7,8 @@ import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
 import htmleditor.texteditor.TabData;
 import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
@@ -42,7 +44,10 @@ public class NewFileCommand implements Command {
         tabBorderContent.setLeft(lineNumbers);
         */
         GridPane lineNumbers = new GridPane();
+        lineNumbers.addEventHandler(EventType.ROOT, null);
         Label lineno = new Label(" 1 ");
+        lineno.setStyle("-fx-padding: 4;"+
+                        "-fx-font-size: 10;");
         GridPane.setConstraints(lineno, 3, 1); // column=3 row=1
 
         lineNumbers.getChildren().addAll(lineno);

@@ -374,8 +374,6 @@ public class HTMLEditor extends Application {
                 
             }
         }
-        
-        
     }
     
     /**
@@ -413,6 +411,11 @@ public class HTMLEditor extends Application {
             }
         }
         return stringBuffer.toString();
+    }
+    
+    /* Returns the HTMLAnalyzer of HTMLEditor */
+    public HTMLAnalyzer getAnalyzer(){
+        return this.analyzer ;
     }
     
     /* Returns the tabPane of HTMLEditor */

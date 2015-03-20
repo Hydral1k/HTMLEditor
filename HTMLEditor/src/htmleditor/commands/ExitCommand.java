@@ -23,7 +23,7 @@ public class ExitCommand implements Command{
     
     public void execute(Event t){
         boolean confirm;
-        String message = "Warning!\nThis following files contain unsaved changes:\n";
+        String message = "Warning!\nThese following files contain unsaved changes:\n";
         ArrayList<String> changedTabs = new ArrayList<String>();
         ObservableList<Tab> tabs = this.editor.getTabPane().getTabs();
         for( Tab thisTab : tabs ){

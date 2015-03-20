@@ -89,7 +89,6 @@ public class HTMLAnalyzer {
             }
             
         }
-		
         return true;
     }
 	
@@ -157,7 +156,7 @@ public class HTMLAnalyzer {
 			count++;
 		}
 	}
-		
+        
         return count ;
     }
     
