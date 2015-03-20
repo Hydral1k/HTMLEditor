@@ -10,6 +10,7 @@ package htmleditor.outline;
  * @author jlt8213
  */
 public class HTMLEditorFactory {
+    /*
     public static MakeLineNumber(int num){
         
     }
@@ -19,5 +20,5 @@ public class HTMLEditorFactory {
 
     public static MakeExpandCollapseElement(boolean expanded = false ){
         
-    }
+    }*/
 }

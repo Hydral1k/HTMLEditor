@@ -149,11 +149,11 @@ public class HTMLAnalyzer {
      * @return 
      */
     public int lineCount( String bufferHTML ){
-        int count = 0 ;
+        int count = 1 ;
         
 	for( int x = 0; x < bufferHTML.length(); x++ ){
 		if( bufferHTML.charAt(x) == '\n' ){
-			count++;
+                    count++;
 		}
 	}
         

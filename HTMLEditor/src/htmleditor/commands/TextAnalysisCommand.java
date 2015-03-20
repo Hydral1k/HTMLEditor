@@ -32,11 +32,6 @@ public class TextAnalysisCommand implements Command {
         KeyCode keyType = ((KeyEvent)t).getCode();
         
         
-        // Line counting
-        HTMLAnalyzer analyzer = editor.getAnalyzer();
-        int lineno = analyzer.lineCount(editor.getBuffer());
-        
-        
         // Only non-navigation characters
         if( keyType != KeyCode.ENTER){
             return;
