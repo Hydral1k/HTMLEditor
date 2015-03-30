@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -42,13 +43,18 @@ public class NewFileCommand implements Command {
         BorderPane tabBorderContent = new BorderPane();
         
         // line numbers
-        /*
-        TextArea lineNumbers = new TextArea("1");
+        final TextArea lineNumbers = new TextArea("1");
+        lineNumbers.setStyle("-fx-text-fill: black;"+
+                             "-fx-background-color: white;"+
+                             "-fx-font: Courier New;"+
+                             "-fx-font-family: monospace;"+
+                             "-fx-font-size: 12;");
         lineNumbers.setDisable(true);
         lineNumbers.setWrapText(true);
         lineNumbers.setPrefWidth(20);
+        lineNumbers.autosize();
         tabBorderContent.setLeft(lineNumbers);
-        */
+        /*
         final GridPane lineNumbers = new GridPane();
         ColumnConstraints column = new ColumnConstraints(20,20,Double.MAX_VALUE);
         column.setHgrow(Priority.ALWAYS);
@@ -57,10 +63,11 @@ public class NewFileCommand implements Command {
         lineno.setStyle("-fx-padding: 5 4 0 4;"+
                     "-fx-font: Courier New;"+
                     "-fx-font-family: monospace;"+
-                    "-fx-font-size: 1;");
+                    "-fx-font-size: 1;"+
+                    "-fx-background-color: black");
         lineNumbers.getChildren().addAll(lineno);
         tabBorderContent.setLeft(lineNumbers);
-        
+        */
         
         // text area
         TextArea ta = new TextArea();
@@ -77,10 +84,12 @@ public class NewFileCommand implements Command {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 System.out.println("line: " + new HTMLAnalyzer().lineCount(editor.getBuffer()));
-                lineNumbers.getChildren().clear();
+                lineNumbers.clear();
                 
                 for (int i = 1; i <= new HTMLAnalyzer().lineCount(editor.getBuffer()); i++){
-                    Label newLineNo = new Label(" " + Integer.toString(i) + " ");
+                    System.out.println(lineNumbers.getClass());
+                    lineNumbers.appendText(""+i+"\n");
+                    /*
                     if (i == 1){
                         newLineNo.setStyle("-fx-padding: 5 4 0 4;"+ 
                     "-fx-font: Courier New;"+
@@ -94,11 +103,11 @@ public class NewFileCommand implements Command {
                     "-fx-font-size: 11;");
                     }
                     lineNumbers.addRow(i-1, newLineNo);
+                    */
                 }
             }
         });
         tabBorderContent.setRight(ta);
-        
         
         tab.setContent(tabBorderContent);
         this.editor.getTabPane().getTabs().add(tab);
