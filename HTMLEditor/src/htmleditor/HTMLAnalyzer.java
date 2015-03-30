@@ -26,16 +26,7 @@ public class HTMLAnalyzer {
      * @return true if no tag is left open throughout the input buffer
      */
     public boolean wellFormed( String bufferHTML ){
-        List<String> allTags = new ArrayList<String>();
-        
-        // This regular expression matches HTML tags.
-        Pattern tagPattern = Pattern.compile("<(\"[^\"]*\"|'[^']*'|[^'\">])*>");
-        Matcher tagFinder = tagPattern.matcher( bufferHTML );
-		
-        // Create a list containing all of the HTML tags.
-	while( tagFinder.find() ){
-            allTags.add( tagFinder.group() );
-	}
+        List<String> allTags = extractTags( bufferHTML );
         
         String nextTag = "";
         
@@ -90,6 +81,21 @@ public class HTMLAnalyzer {
             
         }
         return true;
+    }
+    
+    public List<String> extractTags( String buffer ){
+        List<String> allTags = new ArrayList<String>();
+        
+        // This regular expression matches HTML tags.
+        Pattern tagPattern = Pattern.compile("<(\"[^\"]*\"|'[^']*'|[^'\">])*>");
+        Matcher tagFinder = tagPattern.matcher( buffer );
+		
+        // Create a list containing all of the HTML tags.
+	while( tagFinder.find() ){
+            allTags.add( tagFinder.group() );
+	}
+        
+        return allTags;
     }
 	
     /**
