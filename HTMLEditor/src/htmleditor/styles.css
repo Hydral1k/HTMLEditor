@@ -3097,3 +3097,7 @@ Only the properties with values that are different from the TextBox are specifie
     -fx-background-color: -fx-cell-hover-color;
     -fx-text-fill: -fx-text-inner-color;
 }
+
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
