@@ -80,7 +80,10 @@ public class NewFileCommand implements Command {
                 for (int i = 1; i <= lineCount; i++){
                     Integer curr_length = String.valueOf(i).length();
                     String spacing = new String(new char[max_length - curr_length + TOGGLER_SPACING]).replace("\0", " ");
-                    lineNumbers.appendText(i + spacing + "[+]\n");
+                    if (i == 1){
+                        lineNumbers.appendText(i + spacing + "[+]");
+                    }
+                    else{lineNumbers.appendText("\n" + i + spacing + "[+]");}
                 }
             }
         });
