@@ -54,6 +54,7 @@ public class NewFileCommand implements Command {
         lineNumbers.setPrefWidth(20);
         lineNumbers.autosize();
         tabBorderContent.setLeft(lineNumbers);
+        
         /*
         final GridPane lineNumbers = new GridPane();
         ColumnConstraints column = new ColumnConstraints(20,20,Double.MAX_VALUE);
@@ -76,6 +77,7 @@ public class NewFileCommand implements Command {
                     "-fx-font: Courier New;"+
                     "-fx-font-family: monospace;"+
                     "-fx-font-size: 12;");
+        lineNumbers.scrollTopProperty().bindBidirectional(ta.scrollTopProperty());
         ta.setOnKeyReleased(new MyEventHandler(new TextAnalysisCommand(this.editor)));
         ta.setWrapText(true);
         ta.prefHeightProperty().bind(this.editor.getScene().heightProperty());
