@@ -2593,7 +2593,7 @@
 /*    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
     -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
     -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;*/
-    -fx-background-color: -fx-tab-border-color, linear-gradient(#66FFFF, #99CCFF, #66CCFF);
+    -fx-background-color: -fx-tab-border-color, linear-gradient(#66FFFF, #A3F3FF, #52B8FF, #00A3EF);
     -fx-background-insets: 0, 1 1 0 1;
     -fx-background-radius: 5 5 0 0, 4 4 0 0;
 }
