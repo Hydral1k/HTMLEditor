@@ -52,7 +52,7 @@ public class NewFileCommand implements Command {
                              "-fx-font-size: 12;");
         lineNumbers.setDisable(true);
         lineNumbers.setWrapText(true);
-        lineNumbers.setPrefWidth(20);
+        lineNumbers.setPrefWidth(30);
         lineNumbers.autosize();
         tabBorderContent.setLeft(lineNumbers);
         
@@ -89,7 +89,7 @@ public class NewFileCommand implements Command {
                 System.out.println("line: " + new HTMLAnalyzer().lineCount(editor.getBuffer()));
                 lineNumbers.clear();
                 int lineCount = new HTMLAnalyzer().lineCount(editor.getBuffer());
-                lineNumbers.setPrefWidth(20 * (int)(Math.log10(lineCount)+1));
+                lineNumbers.setPrefWidth(20 + 10 * (int)(Math.log10(lineCount)+1));
                 for (int i = 1; i <= lineCount; i++){
                     System.out.println(lineNumbers.getClass());
                     lineNumbers.appendText(""+i+"\n");
