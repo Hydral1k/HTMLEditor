@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
  */
 public class NewFileCommand implements Command {
     HTMLEditor editor ;
+    final int TOGGLER_SPACING = 1;
     
     public NewFileCommand(HTMLEditor editor){
         this.editor = editor;
@@ -46,30 +47,15 @@ public class NewFileCommand implements Command {
         // line numbers
         final TextArea lineNumbers = new TextArea("1");
         lineNumbers.setStyle("-fx-text-fill: black;"+
-                             "-fx-background-color: white;"+
+                             "-fx-background-color: lightgrey;"+
                              "-fx-font: Courier New;"+
                              "-fx-font-family: monospace;"+
                              "-fx-font-size: 12;");
         lineNumbers.setDisable(true);
         lineNumbers.setWrapText(true);
-        lineNumbers.setPrefWidth(30);
+        lineNumbers.setPrefWidth(50);
         lineNumbers.autosize();
         tabBorderContent.setLeft(lineNumbers);
-        
-        /*
-        final GridPane lineNumbers = new GridPane();
-        ColumnConstraints column = new ColumnConstraints(20,20,Double.MAX_VALUE);
-        column.setHgrow(Priority.ALWAYS);
-        
-        Label lineno = new Label(" 1 ");
-        lineno.setStyle("-fx-padding: 5 4 0 4;"+
-                    "-fx-font: Courier New;"+
-                    "-fx-font-family: monospace;"+
-                    "-fx-font-size: 1;"+
-                    "-fx-background-color: black");
-        lineNumbers.getChildren().addAll(lineno);
-        tabBorderContent.setLeft(lineNumbers);
-        */
         
         // text area
         TextArea ta = new TextArea();
@@ -86,29 +72,15 @@ public class NewFileCommand implements Command {
         ta.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                System.out.println("line: " + new HTMLAnalyzer().lineCount(editor.getBuffer()));
                 lineNumbers.clear();
                 int lineCount = new HTMLAnalyzer().lineCount(editor.getBuffer());
-                lineNumbers.setPrefWidth(20 + 10 * (int)(Math.log10(lineCount)+1));
+                Integer max_length = String.valueOf(lineCount).length();
+                lineNumbers.setPrefWidth(50 + (10 * max_length));
+                
                 for (int i = 1; i <= lineCount; i++){
-                    System.out.println(lineNumbers.getClass());
-                    lineNumbers.appendText(""+i+"\n");
-                    
-                    /*
-                    if (i == 1){
-                        newLineNo.setStyle("-fx-padding: 5 4 0 4;"+ 
-                    "-fx-font: Courier New;"+
-                    "-fx-font-family: monospace;"+
-                    "-fx-font-size: 11;");
-                    }
-                    else{
-                    newLineNo.setStyle("-fx-padding: 0 4 0 4;"+
-                    "-fx-font: Courier New;"+
-                    "-fx-font-family: monospace;"+
-                    "-fx-font-size: 11;");
-                    }
-                    lineNumbers.addRow(i-1, newLineNo);
-                    */
+                    Integer curr_length = String.valueOf(i).length();
+                    String spacing = new String(new char[max_length - curr_length + TOGGLER_SPACING]).replace("\0", " ");
+                    lineNumbers.appendText(i + spacing + "[+]\n");
                 }
             }
         });
@@ -117,12 +89,6 @@ public class NewFileCommand implements Command {
         tab.setContent(tabBorderContent);
         this.editor.getTabPane().getTabs().add(tab);
         this.editor.getTabPane().getSelectionModel().select(tab);
-        
-        /*
-        if (tab.isSelected()){
-            tab.getContent().requestFocus();
-        }
-        */
         
         //This saves the initial state to the newly created tab's undoManager.
         ((TabData)tab.getUserData()).getUndoManager().save(this.editor.createMemento());
