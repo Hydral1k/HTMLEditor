@@ -87,10 +87,12 @@ public class NewFileCommand implements Command {
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 System.out.println("line: " + new HTMLAnalyzer().lineCount(editor.getBuffer()));
                 lineNumbers.clear();
-                
-                for (int i = 1; i <= new HTMLAnalyzer().lineCount(editor.getBuffer()); i++){
+                int lineCount = new HTMLAnalyzer().lineCount(editor.getBuffer());
+                lineNumbers.setPrefWidth(20 * (int)(Math.log10(lineCount)+1));
+                for (int i = 1; i <= lineCount; i++){
                     System.out.println(lineNumbers.getClass());
                     lineNumbers.appendText(""+i+"\n");
+                    
                     /*
                     if (i == 1){
                         newLineNo.setStyle("-fx-padding: 5 4 0 4;"+ 
