@@ -15,10 +15,9 @@ public class CutCommand extends UndoableCommand {
         this.editor = e ;
     }
 
+    
     @Override
-    public void execute(Event t) {
-        this.saveState(); //Save before state change.
-        
+    public void operate(Event t) {
         String oldBuff = this.editor.getText().getText() ;
         //In case the if's don't catch, newBuff equals oldBuff by default.
         String newBuff = oldBuff ;
@@ -49,7 +48,5 @@ public class CutCommand extends UndoableCommand {
         
         //Update the buffer
         this.editor.setBuffer(newBuff) ;
-        
-        this.saveState() ; //Save after state changes.
     }   
 }

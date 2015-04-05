@@ -21,9 +21,18 @@ public class KeyCommand extends UndoableCommand {
         this.editor = e ;
         isEntering = true ;
     }
+    
+    @Override
+    /**
+     * Execute must be overriden because it does not follow the same
+     * pattern "save,operate,save".
+     */
+    public void execute(Event t){
+        this.operate(t) ;
+    }
 
     @Override
-    public void execute(Event t) {
+    public void operate(Event t) {
         //If user presses backspace..
             //if isEntering is true, save state.
             //if isEntering false, backspace as normal (i.e. do nothing).
