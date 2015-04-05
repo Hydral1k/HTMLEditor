@@ -40,8 +40,13 @@ public class UndoManager {
      * is a private class in HTMLEditor (encapsulation).
      */
     public void save(Object m) {
-        //Pushes a new state onto the undoStack.
-        this.undoStack.push(m) ;
+        //This prevents duplicate states.
+        if (this.undoStack.isEmpty() || !m.equals(this.undoStack.peek())){    
+            this.undoStack.push(m) ;
+            System.out.println("---------------Saving New State---------------") ;
+            System.out.println(m) ;
+            System.out.println("----------------------------------------------") ;
+        }
         
         //Clear the redoStack after a new operation happens.
         this.redoStack.clear() ;
@@ -55,7 +60,6 @@ public class UndoManager {
     public void undo() {
         //If undoStack is empty, no undo operation can be performed.
         if (this.undoStack.isEmpty()){
-            
             System.out.println("No more commands to undo!") ;
             return ;
         }

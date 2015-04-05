@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -195,6 +197,9 @@ public class HTMLEditor extends Application {
             File f = new File(paramList.get(0)) ;
             openFile(f) ;
         }
+        
+        //This adds the key listener for entering/deleting in blocks
+        this.getText().addEventHandler(KeyEvent.KEY_PRESSED, new MyEventHandler(new KeyCommand(this)));
     }
 
     /**
@@ -525,11 +530,29 @@ public class HTMLEditor extends Application {
         
         public String getBuffer(){
             return this.htmlBuffer ;
-    }
+        }
         
         public int getCurserPos(){
             return this.cursorPos ;
-}
+        }
+        
+        /*
+         * This method is used to compare two states.
+         * It is used to prevent consecutive duplicates in undo/redo stacks.
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Memento) {
+                Memento m = (Memento)o ;
+                return (this.getBuffer().equals(m.getBuffer()) &&
+                        this.getCurserPos() == m.getCurserPos()) ;
+            }
+            else {
+                //Cannot compare Memento to another type of Object.
+                throw new UnsupportedOperationException("Unable to compare un-like classes.") ;
+            }
+            
+        }
         
     }
     
