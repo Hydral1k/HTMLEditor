@@ -17,7 +17,7 @@ public class CutCommand extends UndoableCommand {
 
     @Override
     public void execute(Event t) {
-        
+        this.saveState(); //Save before state change.
         
         String oldBuff = this.editor.getText().getText() ;
         //In case the if's don't catch, newBuff equals oldBuff by default.

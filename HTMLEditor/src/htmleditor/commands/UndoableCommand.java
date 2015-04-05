@@ -18,6 +18,15 @@ public abstract class UndoableCommand implements Command{
     /* This field will be inherited by subclasses */
     public HTMLEditor editor ;
     
+    /* A note about the children's execute() implementation:
+       To ensure each state is saved with text block entry/deletion,
+       the implementation is structured as:
+            saveState()
+            [implementation]
+            saveState()
+       There is a checker in save() of UndoManager to prevent duplicates.
+    */
+    
     public void saveState(){
         //This gets the TabData class from the current open tab.
         TabData tabdata = (TabData)this.editor.getCurrentTab().getUserData() ;

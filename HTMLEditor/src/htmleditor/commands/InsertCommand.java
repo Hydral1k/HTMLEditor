@@ -46,6 +46,8 @@ public class InsertCommand extends UndoableCommand {
     
     @Override
     public void execute(Event t){
+        this.saveState(); //Save before state change.
+        
         String symbol = "";
         //NOTE - header, list, table require user interactions
         Tag new_tag;

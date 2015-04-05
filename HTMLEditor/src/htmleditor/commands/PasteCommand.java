@@ -17,6 +17,8 @@ public class PasteCommand extends UndoableCommand {
 
     @Override
     public void execute(Event t) {
+        this.saveState(); //Save before execution
+        
         String oldBuff = this.editor.getText().getText() ;
         String newBuff ;
         

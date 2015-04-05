@@ -5,7 +5,6 @@ package htmleditor.undomanager;
 
 import htmleditor.HTMLEditor;
 import java.util.Stack;
-import javafx.scene.control.Tab;
 
 /**
  * @author aac6012
