@@ -7,6 +7,7 @@ import htmleditor.HTMLAnalyzer;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
 import htmleditor.texteditor.TabData;
+import java.util.Scanner;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -51,10 +53,37 @@ public class NewFileCommand implements Command {
                              "-fx-font: Courier New;"+
                              "-fx-font-family: monospace;"+
                              "-fx-font-size: 12;");
-        lineNumbers.setDisable(true);
+        lineNumbers.setEditable(false);
         lineNumbers.setWrapText(true);
         lineNumbers.setPrefWidth(50);
         lineNumbers.autosize();
+        lineNumbers.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+            @Override
+            public void handle(MouseEvent t) {
+                System.out.println("CLICKED");
+                int caretPos = lineNumbers.getCaretPosition();
+                String nums = lineNumbers.getText();
+                while(nums.charAt(caretPos) != '\n' && caretPos > 1){
+                    caretPos--;
+                }
+                Scanner sc = new Scanner(nums.substring(caretPos));
+                int clickedLine = sc.nextInt();
+                while(nums.charAt(caretPos) != '['){
+                    caretPos++;
+                }
+                caretPos++;
+                StringBuilder newNums = new StringBuilder(nums);
+                char newChar = '+';
+                if(nums.charAt(caretPos) == '+'){
+                    newChar = '-';
+                }
+                newNums.setCharAt(caretPos, newChar);
+                lineNumbers.setText(newNums.toString());
+                System.out.println("LINE " + clickedLine);
+            }
+        });
+        
         tabBorderContent.setLeft(lineNumbers);
         
         // text area
