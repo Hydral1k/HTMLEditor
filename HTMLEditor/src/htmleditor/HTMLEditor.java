@@ -462,7 +462,7 @@ public class HTMLEditor extends Application {
         return this.VERSION;
     }
     
-    
+
     /**
      * Checks the provided tab if any changes have been made to the tab since the last save.
      * @param tab - The tab to check for changes.
