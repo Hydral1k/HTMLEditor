@@ -2,9 +2,14 @@ package htmleditor;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Used to create and provide display logic for the Link View.
@@ -13,16 +18,39 @@ import javafx.scene.layout.VBox;
  */
 public class LinkViewPane extends VBox {
     
+    final boolean ALPHABETICAL = true;
+    final boolean IN_ORDER = false;
+    private VBox view = null;
     private List<String> links;
     private HashMap<String, Integer> alphabeticalLinks;
     private final HTMLAnalyzer analyzer;
+    private final HTMLEditor editor;
+    private boolean mode;
     
-    public LinkViewPane( String buffer ){
+    /**
+     * Creates a link view pane to display in the main editor.
+     * Sets the initial links and mode according to user selections.
+     * 
+     * @param editor         The open HTMLEditor, used to find the open buffer.
+     * @param isAlphabetical True if alphabetical mode is enabled.
+     *                       ALPHABETICAL and IN_ORDER are provided as constants
+     *                       in order to make the code more readable.
+     */
+    public LinkViewPane( HTMLEditor editor, boolean isAlphabetical ){
         // Set up data structures for the display
         this.analyzer = new HTMLAnalyzer();
+        this.editor = editor;
         this.links = new LinkedList<String>();
         this.alphabeticalLinks = new HashMap<String, Integer>();
-        updateLinks( buffer );
+        this.mode = isAlphabetical;
+        updateLinks( editor.getBuffer() );
+        
+        view = new VBox();
+        view.setLayoutX(10);
+        view.setSpacing(10);
+        update();
+        
+        
     }
     
     /**
@@ -81,9 +109,80 @@ public class LinkViewPane extends VBox {
      * 
      * @param buffer the current buffer
      */
-    public final void updateLinks( String buffer ){
-        //links = extractLinks( analyzer.extractTags( buffer ) );
+    public void updateLinks( String buffer ){
+        links = extractLinks( analyzer.extractTags( buffer ) );
         createAlphabetical( links );
+    }
+    
+    /**
+     * Updates the display mode for the current buffer.
+     * 
+     * @param isAlphabetical True if alphabetical mode is enabled.
+     */
+    public void setMode( boolean isAlphabetical ){
+        mode = isAlphabetical;
+    }
+    
+    /**
+     * Updates and returns a copy of the current view.
+     * 
+     * @return the VBox containing the current links
+     */
+    public VBox getLinkView(){
+        update();
+        return view;
+    }
+    
+    /**
+     * Resets the elements in the link view with new links.
+     */
+    private void update(){
+        
+        // Get new links and reset display
+        updateLinks( editor.getBuffer() );
+        view.getChildren().clear();
+        Text title, element;
+        String nextLink;
+        
+        if( mode == IN_ORDER ){
+            
+            // Add all links from the current document 
+            // Display in the order they were found
+            title = new Text("Links - In order of appearence");
+            view.getChildren().add( title );
+            for( String s : links ){
+                nextLink = " - " + s;
+                element = new Text( nextLink );
+                view.getChildren().add( element );
+            }
+            
+        } else {
+            
+            title = new Text("Links - In alphabetical order");
+            view.getChildren().add(title);
+            
+            // Sort the hash map of links by key (text in link)
+            Map<String, Integer> sortMap;
+            sortMap = new TreeMap<>( alphabeticalLinks );
+            Set sortedLinks = sortMap.entrySet();
+            Iterator i = sortedLinks.iterator();
+            
+            // Iterate through map and add each link to the view
+            while( i.hasNext() ){
+                Map.Entry nextInSorted = (Map.Entry) i.next();
+                nextLink = " - " + nextInSorted.getKey() + " - ";
+                
+                if( nextInSorted.getValue().equals(1) ){
+                    nextLink += nextInSorted.getValue() + " occurence";
+                } else {
+                    nextLink += nextInSorted.getValue() + " occurences";
+                }
+                
+                // Add link to view, displays in alphabetical order
+                element = new Text( nextLink );
+                view.getChildren().add( element );
+            }
+        }
     }
     
 }
