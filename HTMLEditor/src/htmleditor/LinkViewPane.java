@@ -1,13 +1,21 @@
 package htmleditor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -18,10 +26,13 @@ import javafx.scene.text.Text;
  */
 public class LinkViewPane extends VBox {
     
-    final boolean ALPHABETICAL = true;
-    final boolean IN_ORDER = false;
+    final static boolean ALPHABETICAL = true;
+    final static boolean IN_ORDER = false;
+    private BorderPane pane = null;
+    private ToolBar toolbar = null;
     private VBox view = null;
     private List<String> links;
+    private Text modeDisplay;
     private HashMap<String, Integer> alphabeticalLinks;
     private final HTMLAnalyzer analyzer;
     private final HTMLEditor editor;
@@ -39,8 +50,9 @@ public class LinkViewPane extends VBox {
     public LinkViewPane( HTMLEditor editor, boolean isAlphabetical ){
         // Set up data structures for the display
         this.analyzer = new HTMLAnalyzer();
+        this.pane = new BorderPane();
         this.editor = editor;
-        this.links = new LinkedList<String>();
+        this.links = new ArrayList<String>();
         this.alphabeticalLinks = new HashMap<String, Integer>();
         this.mode = isAlphabetical;
         updateLinks( editor.getBuffer() );
@@ -50,31 +62,108 @@ public class LinkViewPane extends VBox {
         view.setSpacing(10);
         update();
         
+        this.toolbar = new ToolBar();
+        addToolBarElements();
         
+        pane.setTop( toolbar );
+        pane.setCenter( view );
+        pane.setVisible( true );
+    }
+    
+    private void addToolBarElements(){
+        if( toolbar == null ) return;
+        
+        this.modeDisplay = new Text();
+        toolbar.setStyle( editor.getStyleCss() );
+        Region rightAlign = new Region();
+        HBox.setHgrow(rightAlign, Priority.ALWAYS);
+       
+        Button refresh = new Button( "Refresh" );
+        Button alphabetical = new Button( "Alphabetical Mode" );
+        Button inOrder = new Button( "In-Order Mode" );
+        Button close = new Button( "Close" );
+        
+        modeDisplay.setText( createDisplayText() );
+        
+        refresh.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent t){
+                update();
+            }
+        });
+        
+        alphabetical.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent t){
+                setMode( ALPHABETICAL );
+                modeDisplay.setText( createDisplayText() );
+            }
+        });
+        
+        inOrder.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent t){
+                setMode( IN_ORDER );
+                modeDisplay.setText( createDisplayText() );
+            }
+        });
+        
+        close.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent t){
+                getPane().setVisible( false );
+            }
+        });
+        
+        toolbar.getItems().add( modeDisplay );
+        toolbar.getItems().add( rightAlign );
+        toolbar.getItems().add( alphabetical );
+        toolbar.getItems().add( inOrder );
+        toolbar.getItems().add( refresh );
+        toolbar.getItems().add( close );
+    }
+    
+    /**
+     * Subroutine for the toolbar creation.
+     * Sets the explanatory text on the left of the toolbar.
+     * 
+     * @return a formatted string describing the current mode and links
+     */
+    private String createDisplayText(){
+        String helperText;
+        
+        if( mode == ALPHABETICAL ){
+            helperText = "Displaying links in alphabetical order - ";
+        } else {
+            helperText = "Displaying links in order of appearence - ";
+        }
+        helperText = helperText + links.size() + " links found";
+        
+        return helperText;
     }
     
     /**
      * Given a list of the tags from the HTML buffer, extracts any links from
      * &lt;a href&gt; tags and places them into a list.
      * 
-     * @param tags the list of all tags from a given HTML buffer
+     * @param initialTags the list of all tags from a given HTML buffer
      * @return a list containing each 
      */
-    private List<String> extractLinks( List<String> tags ){
+    private synchronized List<String> extractLinks( List<String> initialTags ){
         int end;
+        // A temporary storage list, necessary to avoid a ConcurrentModificationException.
+        List<String> tags = new ArrayList<String>();
         
         // Loop through all HTML tags
-        for( String t : tags ){
+        for( String t : initialTags ){
             // Remove whitespace (URLs do not contain whitespace)
             t = t.replaceAll("\\s", "");
-            if( !t.contains("<ahref=\"") ){
-                // Remove non-link tags
-                tags.remove(t);
-            } else {
+            if( t.contains("<ahref=\"") ){
                 // Extract URL from link tag and keep it in the list
                 t = t.replace("<ahref=\"", "");
                 end = t.indexOf("\"");
                 t = t.substring(0, end);
+                tags.add( t );
             }
         }
         
@@ -124,20 +213,9 @@ public class LinkViewPane extends VBox {
     }
     
     /**
-     * Updates and returns a copy of the current view.
-     * 
-     * @return the VBox containing the current links
-     */
-    public VBox getLinkView(){
-        update();
-        return view;
-    }
-    
-    /**
      * Resets the elements in the link view with new links.
      */
-    private void update(){
-        
+    private void update(){    
         // Get new links and reset display
         updateLinks( editor.getBuffer() );
         view.getChildren().clear();
@@ -183,6 +261,14 @@ public class LinkViewPane extends VBox {
                 view.getChildren().add( element );
             }
         }
+    }
+    
+    /**
+     * @return a copy of the BorderPane containing the link view
+     */
+    public BorderPane getPane(){
+        update();
+        return pane;
     }
     
 }

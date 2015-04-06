@@ -68,6 +68,7 @@ public class HTMLEditor extends Application {
     private Stage stage;
     private Group rootGroup;
     private TabPane tabPane;
+    private LinkViewPane linkView;
     private Scene scene;
     private MenuBar menuBar;
     private BorderPane canvas;
@@ -174,9 +175,11 @@ public class HTMLEditor extends Application {
                 }
             }
         );*/
+        this.linkView = new LinkViewPane( this, LinkViewPane.IN_ORDER );
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
+        this.canvas.setBottom(this.linkView.getPane());
         this.canvas.prefHeightProperty().bind(this.scene.heightProperty());
         this.canvas.prefWidthProperty().bind(this.scene.widthProperty());
         this.scene.getStylesheets().clear();
