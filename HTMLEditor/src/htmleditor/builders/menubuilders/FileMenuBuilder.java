@@ -25,8 +25,8 @@ import javafx.scene.input.KeyCombination;
  * @author thn1069
  */
 public class FileMenuBuilder implements Builder {
-    
     private Menu menu;
+    
     
     @Override
     public void build(HTMLEditor editor) {
@@ -74,7 +74,8 @@ public class FileMenuBuilder implements Builder {
 
     
     @Override
-    public Menu getProduct() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Menu getProduct(HTMLEditor editor) {
+        this.build(editor);
+        return this.menu;
     }
 }

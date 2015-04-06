@@ -15,5 +15,5 @@ import javafx.scene.control.Menu;
 public interface Builder {
     public void build(HTMLEditor editor);
     
-    public Menu getProduct();
+    public Menu getProduct(HTMLEditor editor);
 }
