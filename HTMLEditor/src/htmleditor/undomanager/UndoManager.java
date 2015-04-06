@@ -42,9 +42,6 @@ public class UndoManager {
         //This prevents duplicate states.
         if (this.undoStack.isEmpty() || !m.equals(this.undoStack.peek())){    
             this.undoStack.push(m) ;
-            System.out.println("---------------Saving New State---------------") ;
-            System.out.println(m) ;
-            System.out.println("----------------------------------------------") ;
         }
         
         //Clear the redoStack after a new operation happens.

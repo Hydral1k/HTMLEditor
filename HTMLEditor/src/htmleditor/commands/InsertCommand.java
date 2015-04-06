@@ -45,9 +45,7 @@ public class InsertCommand extends UndoableCommand {
     }
     
     @Override
-    public void execute(Event t){
-        this.saveState(); //Save before state change.
-        
+    public void operate(Event t){
         String symbol = "";
         //NOTE - header, list, table require user interactions
         Tag new_tag;
@@ -109,10 +107,6 @@ public class InsertCommand extends UndoableCommand {
                 System.out.println("wrong tag, ya dingus"); 
                 break;
         }
-        
-        /* Memento pattern, saves the state after
-         * the operation has been performed.*/
-        this.saveState() ;
     }
     
     /* Makes an html table at cursor with specified rows and columns */
