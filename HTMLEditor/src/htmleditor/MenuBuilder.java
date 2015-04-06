@@ -5,6 +5,7 @@
  */
 package htmleditor;
 
+import htmleditor.builders.menubuilders.FileMenuBuilder;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.IndentType;
 import htmleditor.texteditor.TagType;
@@ -42,52 +43,15 @@ import javafx.scene.input.KeyCombination;
  * @author thn1069
  */
 public class MenuBuilder {
+    
     public MenuBar buildMenuBarWithMenus(HTMLEditor editor, final ReadOnlyDoubleProperty menuWidthProperty, String STYLE_CSS){
         MenuBar menuBar = new MenuBar();
         menuBar.setStyle(STYLE_CSS);
-
-        // Prepare left-most 'File' drop-down menu
-        final Menu fileMenu = new Menu("File");
-        fileMenu.setStyle("-fx-text-fill: white");
-
-        //New File item
-        MenuItem newItem = new MenuItem("New") ;
-        newItem.setMnemonicParsing(true);
-        newItem.setAccelerator(new KeyCodeCombination(KeyCode.N,KeyCombination.CONTROL_DOWN));
-        newItem.setOnAction(new MyEventHandler(new NewFileCommand(editor)));
-
-        //Open File item
-        MenuItem openItem = new MenuItem("Open") ;
-        openItem.setMnemonicParsing(true);
-        openItem.setAccelerator(new KeyCodeCombination(KeyCode.O,KeyCombination.CONTROL_DOWN));
-        openItem.setOnAction(new MyEventHandler(new OpenFileCommand(editor)));
-
-        //Save File item
-        MenuItem saveItem = new MenuItem("Save") ;
-        saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN));
-        saveItem.setOnAction(new MyEventHandler(new SaveFileCommand(editor)));
-
-        //SaveAs File item
-        MenuItem saveAsItem = new MenuItem("Save As...") ;
-        saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-        saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(editor)));
-
-        //Add all items to the left-most dropdown menu
-        fileMenu.getItems().add(newItem);
-        fileMenu.getItems().add(openItem);
-        fileMenu.getItems().add(saveItem);
-        fileMenu.getItems().add(saveAsItem);
-
-        // Seperator
-        fileMenu.getItems().add(new SeparatorMenuItem());
-
-        // Exit
-        MenuItem exitItem = new MenuItem("Exit", null);
-        exitItem.setMnemonicParsing(true);
-        exitItem.setOnAction(new MyEventHandler(new ExitCommand(editor))) ;
-        fileMenu.getItems().add(exitItem);
-
-        menuBar.getMenus().add(fileMenu);
+        
+        
+        menuBar.getMenus().add(new FileMenuBuilder().getProduct());
+        
+        
 
         // Prepare 'Edit' drop-down menu
         final Menu editMenu = new Menu("Edit") ;
@@ -130,12 +94,13 @@ public class MenuBuilder {
         editMenu.getItems().add(objectItem) ;
 
 
+        
         //Add Edit menu to menu bar
         menuBar.getMenus().add(editMenu) ;
 
         // Prepare 'Insert' drop-down menu
         final Menu insertMenu = new Menu("Insert");
-        fileMenu.setStyle("-fx-text-fill: white");
+        insertMenu.setStyle("-fx-text-fill: white");
 
         //Bold item
         MenuItem boldItem = new MenuItem("Bold") ;
