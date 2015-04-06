@@ -61,12 +61,14 @@ public class NewFileCommand implements Command {
 
             @Override
             public void handle(MouseEvent t) {
-                System.out.println("CLICKED");
                 int caretPos = lineNumbers.getCaretPosition();
                 String nums = lineNumbers.getText();
-                while(nums.charAt(caretPos) != '\n' && caretPos > 1){
-                    caretPos--;
-                }
+                if(nums.isEmpty())
+                    return;
+                String str = nums.substring(0, caretPos);
+                caretPos = str.lastIndexOf("\n");
+                if(caretPos == -1)
+                    caretPos++;
                 Scanner sc = new Scanner(nums.substring(caretPos));
                 int clickedLine = sc.nextInt();
                 while(nums.charAt(caretPos) != '['){
@@ -79,6 +81,11 @@ public class NewFileCommand implements Command {
                     newChar = '-';
                 }
                 newNums.setCharAt(caretPos, newChar);
+                /* TODO: 
+                   for above line, implement function to collapse element,
+                    which should return a boolean.
+                    changing character should depend on collapse
+                */
                 lineNumbers.setText(newNums.toString());
                 System.out.println("LINE " + clickedLine);
             }
