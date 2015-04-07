@@ -546,16 +546,14 @@ public class HTMLEditor extends Application {
          */
         @Override
         public boolean equals(Object o) {
-            if (o instanceof Memento) {
+            try{
                 Memento m = (Memento)o ;
                 return (this.getBuffer().equals(m.getBuffer()) &&
-                        this.getCurserPos() == m.getCurserPos()) ;
+                    this.getCurserPos() == m.getCurserPos()) ;
             }
-            else {
-                //Cannot compare Memento to another type of Object.
-                throw new UnsupportedOperationException("Unable to compare un-like classes.") ;
-            }
-            
+            catch (ClassCastException e){
+                throw new UnsupportedOperationException("Unable to compare Memento to other classes.") ;
+            }   
         }
         
     }
