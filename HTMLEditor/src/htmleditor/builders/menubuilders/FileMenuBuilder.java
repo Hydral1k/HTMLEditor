@@ -11,6 +11,7 @@ import htmleditor.commands.ExitCommand;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.commands.NewFileCommand;
 import htmleditor.commands.OpenFileCommand;
+import htmleditor.commands.OpenLinkCommand;
 import htmleditor.commands.SaveAsCommand;
 import htmleditor.commands.SaveFileCommand;
 import javafx.scene.control.Menu;
@@ -55,12 +56,18 @@ public class FileMenuBuilder implements Builder {
         MenuItem saveAsItem = new MenuItem("Save As...") ;
         saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
         saveAsItem.setOnAction(new MyEventHandler(new SaveAsCommand(editor)));
+        
+        //OpenLink item
+        MenuItem openLinkItem = new MenuItem("Open link...") ;
+        openLinkItem.setAccelerator(new KeyCodeCombination(KeyCode.O,KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN)) ;
+        openLinkItem.setOnAction(new MyEventHandler(new OpenLinkCommand(editor))) ;
 
         //Add all items to the left-most dropdown menu
         this.menu.getItems().add(newItem);
         this.menu.getItems().add(openItem);
         this.menu.getItems().add(saveItem);
         this.menu.getItems().add(saveAsItem);
+        this.menu.getItems().add(openLinkItem) ;
 
         // Seperator
         this.menu.getItems().add(new SeparatorMenuItem());

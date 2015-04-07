@@ -1,5 +1,8 @@
 package htmleditor;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -168,9 +173,6 @@ public class LinkViewPane extends VBox {
                 tags.add( t );
             }
         }
-        for(String s : tags){
-            System.out.println(s) ;
-        }
         return tags;
     }
     
@@ -273,6 +275,21 @@ public class LinkViewPane extends VBox {
     public BorderPane getPane(){
         update();
         return pane;
+    }
+    
+    
+    /**
+     * Opens the provided link in a browser window.
+     * @param link - the link for the file to open.
+     */
+    public void openLink(String link){
+        File file = new File(link);
+        try {
+            Desktop.getDesktop().open(file) ;
+        } catch (IllegalArgumentException|IOException ex) {
+            System.out.println("Unable to locate file.") ;
+        }
+        
     }
     
 }
