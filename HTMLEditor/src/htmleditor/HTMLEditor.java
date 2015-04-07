@@ -12,6 +12,7 @@
 package htmleditor;
 
 
+import htmleditor.builders.menubuilders.MenuBuilder;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.commands.*;
@@ -68,6 +69,7 @@ public class HTMLEditor extends Application {
     private Stage stage;
     private Group rootGroup;
     private TabPane tabPane;
+    private LinkViewPane linkView;
     private Scene scene;
     private MenuBar menuBar;
     private BorderPane canvas;
@@ -174,9 +176,11 @@ public class HTMLEditor extends Application {
                 }
             }
         );*/
+        this.linkView = new LinkViewPane( this, LinkViewPane.IN_ORDER );
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
+        this.canvas.setBottom(this.linkView.getPane());
         this.canvas.prefHeightProperty().bind(this.scene.heightProperty());
         this.canvas.prefWidthProperty().bind(this.scene.widthProperty());
         this.scene.getStylesheets().clear();
@@ -462,7 +466,7 @@ public class HTMLEditor extends Application {
         return this.VERSION;
     }
     
-    
+
     /**
      * Checks the provided tab if any changes have been made to the tab since the last save.
      * @param tab - The tab to check for changes.
@@ -542,17 +546,19 @@ public class HTMLEditor extends Application {
          */
         @Override
         public boolean equals(Object o) {
-            try{
+            if (o instanceof Memento) {
                 Memento m = (Memento)o ;
                 return (this.getBuffer().equals(m.getBuffer()) &&
-                    this.getCurserPos() == m.getCurserPos()) ;
+                        this.getCurserPos() == m.getCurserPos()) ;
             }
-            catch (ClassCastException e){
-                throw new UnsupportedOperationException("Unable to compare Memento to other classes.") ;
-            }   
+            else {
+                //Cannot compare Memento to another type of Object.
+                throw new UnsupportedOperationException("Unable to compare un-like classes.") ;
+            }
+            
         }
         
-    } //End Memento
+    }
     
     public void setState(Object o){
         Memento m = (Memento)o ; //Converting object from UndoManager.
