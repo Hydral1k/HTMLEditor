@@ -290,24 +290,6 @@ public class HTMLEditor extends Application {
     }
     
     /**
-     * An overwatch method that replaces all instances of tabs with the specified
-     * indentation as per the requirements. If a tab is removed, the function
-     * attempts to reposition the caret properly.
-     */
-    public void replaceTabWithSpace(){
-        TextArea thisTA = getText();
-        
-        if(thisTA.getText().contains("\t")){
-            int temp = getCarrotPosition();
-            thisTA.setText(thisTA.getText().replace("\t", 
-                new String(new char[HTMLEditor.this.indent_size]).replace("\0", " ")
-                )
-            );
-            setCarrotPosition(temp + HTMLEditor.this.indent_size);
-        }
-    }
-    
-    /**
      * Replaces the text inside the textArea with the provided String.
      * @param text - The String that is replacing the current text.
      */
