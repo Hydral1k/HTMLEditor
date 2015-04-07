@@ -1,3 +1,4 @@
+
 package htmleditor.commands;
 
 import htmleditor.HTMLAnalyzer;
@@ -24,7 +25,6 @@ public class TextAnalysisCommand implements Command {
     
     public void execute(Event t){
         
-        editor.replaceTabWithSpace();
         Integer carrotPosition = editor.getCarrotPosition();
         String buffer = editor.getBuffer().substring(0, carrotPosition);
         

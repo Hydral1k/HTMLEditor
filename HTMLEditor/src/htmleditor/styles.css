@@ -1430,6 +1430,10 @@
     -fx-opacity: 1;
 }
 
+.text-area #line-numbers .scroll-bar{
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
 /*******************************************************************************
  *                                                                             *
  * Customised CSS for controls placed directly within cells                    *
