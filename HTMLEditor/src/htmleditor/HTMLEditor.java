@@ -12,6 +12,7 @@
 package htmleditor;
 
 
+import htmleditor.builders.menubuilders.MenuBuilder;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.commands.*;

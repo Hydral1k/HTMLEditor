@@ -70,9 +70,8 @@ public class EditMenuBuilder implements Builder {
         objectItem.setOnAction(new MyEventHandler(new ObjectCommand(editor))) ;
         this.menu.getItems().add(objectItem) ;
     }
-
     
-    @Override
+    
     public Menu getProduct(HTMLEditor editor) {
         this.build(editor);
         return this.menu;

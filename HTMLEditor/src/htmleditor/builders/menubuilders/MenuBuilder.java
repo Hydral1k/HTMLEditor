@@ -6,14 +6,9 @@
 package htmleditor.builders.menubuilders;
 
 import htmleditor.HTMLEditor;
-import htmleditor.HTMLEditor;
-import htmleditor.builders.menubuilders.EditMenuBuilder;
 import htmleditor.builders.menubuilders.EditMenuBuilder;
 import htmleditor.builders.menubuilders.FileMenuBuilder;
-import htmleditor.builders.menubuilders.FileMenuBuilder;
 import htmleditor.builders.menubuilders.IndentMenuBuilder;
-import htmleditor.builders.menubuilders.IndentMenuBuilder;
-import htmleditor.builders.menubuilders.InsertMenuBuilder;
 import htmleditor.builders.menubuilders.InsertMenuBuilder;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.IndentType;

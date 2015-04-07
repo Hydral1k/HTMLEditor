@@ -35,7 +35,6 @@ public class IndentMenuBuilder implements Builder {
     }
 
     
-    @Override
     public Menu getProduct(HTMLEditor editor) {
         this.build(editor);
         return this.menu;

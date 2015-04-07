@@ -71,9 +71,8 @@ public class FileMenuBuilder implements Builder {
         exitItem.setOnAction(new MyEventHandler(new ExitCommand(editor))) ;
         this.menu.getItems().add(exitItem);
     }
-
     
-    @Override
+    
     public Menu getProduct(HTMLEditor editor) {
         this.build(editor);
         return this.menu;
