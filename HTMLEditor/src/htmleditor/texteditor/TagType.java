@@ -10,6 +10,6 @@ package htmleditor.texteditor;
 * @author jlt8213
 */
 public enum TagType {
-    HEADER, BOLD, ITALICS, LIST, LIST_ITEM, TABLE;
+    HEADER, BOLD, ITALICS, LIST, LIST_ITEM, TABLE, LINK, IMAGE;
 }
 

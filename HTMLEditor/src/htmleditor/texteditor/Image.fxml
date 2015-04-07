@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TextField?>
+<?import htmleditor.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="226.0" prefWidth="345.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htmleditor.texteditor.ImageFXMLController">
+   <children>
+      <Button layoutX="27.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleSubmitAction" prefHeight="45.0" prefWidth="125.0" text="Confirm" />
+      <TextField fx:id="url" layoutX="98.0" layoutY="75.0" prefHeight="38.0" prefWidth="137.0" promptText="URL" />
+      <Label layoutX="87.0" layoutY="17.0" text="New Image:">
+         <font>
+            <Font name="Khmer OS System" size="31.0" />
+         </font>
+      </Label>
+      
+      <Button cancelButton="true" layoutX="190.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleCancelAction" prefHeight="45.0" prefWidth="125.0" text="Cancel" />
+      <TextField fx:id="text" layoutX="98.0" layoutY="125.0" prefHeight="38.0" prefWidth="137.0" promptText="Text" />
+      <Label layoutX="27.0" layoutY="85.0" text="URL" />
+      <Label layoutX="27.0" layoutY="135.0" text="Text" />
+   </children>
+</AnchorPane>

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class Tag{
     public static int TableRows = -1;
     public static int TableCols = -1;
+    public static String url ;
+    public static String text ;
     String tag; 
     TagType tag_type;
     String tag_style; // abstract css styling, if so ever in this project
