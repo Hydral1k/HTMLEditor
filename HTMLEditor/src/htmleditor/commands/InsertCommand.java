@@ -5,7 +5,6 @@
 package htmleditor.commands;
 
 import htmleditor.HTMLEditor;
-import htmleditor.texteditor.TabData;
 import htmleditor.texteditor.Tag;
 import htmleditor.texteditor.TagType;
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -188,6 +186,9 @@ public class InsertCommand extends UndoableCommand {
         while(thisText.charAt(position)!='>')
             position++;
         thisTA.positionCaret(position+1);
+        
+        //Update Link view after adding a new link via insert command.
+        this.editor.getLinkView().update() ;
     };
     
     public void makeImageTag(String u, String t) {

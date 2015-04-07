@@ -97,6 +97,7 @@ public class LinkViewPane extends VBox {
             public void handle(ActionEvent t){
                 setMode( ALPHABETICAL );
                 modeDisplay.setText( createDisplayText() );
+                update() ;
             }
         });
         
@@ -105,6 +106,7 @@ public class LinkViewPane extends VBox {
             public void handle(ActionEvent t){
                 setMode( IN_ORDER );
                 modeDisplay.setText( createDisplayText() );
+                update() ;
             }
         });
         
@@ -166,7 +168,9 @@ public class LinkViewPane extends VBox {
                 tags.add( t );
             }
         }
-        
+        for(String s : tags){
+            System.out.println(s) ;
+        }
         return tags;
     }
     
@@ -215,7 +219,7 @@ public class LinkViewPane extends VBox {
     /**
      * Resets the elements in the link view with new links.
      */
-    private void update(){    
+    public void update(){    
         // Get new links and reset display
         updateLinks( editor.getBuffer() );
         view.getChildren().clear();
