@@ -118,8 +118,7 @@ public class HTMLEditor extends Application {
         final MenuItem indentTypeNone = new MenuItem("None");
         indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent t){
-                indentMenu.setText("Auto Indent (Off)");
-                HTMLEditor.this.indent_size = 0;
+                linkView.setVisible(autoindent);
             }
         });
         indentMenu.getItems().add(indentTypeNone);
