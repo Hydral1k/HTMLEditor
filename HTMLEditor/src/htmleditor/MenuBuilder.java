@@ -178,6 +178,20 @@ public class MenuBuilder {
             listItem.getItems().add(subListType);
         }
         insertMenu.getItems().add(listItem);
+        
+        //Link item
+        MenuItem linkItem = new MenuItem("Link") ;
+        //tableItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN)) ;
+        linkItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.LINK))) ;
+        insertMenu.getItems().add(linkItem) ;
+        
+        //Image item
+        MenuItem imageItem = new MenuItem("Image") ;
+        imageItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN)) ;
+        imageItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.IMAGE))) ;
+        insertMenu.getItems().add(imageItem) ;
+        
+        //Add insert menu to menu bar
         menuBar.getMenus().add(insertMenu);
 
         // Indent Menu

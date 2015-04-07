@@ -47,6 +47,8 @@ public class InsertCommand extends UndoableCommand {
     @Override
     public void operate(Event t){
         String symbol = "";
+        Stage stage ;
+        Parent root ;
         //NOTE - header, list, table require user interactions
         Tag new_tag;
         switch (tag){
@@ -87,10 +89,9 @@ public class InsertCommand extends UndoableCommand {
                 break;
             case TABLE:
                 //Prompts for user input, then makes table after submission
-                Stage stage = new Stage();
-                Parent root;
+                stage = new Stage();
                 try {
-                    root = FXMLLoader.load(getClass().getResource("/htmleditor/Table.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("/htmleditor/texteditor/Table.fxml"));
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.showAndWait();    //should change later to avoid confusion!
@@ -103,6 +104,33 @@ public class InsertCommand extends UndoableCommand {
                     Tag.TableCols = -1;
                 }
                 break;
+            case LINK:
+                //Prompts the user for input of link URL and text.
+                stage = new Stage() ;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/htmleditor/texteditor/Link.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.showAndWait();    //should change later to avoid confusion!
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(InsertCommand.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                makeLinkTag(Tag.url, Tag.text) ;
+                break ;
+            case IMAGE:
+                //Prompts the user for image url.
+                stage = new Stage() ;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/htmleditor/texteditor/Image.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.showAndWait();    //should change later to avoid confusion!
+                } catch (IOException ex) {
+                    Logger.getLogger(InsertCommand.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                makeImageTag(Tag.url, Tag.text) ;
+                break ;
             default:
                 System.out.println("wrong tag, ya dingus"); 
                 break;
@@ -129,7 +157,6 @@ public class InsertCommand extends UndoableCommand {
             + thisText.substring(position, thisText.length());
         thisTA.setText(thisText);
         
-        return;
     }
     
     
@@ -149,4 +176,31 @@ public class InsertCommand extends UndoableCommand {
         
     };
     
+    public void makeLinkTag(String u, String t){         
+        TextArea thisTA = this.editor.getText();
+        String thisText = thisTA.getText();
+        int position = thisTA.getCaretPosition();
+        thisText = thisText.substring(0, position) 
+            + "<a" + " href=\"" + u + "\">" + t + "</a>"
+            + thisText.substring(position);
+        thisTA.setText(thisText) ;
+        
+        while(thisText.charAt(position)!='>')
+            position++;
+        thisTA.positionCaret(position+1);
+    };
+    
+    public void makeImageTag(String u, String t) {
+        TextArea thisTA = this.editor.getText();
+        String thisText = thisTA.getText();
+        int position = thisTA.getCaretPosition();
+        thisText = thisText.substring(0, position) 
+            + "<img src=\"" + u + "\">" + t + "</img>"
+            + thisText.substring(position, thisText.length());
+        thisTA.setText(thisText) ;
+        
+        while(thisText.charAt(position)!='>')
+            position++;
+        thisTA.positionCaret(position+1) ;   
+    }   
 }
