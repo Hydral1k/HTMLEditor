@@ -6,6 +6,7 @@
 package htmleditor.builders.menubuilders;
 
 import htmleditor.HTMLEditor;
+import htmleditor.LinkViewPane;
 import htmleditor.builders.Builder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -37,7 +38,7 @@ public class ViewMenuBuilder implements Builder {
         linkViewShow.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent t){
-                editor.getLinkView().getPane().setVisible(true);
+                editor.showLinkView( true );
             }
         });
         linkView.getItems().add(linkViewShow);
@@ -46,7 +47,7 @@ public class ViewMenuBuilder implements Builder {
         linkViewHide.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent t){
-                editor.getLinkView().getPane().setVisible(false);
+                editor.showLinkView( false );
             }
         });
         linkView.getItems().add(linkViewHide);

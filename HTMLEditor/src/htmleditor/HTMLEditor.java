@@ -450,7 +450,6 @@ public class HTMLEditor extends Application {
     public LinkViewPane getLinkView(){
         return this.linkView ;
     }
-    
 
     /**
      * Checks the provided tab if any changes have been made to the tab since the last save.
@@ -496,6 +495,14 @@ public class HTMLEditor extends Application {
             changedText = true;
         
         return changedText;
+    }
+
+    public void showLinkView( boolean show ){
+        if( show ){
+            this.canvas.setBottom( linkView.getPane() );
+        } else {
+            this.canvas.setBottom( null );
+        }
     }
     
     /** 
