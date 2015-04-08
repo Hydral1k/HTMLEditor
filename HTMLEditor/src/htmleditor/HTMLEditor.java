@@ -179,7 +179,6 @@ public class HTMLEditor extends Application {
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
-        this.canvas.setBottom(this.linkView.getPane());
         this.canvas.prefHeightProperty().bind(this.scene.heightProperty());
         this.canvas.prefWidthProperty().bind(this.scene.widthProperty());
         this.scene.getStylesheets().clear();

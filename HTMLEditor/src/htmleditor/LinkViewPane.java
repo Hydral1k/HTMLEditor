@@ -14,9 +14,15 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -37,6 +43,7 @@ public class LinkViewPane extends VBox {
     private BorderPane pane = null;
     private ToolBar toolbar = null;
     private VBox view = null;
+    private ScrollPane scroll = null;
     private List<String> links;
     private Text modeDisplay;
     private HashMap<String, Integer> alphabeticalLinks;
@@ -61,6 +68,7 @@ public class LinkViewPane extends VBox {
         this.links = new LinkedList<String>();
         this.alphabeticalLinks = new HashMap<String, Integer>();
         this.mode = isAlphabetical;
+        this.scroll = new ScrollPane();
         updateLinks( editor.getBuffer() );
         
         view = new VBox();
@@ -71,8 +79,11 @@ public class LinkViewPane extends VBox {
         this.toolbar = new ToolBar();
         addToolBarElements();
         
+        scroll.setContent( view );
+
+        pane.setMaxHeight( 200 );        
         pane.setTop( toolbar );
-        pane.setCenter( view );
+        pane.setCenter( scroll );
         pane.setVisible( true );
     }
     
