@@ -6,6 +6,7 @@ package htmleditor.commands;
 import htmleditor.HTMLAnalyzer;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
+import htmleditor.outline.Folder;
 import htmleditor.texteditor.TabData;
 import java.util.Scanner;
 import javafx.beans.value.ChangeListener;
@@ -76,17 +77,22 @@ public class NewFileCommand implements Command {
                 }
                 caretPos++;
                 StringBuilder newNums = new StringBuilder(nums);
-                char newChar = '+';
-                if(nums.charAt(caretPos) == '+'){
-                    newChar = '-';
+                Folder thisFolder = HTMLEditor.getInstance().getTabData().getFolder();
+                boolean isFolded = thisFolder.foldLine(clickedLine);
+                if(isFolded){
+                    char newChar = '+';
+                    if(nums.charAt(caretPos) == '+'){
+                        newChar = '-';
+                    }
+                    newNums.setCharAt(caretPos, newChar);
+                    lineNumbers.setText(newNums.toString());
                 }
-                newNums.setCharAt(caretPos, newChar);
+                System.out.println("LINE " + clickedLine);
                 /* TODO: 
                    for above line, implement function to collapse element,
                     which should return a boolean.
                     changing character should depend on collapse
                 */
-                lineNumbers.setText(newNums.toString());
                 System.out.println("LINE " + clickedLine);
             }
         });

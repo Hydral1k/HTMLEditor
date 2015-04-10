@@ -37,6 +37,8 @@ public class HTMLTag extends HTMLComposite{
 
     @Override
     public String getHTML() {
+        if(isCollapsed)
+            return(tag);
         String newText = tag;
         //newText += super.getHTML();
         for( int i=0; i < children.size(); i++ )

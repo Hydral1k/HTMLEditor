@@ -5,6 +5,7 @@
 package htmleditor.texteditor;
 
 import htmleditor.HTMLEditor;
+import htmleditor.outline.Folder;
 import htmleditor.undomanager.UndoManager;
 import javafx.scene.control.Tab;
 
@@ -19,12 +20,14 @@ public class TabData {
     private int indentSpace ; //default indent length
     private UndoManager undoManager ;
     private String clipTray ; //for cut/copy + paste
+    private Folder folder;
     
     public TabData(HTMLEditor e) {
         this.wordWrap = true ;
         this.autoIndent = true ;
         this.indentSpace = 4 ;
         this.undoManager = new UndoManager(e) ;
+        this.folder = new Folder();
     }
 
     public void setWordWrap(boolean wordWrap) {
@@ -37,6 +40,10 @@ public class TabData {
     
     public UndoManager getUndoManager(){
         return this.undoManager ;
+    }
+    
+    public Folder getFolder(){
+        return this.folder;
     }
     
     

@@ -7,6 +7,7 @@ package htmleditor.builders.texteditorbuilders;
 
 import htmleditor.HTMLEditor;
 import htmleditor.builders.Builder;
+import htmleditor.outline.Folder;
 import java.util.Scanner;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
@@ -50,17 +51,16 @@ public class LineNumbersBuilder implements Builder {
                 }
                 caretPos++;
                 StringBuilder newNums = new StringBuilder(nums);
-                char newChar = '+';
-                if(nums.charAt(caretPos) == '+'){
-                    newChar = '-';
+                Folder thisFolder = HTMLEditor.getInstance().getTabData().getFolder();
+                boolean isFolded = thisFolder.foldLine(clickedLine);
+                if(isFolded){
+                    char newChar = '+';
+                    if(nums.charAt(caretPos) == '+'){
+                        newChar = '-';
+                    }
+                    newNums.setCharAt(caretPos, newChar);
+                    lineNumbers.setText(newNums.toString());
                 }
-                newNums.setCharAt(caretPos, newChar);
-                /* TODO: 
-                   for above line, implement function to collapse element,
-                    which should return a boolean.
-                    changing character should depend on collapse
-                */
-                lineNumbers.setText(newNums.toString());
                 System.out.println("LINE " + clickedLine);
             }
         });

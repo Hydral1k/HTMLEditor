@@ -35,7 +35,7 @@ public class ObjectCommand implements Command {
         System.out.println("End composite");
     }
     
-    public HTMLComposite createComposite(String buffer){ //RECUSION YO
+    public HTMLComposite createComposite(String buffer){
         return createCompositeRecursive(buffer, "");
         
     }

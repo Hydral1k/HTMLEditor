@@ -16,6 +16,7 @@ import htmleditor.builders.menubuilders.MenuBuilder;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.commands.*;
+import htmleditor.texteditor.TabData;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -287,6 +288,10 @@ public class HTMLEditor extends Application {
     
     public void insertIntoBufferAtPos(String text, Integer position){
         getText().insertText(position, text);
+    }
+    
+    public TabData getTabData(){
+        return (TabData)getCurrentTab().getUserData();
     }
     
     /**
