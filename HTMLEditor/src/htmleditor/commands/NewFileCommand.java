@@ -87,13 +87,11 @@ public class NewFileCommand implements Command {
                     newNums.setCharAt(caretPos, newChar);
                     lineNumbers.setText(newNums.toString());
                 }
-                System.out.println("LINE " + clickedLine);
                 /* TODO: 
                    for above line, implement function to collapse element,
                     which should return a boolean.
                     changing character should depend on collapse
                 */
-                System.out.println("LINE " + clickedLine);
             }
         });
         
