@@ -25,6 +25,12 @@ public class Folder {
             otherwise line numbers in folderMap will need to update as well
     */
     
+    public void updateFolder(){
+        // stub
+        // iterate through map and positions, update based on change, 
+        // preferably update sidebar too
+    }
+    
     public boolean foldLine(Integer lineNumber){
         System.out.println(folderMap.size() + " items in folderman\n" + tagPositions.size() + " positions");
         if(folderMap.containsKey(lineNumber))
@@ -61,7 +67,7 @@ public class Folder {
         HTMLTag thisTag = new HTMLTag(foundTag.getTag());
         thisTag.setCloseTag(thisTagComp.getCloser());
         thisTag.add(thisTagComp);
-        
+        System.out.println(thisTag.getHTML());
         thisText = thisText.substring(0, foundTag.getTagStart()) + foundTag.getTag() + thisText.substring(foundTag.getTagStart()+thisTag.getHTML().length());
         HTMLEditor.getInstance().getText().setText(thisText);
         thisTag.collapseToggle();
@@ -171,18 +177,16 @@ public class Folder {
                 case SAVETAG: //finished tag object
                     if(closingTag){
                         closingTag = false;
-                        //System.out.println(tagMatches(closeTag, tempTag));
-                        if(!tagMatches(closeTag, tempTag)){
-                            tempText += tempTag;
-                            tempTag = "";
-                        }
-                        else{
+                        if(tagMatches(closeTag, tempTag)){
                             thisComposite.setCloser(tempTag); //pass the closing tag back for HTMLTag object
                             return thisComposite;
                         }
+                        tempText += tempTag;
+                        tempTag = "";
+                        i--;
                         state = INTEXT;
                         break;
-                    }
+                    } 
                     HTMLTag newTag = new HTMLTag(tempTag);
                     if(i < buffer.length()){
                         HTMLComposite newComposite = createCompositeRecursive(buffer.substring(i), tempTag); //recursive
@@ -190,6 +194,7 @@ public class Folder {
                             if(tagMatches(newComposite.getCloser(), closeTag)){
                                 newTag.setCloseTag(newComposite.getCloser());
                                 newTag.add(newComposite);
+                                thisComposite.add(newTag);
                                 thisComposite.setCloser(newComposite.getCloser());
                                 return thisComposite;
                             }
@@ -197,18 +202,20 @@ public class Folder {
                             int newLength = newComposite.getLength();
                             if(newLength > 0){
                                 newTag.add(newComposite);
-                                i += newLength;
-                                i += newComposite.getCloser().length() - 1;
-                                thisComposite.add(newTag);
                             }
+                            i += newTag.getLength() - tempTag.length() ;
+                            thisComposite.add(newTag);
                         }
                         else{
-                            thisComposite.add(new HTMLText(tempTag));
-                            i--;
+                            System.out.println("new composite had no return tag");
+                            thisComposite.add(newComposite);//new HTMLText(tempTag));
+                            i += newComposite.getHTML().length();
+                            //i--;
                         }
                     }
                     
                     tempTag = "";
+                    i--;
                     state = INTEXT;
                     break;
                 default:
