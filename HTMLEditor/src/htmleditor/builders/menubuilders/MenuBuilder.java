@@ -6,10 +6,7 @@
 package htmleditor.builders.menubuilders;
 
 import htmleditor.HTMLEditor;
-import htmleditor.builders.menubuilders.EditMenuBuilder;
-import htmleditor.builders.menubuilders.FileMenuBuilder;
-import htmleditor.builders.menubuilders.IndentMenuBuilder;
-import htmleditor.builders.menubuilders.InsertMenuBuilder;
+import htmleditor.builders.menubuilders.*;
 import htmleditor.commands.MyEventHandler;
 import htmleditor.texteditor.IndentType;
 import htmleditor.texteditor.TagType;
@@ -61,6 +58,8 @@ public class MenuBuilder {
         menuBar.getMenus().add(new InsertMenuBuilder().getProduct(editor));
         //Add Indent menu to menu bar
         menuBar.getMenus().add(new IndentMenuBuilder().getProduct(editor));
+        // Add View menu to menu bar
+        menuBar.getMenus().add(new ViewMenuBuilder().getProduct(editor));
         
         
         // bind width of menu bar to width of associated stage

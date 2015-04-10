@@ -119,8 +119,7 @@ public class HTMLEditor extends Application {
         final MenuItem indentTypeNone = new MenuItem("None");
         indentTypeNone.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent t){
-                indentMenu.setText("Auto Indent (Off)");
-                HTMLEditor.this.indent_size = 0;
+                linkView.setVisible(autoindent);
             }
         });
         indentMenu.getItems().add(indentTypeNone);
@@ -181,7 +180,6 @@ public class HTMLEditor extends Application {
         
         this.canvas.setTop(this.menuBar);
         this.canvas.setCenter(this.tabPane);
-        this.canvas.setBottom(this.linkView.getPane());
         this.canvas.prefHeightProperty().bind(this.scene.heightProperty());
         this.canvas.prefWidthProperty().bind(this.scene.widthProperty());
         this.scene.getStylesheets().clear();
@@ -292,24 +290,6 @@ public class HTMLEditor extends Application {
     
     public TabData getTabData(){
         return (TabData)getCurrentTab().getUserData();
-    }
-    
-    /**
-     * An overwatch method that replaces all instances of tabs with the specified
-     * indentation as per the requirements. If a tab is removed, the function
-     * attempts to reposition the caret properly.
-     */
-    public void replaceTabWithSpace(){
-        TextArea thisTA = getText();
-        
-        if(thisTA.getText().contains("\t")){
-            int temp = getCarrotPosition();
-            thisTA.setText(thisTA.getText().replace("\t", 
-                new String(new char[HTMLEditor.this.indent_size]).replace("\0", " ")
-                )
-            );
-            setCarrotPosition(temp + HTMLEditor.this.indent_size);
-        }
     }
     
     /**
@@ -471,6 +451,9 @@ public class HTMLEditor extends Application {
         return this.VERSION;
     }
     
+    public LinkViewPane getLinkView(){
+        return this.linkView ;
+    }
 
     /**
      * Checks the provided tab if any changes have been made to the tab since the last save.
@@ -516,6 +499,14 @@ public class HTMLEditor extends Application {
             changedText = true;
         
         return changedText;
+    }
+
+    public void showLinkView( boolean show ){
+        if( show ){
+            this.canvas.setBottom( linkView.getPane() );
+        } else {
+            this.canvas.setBottom( null );
+        }
     }
     
     /** 

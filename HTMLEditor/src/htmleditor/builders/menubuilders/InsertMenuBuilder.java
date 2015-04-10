@@ -73,6 +73,19 @@ public class InsertMenuBuilder implements Builder {
             listItem.getItems().add(subListType);
         }
         this.menu.getItems().add(listItem);
+        
+        //Link item
+        MenuItem linkItem = new MenuItem("Link") ;
+        linkItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN)) ;
+        linkItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.LINK))) ;
+        this.menu.getItems().add(linkItem) ;
+        
+        //Image item
+        MenuItem imageItem = new MenuItem("Image") ;
+        imageItem.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN)) ;
+        imageItem.setOnAction(new MyEventHandler(new InsertCommand(TagType.IMAGE))) ;
+        this.menu.getItems().add(imageItem) ;
+        
     }
 
     

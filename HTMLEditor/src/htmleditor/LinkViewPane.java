@@ -1,16 +1,28 @@
 package htmleditor;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -31,6 +43,7 @@ public class LinkViewPane extends VBox {
     private BorderPane pane = null;
     private ToolBar toolbar = null;
     private VBox view = null;
+    private ScrollPane scroll = null;
     private List<String> links;
     private Text modeDisplay;
     private HashMap<String, Integer> alphabeticalLinks;
@@ -52,9 +65,10 @@ public class LinkViewPane extends VBox {
         this.analyzer = new HTMLAnalyzer();
         this.pane = new BorderPane();
         this.editor = editor;
-        this.links = new ArrayList<String>();
+        this.links = new LinkedList<String>();
         this.alphabeticalLinks = new HashMap<String, Integer>();
         this.mode = isAlphabetical;
+        this.scroll = new ScrollPane();
         updateLinks( editor.getBuffer() );
         
         view = new VBox();
@@ -65,8 +79,11 @@ public class LinkViewPane extends VBox {
         this.toolbar = new ToolBar();
         addToolBarElements();
         
+        scroll.setContent( view );
+
+        pane.setMaxHeight( 200 );        
         pane.setTop( toolbar );
-        pane.setCenter( view );
+        pane.setCenter( scroll );
         pane.setVisible( true );
     }
     
@@ -89,6 +106,7 @@ public class LinkViewPane extends VBox {
             @Override
             public void handle(ActionEvent t){
                 update();
+                modeDisplay.setText( createDisplayText() );
             }
         });
         
@@ -96,6 +114,7 @@ public class LinkViewPane extends VBox {
             @Override
             public void handle(ActionEvent t){
                 setMode( ALPHABETICAL );
+                update();
                 modeDisplay.setText( createDisplayText() );
             }
         });
@@ -104,6 +123,7 @@ public class LinkViewPane extends VBox {
             @Override
             public void handle(ActionEvent t){
                 setMode( IN_ORDER );
+                update();
                 modeDisplay.setText( createDisplayText() );
             }
         });
@@ -111,7 +131,7 @@ public class LinkViewPane extends VBox {
         close.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent t){
-                getPane().setVisible( false );
+                editor.showLinkView( false );
             }
         });
         
@@ -152,7 +172,7 @@ public class LinkViewPane extends VBox {
     private synchronized List<String> extractLinks( List<String> initialTags ){
         int end;
         // A temporary storage list, necessary to avoid a ConcurrentModificationException.
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new LinkedList<String>();
         
         // Loop through all HTML tags
         for( String t : initialTags ){
@@ -166,7 +186,6 @@ public class LinkViewPane extends VBox {
                 tags.add( t );
             }
         }
-        
         return tags;
     }
     
@@ -215,19 +234,18 @@ public class LinkViewPane extends VBox {
     /**
      * Resets the elements in the link view with new links.
      */
-    private void update(){    
+    public void update(){    
         // Get new links and reset display
         updateLinks( editor.getBuffer() );
+        System.out.println( links.size() );
         view.getChildren().clear();
-        Text title, element;
+        Text element;
         String nextLink;
         
         if( mode == IN_ORDER ){
             
             // Add all links from the current document 
             // Display in the order they were found
-            title = new Text("Links - In order of appearence");
-            view.getChildren().add( title );
             for( String s : links ){
                 nextLink = " - " + s;
                 element = new Text( nextLink );
@@ -235,9 +253,6 @@ public class LinkViewPane extends VBox {
             }
             
         } else {
-            
-            title = new Text("Links - In alphabetical order");
-            view.getChildren().add(title);
             
             // Sort the hash map of links by key (text in link)
             Map<String, Integer> sortMap;
@@ -269,6 +284,21 @@ public class LinkViewPane extends VBox {
     public BorderPane getPane(){
         update();
         return pane;
+    }
+    
+    
+    /**
+     * Opens the provided link in a browser window.
+     * @param link - the link for the file to open.
+     */
+    public void openLink(String link){
+        File file = new File(link);
+        try {
+            Desktop.getDesktop().open(file) ;
+        } catch (IllegalArgumentException|IOException ex) {
+            System.out.println("Unable to locate file.") ;
+        }
+        
     }
     
 }

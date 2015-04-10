@@ -10,8 +10,10 @@ import htmleditor.builders.Builder;
 import htmleditor.outline.Folder;
 import java.util.Scanner;
 import javafx.event.EventHandler;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 /**
  *
@@ -23,11 +25,12 @@ public class LineNumbersBuilder implements Builder {
     @Override
     public void build(HTMLEditor editor) {
         this.lineNumbers = new TextArea("1");
-        this.lineNumbers.setStyle("-fx-text-fill: black;"+
+        this.lineNumbers.setId("line-numbers");
+        this.lineNumbers.setStyle("{-fx-text-fill: black;"+
                              "-fx-background-color: lightgrey;"+
                              "-fx-font: Courier New;"+
                              "-fx-font-family: monospace;"+
-                             "-fx-font-size: 12;");
+                             "-fx-font-size: 12;}\n");
         this.lineNumbers.setEditable(false);
         this.lineNumbers.setWrapText(true);
         this.lineNumbers.setPrefWidth(50);
@@ -61,7 +64,6 @@ public class LineNumbersBuilder implements Builder {
                     newNums.setCharAt(caretPos, newChar);
                     lineNumbers.setText(newNums.toString());
                 }
-                System.out.println("LINE " + clickedLine);
             }
         });
     }
