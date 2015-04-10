@@ -6,8 +6,12 @@ package htmleditor.commands;
 import htmleditor.HTMLAnalyzer;
 import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
+<<<<<<< HEAD
+import htmleditor.outline.Folder;
+=======
 import htmleditor.builders.texteditorbuilders.LineNumbersBuilder;
 import htmleditor.builders.texteditorbuilders.TextAreaBuilder;
+>>>>>>> c7881afa7a993e0913768534e4c51b772471f295
 import htmleditor.texteditor.TabData;
 import java.util.Scanner;
 import javafx.beans.value.ChangeListener;
@@ -49,8 +53,58 @@ public class NewFileCommand implements Command {
         BorderPane tabBorderContent = new BorderPane();
         
         // line numbers
+<<<<<<< HEAD
+        final TextArea lineNumbers = new TextArea("1");
+        lineNumbers.setStyle("-fx-text-fill: black;"+
+                             "-fx-background-color: lightgrey;"+
+                             "-fx-font: Courier New;"+
+                             "-fx-font-family: monospace;"+
+                             "-fx-font-size: 12;");
+        lineNumbers.setEditable(false);
+        lineNumbers.setWrapText(true);
+        lineNumbers.setPrefWidth(50);
+        lineNumbers.autosize();
+        lineNumbers.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+            @Override
+            public void handle(MouseEvent t) {
+                int caretPos = lineNumbers.getCaretPosition();
+                String nums = lineNumbers.getText();
+                if(nums.isEmpty())
+                    return;
+                String str = nums.substring(0, caretPos);
+                caretPos = str.lastIndexOf("\n");
+                if(caretPos == -1)
+                    caretPos++;
+                Scanner sc = new Scanner(nums.substring(caretPos));
+                int clickedLine = sc.nextInt();
+                while(nums.charAt(caretPos) != '['){
+                    caretPos++;
+                }
+                caretPos++;
+                StringBuilder newNums = new StringBuilder(nums);
+                Folder thisFolder = HTMLEditor.getInstance().getTabData().getFolder();
+                boolean isFolded = thisFolder.foldLine(clickedLine);
+                if(isFolded){
+                    char newChar = '+';
+                    if(nums.charAt(caretPos) == '+'){
+                        newChar = '-';
+                    }
+                    newNums.setCharAt(caretPos, newChar);
+                    lineNumbers.setText(newNums.toString());
+                }
+                /* TODO: 
+                   for above line, implement function to collapse element,
+                    which should return a boolean.
+                    changing character should depend on collapse
+                */
+            }
+        });
+        
+=======
         LineNumbersBuilder lineNumBuilder = new LineNumbersBuilder();
         final TextArea lineNumbers = lineNumBuilder.getProduct(editor);
+>>>>>>> c7881afa7a993e0913768534e4c51b772471f295
         tabBorderContent.setLeft(lineNumbers);
         
         // text area

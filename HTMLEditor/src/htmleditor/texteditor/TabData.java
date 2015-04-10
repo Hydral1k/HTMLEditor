@@ -41,9 +41,9 @@ public class TabData {
     public UndoManager getUndoManager(){
         return this.undoManager ;
     }
-    
-    public Folder getFolder(){
-        return this.folder;
+
+    public Folder getFolder() {
+        return folder;
     }
     
     

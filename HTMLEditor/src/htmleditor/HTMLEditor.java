@@ -288,13 +288,6 @@ public class HTMLEditor extends Application {
         getText().insertText(position, text);
     }
     
-<<<<<<< HEAD
-    public TabData getTabData(){
-        return (TabData)getCurrentTab().getUserData();
-    }
-    
-=======
->>>>>>> c7881afa7a993e0913768534e4c51b772471f295
     /**
      * Replaces the text inside the textArea with the provided String.
      * @param text - The String that is replacing the current text.
@@ -307,6 +300,11 @@ public class HTMLEditor extends Application {
     public String getFileName(){
         Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
         return thisTab.getId();
+    }
+    
+    public TabData getTabData(){
+        Tab thisTab = this.tabPane.getSelectionModel().getSelectedItem();
+        return (TabData) thisTab.getUserData();
     }
     
     /* Returns the TextArea object of the current tab. */
