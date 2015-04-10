@@ -2,6 +2,7 @@ package htmleditor.outline;
 
 import htmleditor.HTMLEditor;
 import static htmleditor.outline.StateEnum.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TextArea;
@@ -36,10 +37,10 @@ public class Folder {
         HTMLTag unfoldTag = folderMap.get(lineNumber);
         TextArea buffer = HTMLEditor.getInstance().getText();
         Integer tagPosition = tagPositions.get(unfoldTag);
+        Integer tagLength = unfoldTag.getHTML().length();
         String bufText = buffer.getText();
-        bufText = bufText.substring(0, tagPosition) + bufText.substring(unfoldTag.getHTML().length());
         unfoldTag.collapseToggle();
-        bufText = bufText.substring(0, tagPosition) + unfoldTag.getHTML() + bufText.substring(tagPosition);
+        bufText = bufText.substring(0, tagPosition) + unfoldTag.getHTML() + bufText.substring(tagPosition + tagLength);
         buffer.setText(bufText);
         folderMap.remove(lineNumber);
         tagPositions.remove(unfoldTag);
@@ -61,7 +62,7 @@ public class Folder {
         thisTag.setCloseTag(thisTagComp.getCloser());
         thisTag.add(thisTagComp);
         
-        thisText = thisText.substring(0, foundTag.getTagStart()) + foundTag.getTag() + thisText.substring(thisTagComp.getHTML().length());
+        thisText = thisText.substring(0, foundTag.getTagStart()) + foundTag.getTag() + thisText.substring(foundTag.getTagStart()+thisTag.getHTML().length());
         HTMLEditor.getInstance().getText().setText(thisText);
         thisTag.collapseToggle();
         folderMap.put(lineNumber, thisTag );
@@ -168,14 +169,6 @@ public class Folder {
                     else{ state = INTEXT; }
                     break;
                 case SAVETAG: //finished tag object
-                    /* thoughts:
-                    recursion should occur here, create HTMLTag with 
-                        child being HTMLComposite from recursive call
-                    needs a way to only parse until closing tag from original 
-                        tag is reached, possibly by modifying recursive function 
-                        or probably adding helper function
-                    tag won't always be closed, if not it should just return the HTMLText
-                    */
                     if(closingTag){
                         closingTag = false;
                         //System.out.println(tagMatches(closeTag, tempTag));
@@ -193,18 +186,28 @@ public class Folder {
                     HTMLTag newTag = new HTMLTag(tempTag);
                     if(i < buffer.length()){
                         HTMLComposite newComposite = createCompositeRecursive(buffer.substring(i), tempTag); //recursive
-                        if(newComposite.getCloser() != "")
+                        if(newComposite.getCloser() != ""){ //it matched, these are the droids we're looking for
+                            if(tagMatches(newComposite.getCloser(), closeTag)){
+                                newTag.setCloseTag(newComposite.getCloser());
+                                newTag.add(newComposite);
+                                thisComposite.setCloser(newComposite.getCloser());
+                                return thisComposite;
+                            }
                             newTag.setCloseTag(newComposite.getCloser());
-                        //else convert opening tag to text cause it isn't a complete tag, keep composite in case of further tags
-                        int newLength = newComposite.getLength();
-                        if(newLength > 0){
-                            newTag.add(newComposite);
-                            i += newLength;
-                            i += newComposite.getCloser().length() - 1;
-                            return newTag; //FOR FOLDER ONLY
+                            int newLength = newComposite.getLength();
+                            if(newLength > 0){
+                                newTag.add(newComposite);
+                                i += newLength;
+                                i += newComposite.getCloser().length() - 1;
+                                thisComposite.add(newTag);
+                            }
+                        }
+                        else{
+                            thisComposite.add(new HTMLText(tempTag));
+                            i--;
                         }
                     }
-                    thisComposite.add(newTag);
+                    
                     tempTag = "";
                     state = INTEXT;
                     break;
@@ -228,8 +231,7 @@ public class Folder {
         
         //System.out.printf("Checking if %s matches %s\n", tag1, tag2);
         return tag1.equals(tag2);
-    }
-    
+    }    
 }
 
 class TagTuple{
