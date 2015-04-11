@@ -36,7 +36,6 @@ public class ObjectCommand implements Command {
         HTMLComposite bufferComposite = createComposite(thisTA.getText());
         System.out.println("This composite:");
         System.out.println(bufferComposite.getHTML());
-        System.out.println("End composite");
     }
     
     public HTMLComposite createComposite(String buffer){
@@ -159,7 +158,6 @@ public class ObjectCommand implements Command {
         tag2 = tag2.replace("</", "");
         tag2 = tag2.replace(">", "");
         
-        System.out.printf("Checking if %s matches %s\n", tag1, tag2);
         return tag1.equals(tag2);
     }
     

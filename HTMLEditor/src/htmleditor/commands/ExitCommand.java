@@ -45,9 +45,7 @@ public class ExitCommand implements Command{
                 System.exit(0);
                 return;
             }
-            else{ //cancel close
-                System.out.println("CANCEL EXIT");
-                t.consume();
+            else{                 t.consume();
                 return;
             }
         }

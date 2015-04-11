@@ -49,7 +49,6 @@ public class SaveAsCommand implements Command {
                     thisTab.setId(file.getAbsolutePath());
                     thisTab.setText(file.getName());
                 } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
                 }
             }
         }

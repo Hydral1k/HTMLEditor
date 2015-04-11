@@ -229,7 +229,6 @@ public class LinkViewPane extends VBox {
     public void update(){    
         // Get new links and reset display
         updateLinks( editor.getBuffer() );
-        System.out.println( links.size() );
         view.getChildren().clear();
         Text element;
         String nextLink;

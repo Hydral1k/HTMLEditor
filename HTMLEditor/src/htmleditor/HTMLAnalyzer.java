@@ -36,7 +36,6 @@ public class HTMLAnalyzer {
             
             if( nextTag.charAt( nextTag.length() - 2 ) == '/' || 
                 nextTag.charAt(1) == '!' ){
-                System.out.println("Removing " + nextTag);
                 x--;
                 allTags.remove(x + 1);
             }
@@ -73,7 +72,6 @@ public class HTMLAnalyzer {
             if( openTags == 0 && closingLoc < allTags.size() ){
                 System.out.println("Removing " + allTags.get(closingLoc));
                 allTags.remove( closingLoc );
-                System.out.println("Removing " + allTags.get(0));
                 allTags.remove( 0 );
             } else {
                 return false;

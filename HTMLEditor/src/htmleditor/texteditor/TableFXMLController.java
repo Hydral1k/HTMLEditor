@@ -17,7 +17,6 @@ public class TableFXMLController implements Initializable{
     
     @FXML
     private void handleSubmitAction(ActionEvent event) {
-        System.out.println(rowCount.getText());
         Tag.TableRows = Integer.parseInt(rowCount.getText());
         Tag.TableCols = Integer.parseInt(colCount.getText());
         Stage stage = (Stage) rowCount.getScene().getWindow();

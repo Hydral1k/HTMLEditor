@@ -54,6 +54,5 @@ public class SaveFileCommand implements Command {
                 }
             }
         }
-        System.out.println(editor.getBuffer());
     }
 }

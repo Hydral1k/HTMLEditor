@@ -63,7 +63,6 @@ public class UserManager {
             StreamResult result = new StreamResult(new File(UserSettingsRoot));
             
             transformer.transform(source, result);
-            System.out.println("User Config Saved! Location : " + UserSettingsRoot);
                     
             return true;
             

@@ -27,7 +27,6 @@ public class TextAnalysisCommand implements Command {
         Integer carrotPosition = editor.getCarrotPosition();
         String buffer = editor.getBuffer().substring(0, carrotPosition);
         
-        System.out.println("Carrot Position: "+ carrotPosition + " Buffer: " + buffer);
         KeyCode keyType = ((KeyEvent)t).getCode();
         
         
@@ -46,13 +45,12 @@ public class TextAnalysisCommand implements Command {
                 ( buffer.length() >= 8 && buffer.substring(carrotPosition - 8, carrotPosition).toLowerCase().matches("<table>\n"))
           ){ 
             
-            System.out.println("Adding newline with new indent with respect to previous line");
             String indent = "";
             Integer previous_indent_size = getDepthOfBuffer( getPrevLine(buffer, editor.getCarrotPosition()) );
             Integer indent_size = editor.indent_size;
             
             if( previous_indent_size % editor.indent_size != 0){ // the user changed the depth of the indentation
-                System.out.println("User set his own indent size from the previous line");
+                //User set his own indent size from the previous line
                 indent_size = previous_indent_size;
             }
             
@@ -65,7 +63,6 @@ public class TextAnalysisCommand implements Command {
         }else if(   buffer.length() >= 4 &&  
                     getClosingTagType(buffer) == "Closing" &&
                     buffer.substring(carrotPosition - 1, carrotPosition).matches("\n")){
-            System.out.println("Adding newline with respect to previous line");
             String indent = "";
             Integer previous_indent_size = getDepthOfBuffer( getPrevLine(buffer, editor.getCarrotPosition()) );
             
@@ -128,10 +125,8 @@ public class TextAnalysisCommand implements Command {
         Boolean endTagFlag = false;
         Boolean openingBracket = false;
             
-        System.out.println("Looking for closing tag...");
         while( text.length() > 0 ){
             String lastChar = text.substring(text.length() - 1, text.length());
-            System.out.println("Last character: " + lastChar +", Text:" + text);
   
             if( closingBracket == false && 
                     ( !lastChar.equals(">") && 

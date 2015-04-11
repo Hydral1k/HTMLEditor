@@ -27,7 +27,6 @@ public class IndentCommand implements Command{
         /** For indenting the entire buffer **/
         if(type == IndentType.INDENT_ALL){
             String indent = new String(new char[editor.indent_size]).replace("\0", " ");
-            System.out.println("Indenting entire buffer...");
             
             String[] lines = editor.getBuffer().split("\n");
             String buffer_out = "";
@@ -38,7 +37,6 @@ public class IndentCommand implements Command{
             
         /** For indenting the current line **/
         }else if( type == IndentType.INDENT_CURRENT_LINE){
-            System.out.println("Indenting current line..." + editor.getPrevLine(editor.getCarrotPosition()));
             Integer depth = getDepthOfBuffer(editor.getPrevLine(editor.getCarrotPosition()));
             String indent = new String(new char[editor.indent_size]).replace("\0", " ");
             if(depth > 0){
@@ -50,7 +48,6 @@ public class IndentCommand implements Command{
         /** For indenting the current highlighted selection **/
         }else if( type == IndentType.INDENT_SELECTION){     
            
-            System.out.println("Indenting selection...");
             
             TextArea ta = editor.getText();
             

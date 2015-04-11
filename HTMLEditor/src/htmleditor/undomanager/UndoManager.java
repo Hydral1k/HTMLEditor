@@ -56,7 +56,6 @@ public class UndoManager {
     public void undo() {
         //If undoStack is empty, no undo operation can be performed.
         if (this.undoStack.isEmpty()){
-            System.out.println("No more commands to undo!") ;
             return ;
         }
         
@@ -82,7 +81,6 @@ public class UndoManager {
     public void redo() {
         //If redoStack is empty, do nothing.
         if (this.redoStack.isEmpty()){
-            System.out.println("No more commands to redo!") ;
             //Redo stack is empty.
             return ;
         }

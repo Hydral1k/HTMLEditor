@@ -35,7 +35,6 @@ public class Folder {
     }
     
     public boolean foldLine(Integer lineNumber){
-        System.out.println(folderMap.size() + " items in folderman\n" + tagPositions.size() + " positions");
         if(folderMap.containsKey(lineNumber))
             return unfold(lineNumber);
         else{
@@ -57,12 +56,10 @@ public class Folder {
         
     }
     public boolean addToFolder(int lineNumber){
-        System.out.println("folding line " + lineNumber);
         TagTuple foundTag = findFirstTag(lineNumber);
         if(foundTag.getTag().isEmpty()){
             return false;
         }
-        System.out.println(foundTag.getTag() + " is at index " + foundTag.getTagStart() + " until " + foundTag.getTagEnd());
         String thisText = HTMLEditor.getInstance().getText().getText();
         HTMLComposite thisTagComp = createCompositeRecursive(thisText.substring(foundTag.getTagEnd()+1), foundTag.getTag());
         if(thisTagComp.getCloser().isEmpty())
@@ -70,13 +67,11 @@ public class Folder {
         HTMLTag thisTag = new HTMLTag(foundTag.getTag());
         thisTag.setCloseTag(thisTagComp.getCloser());
         thisTag.add(thisTagComp);
-        System.out.println(thisTag.getHTML());
         thisText = thisText.substring(0, foundTag.getTagStart()) + foundTag.getTag() + thisText.substring(foundTag.getTagStart()+thisTag.getHTML().length());
         HTMLEditor.getInstance().getText().setText(thisText);
         thisTag.collapseToggle();
         folderMap.put(lineNumber, thisTag );
         tagPositions.put(thisTag, foundTag.getTagStart());
-        System.out.println("the HTMLTag html is:\n" + thisTag.getHTML());
         return true;
     }
     
@@ -154,9 +149,8 @@ public class Folder {
                     }
                     break;
                 case INBRACKET: //inside tag brackets. **if no close is found, convert to HTMLText
-                    //should also check for tag inside tag
                     if(i > buffer.length()){
-                        state = EXIT; //write out tag!
+                        state = EXIT; //write out tag?
                         break; 
                     }
                     else if(buffer.charAt(i) == '/'){
@@ -210,7 +204,6 @@ public class Folder {
                             thisComposite.add(newTag);
                         }
                         else{
-                            System.out.println("new composite had no return tag");
                             thisComposite.add(newComposite);//new HTMLText(tempTag));
                             i += newComposite.getHTML().length();
                             //i--;
@@ -233,13 +226,17 @@ public class Folder {
     
     private boolean tagMatches(String tag1, String tag2){
         /*still needs to strip whitespace, check for special html cases */
-        //System.out.printf("original strings are %s and %s\n", tag1, tag2);
         tag1 = tag1.replace("<", "");
         tag1 = tag1.replace(">", "");
         tag2 = tag2.replace("</", "");
         tag2 = tag2.replace(">", "");
+        tag1 = tag1.replace(" ", "");
+        tag2 = tag2.replace(" ", "");
         
-        //System.out.printf("Checking if %s matches %s\n", tag1, tag2);
+        if(tag1.charAt(0) == 'a'){
+            tag1 = "a";
+        }
+        
         return tag1.equals(tag2);
     }    
 }
@@ -266,7 +263,5 @@ class TagTuple{
     public int getTagEnd() {
         return tagEnd;
     }
-
-    
     
 }
