@@ -6,6 +6,8 @@ import java.util.ArrayList;
  *
  * @author jlt8213
  * represents a tag object - composite object in composite pattern
+ * this class is a Decorator for the HTMLComposite class, in that it uses most of
+ * the same functionality but adds opening and closing in on top of it
  */
 public class HTMLTag extends HTMLComposite{
 

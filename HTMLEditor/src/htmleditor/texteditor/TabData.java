@@ -1,13 +1,12 @@
 /*
  * Stores data about each tab
- * This can be very useful! Would've made things easier if I'd thought of it earlier
+ * Includes, folder (folding data), editor settings, and undo manager
  */
 package htmleditor.texteditor;
 
 import htmleditor.HTMLEditor;
 import htmleditor.outline.Folder;
 import htmleditor.undomanager.UndoManager;
-import javafx.scene.control.Tab;
 
 /**
  *

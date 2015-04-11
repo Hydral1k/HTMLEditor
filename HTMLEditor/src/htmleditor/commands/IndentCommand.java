@@ -3,10 +3,7 @@ package htmleditor.commands;
 
 import htmleditor.HTMLEditor;
 import htmleditor.texteditor.IndentType;
-import java.util.ArrayList;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 
 /**

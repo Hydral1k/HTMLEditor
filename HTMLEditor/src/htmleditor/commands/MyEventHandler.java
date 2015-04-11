@@ -4,7 +4,6 @@
  */
 package htmleditor.commands;
 
-import htmleditor.commands.Command;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 

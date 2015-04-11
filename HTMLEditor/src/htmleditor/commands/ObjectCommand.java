@@ -8,7 +8,11 @@ import htmleditor.outline.HTMLComposite;
 import htmleditor.outline.HTMLTag;
 import htmleditor.outline.HTMLText;
 import htmleditor.outline.StateEnum;
-import static htmleditor.outline.StateEnum.*;
+import static htmleditor.outline.StateEnum.EXIT;
+import static htmleditor.outline.StateEnum.INBRACKET;
+import static htmleditor.outline.StateEnum.INTEXT;
+import static htmleditor.outline.StateEnum.SAVETAG;
+import static htmleditor.outline.StateEnum.SAVETEXT;
 import javafx.event.Event;
 import javafx.scene.control.TextArea;
 

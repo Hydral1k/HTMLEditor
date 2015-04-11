@@ -1,7 +1,6 @@
 
 package htmleditor.commands;
 
-import htmleditor.HTMLAnalyzer;
 import htmleditor.HTMLEditor;
 import java.util.Scanner;
 import javafx.event.Event;

@@ -1,3 +1,9 @@
+/*
+Any component of the HTML Composite object that is created when objectifying
+the HTMLBuffer or a single tag for folding. The interface includes child functions
+for continuity and anonymity when referring to objects, but leaf nodes will only
+return null if these are accessed.
+*/
 package htmleditor.outline;
 
 /**

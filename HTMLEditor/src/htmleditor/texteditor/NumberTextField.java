@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+Used to decorate a text field in a way that only allows numbers to be entered,
+for the table creation scene (prevents having to pop up warnings and what not)
+*/
 package htmleditor.texteditor;
 
 import javafx.scene.control.TextField;

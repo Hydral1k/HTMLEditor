@@ -1,3 +1,8 @@
+/*
+ * HTMLText by Jordan Tice
+ * Represents a composite pattern leaf node for objectifying a tag in a buffer
+ * Contains child functions for consistency, but only raises errors when accessed
+*/
 package htmleditor.outline;
 
 /**
@@ -11,7 +16,6 @@ public class HTMLText implements HTMLComponent {
     public HTMLText(String text) {
         this.text = text;
     }
-    
 
     @Override
     public void add(HTMLComponent htmlComponent) {

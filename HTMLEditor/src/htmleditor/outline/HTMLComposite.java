@@ -1,3 +1,8 @@
+/*
+HTMLComposite by Jordan Tice
+Used to represent a buffer as a composite object, this class consists of 
+zero to many HTML objects, such as tags, text, etc.
+*/
 package htmleditor.outline;
 
 import java.util.ArrayList;

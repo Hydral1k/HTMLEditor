@@ -1,8 +1,11 @@
 package htmleditor.outline;
 
 import htmleditor.HTMLEditor;
-import static htmleditor.outline.StateEnum.*;
-import java.util.Collection;
+import static htmleditor.outline.StateEnum.EXIT;
+import static htmleditor.outline.StateEnum.INBRACKET;
+import static htmleditor.outline.StateEnum.INTEXT;
+import static htmleditor.outline.StateEnum.SAVETAG;
+import static htmleditor.outline.StateEnum.SAVETEXT;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.TextArea;

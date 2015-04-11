@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * StateEnum by Jordan Tice
+ * Used to represent which state the finite state machine is in while it
+ * parses a buffer for tag folding
  */
 package htmleditor.outline;
 

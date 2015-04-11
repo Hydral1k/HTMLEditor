@@ -5,7 +5,6 @@ import htmleditor.builders.Builder;
 import htmleditor.commands.CopyCommand;
 import htmleditor.commands.CutCommand;
 import htmleditor.commands.MyEventHandler;
-import htmleditor.commands.ObjectCommand;
 import htmleditor.commands.PasteCommand;
 import htmleditor.commands.RedoCommand;
 import htmleditor.commands.UndoCommand;

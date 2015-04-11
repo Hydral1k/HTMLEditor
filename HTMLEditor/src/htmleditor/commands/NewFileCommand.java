@@ -3,29 +3,15 @@
  */
 package htmleditor.commands;
 
-import htmleditor.HTMLAnalyzer;
-import htmleditor.texteditor.CloseListener;
 import htmleditor.HTMLEditor;
 import htmleditor.builders.texteditorbuilders.LineNumbersBuilder;
 import htmleditor.builders.texteditorbuilders.TextAreaBuilder;
+import htmleditor.texteditor.CloseListener;
 import htmleditor.texteditor.TabData;
-import java.util.Scanner;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 
 /**
  *
