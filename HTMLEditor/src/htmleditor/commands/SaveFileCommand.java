@@ -28,6 +28,7 @@ public class SaveFileCommand implements Command {
     
     public void execute(Event t){
         String fileName = editor.getFileName();
+        editor.getTabData().getFolder().unfoldAll();
         if (fileName.equals("Untitled")){
             SaveAsCommand saveAs = new SaveAsCommand(editor) ;
             saveAs.execute(t) ; //If a file has not been saved yet, the user will be prompted to save a new file.

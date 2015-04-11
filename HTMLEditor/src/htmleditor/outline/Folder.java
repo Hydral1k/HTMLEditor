@@ -8,6 +8,7 @@ import static htmleditor.outline.StateEnum.SAVETAG;
 import static htmleditor.outline.StateEnum.SAVETEXT;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javafx.scene.control.TextArea;
 
 /**
@@ -54,6 +55,17 @@ public class Folder {
         tagPositions.remove(unfoldTag);
         return true;
         
+    }
+    public void unfoldAll(){
+        
+        while(!folderMap.isEmpty()){
+            
+            Set keys = folderMap.keySet();
+            Object[] keyArray = keys.toArray();
+            System.out.println("unfolding line " + (Integer)keyArray[0]);
+            unfold((Integer)keyArray[0]);
+            
+        }
     }
     public boolean addToFolder(int lineNumber){
         TagTuple foundTag = findFirstTag(lineNumber);

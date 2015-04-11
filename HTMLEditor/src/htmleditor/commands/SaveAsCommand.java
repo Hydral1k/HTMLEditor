@@ -28,6 +28,7 @@ public class SaveAsCommand implements Command {
     
     public void execute(Event t){
         String htmlText = this.editor.getBuffer();
+        editor.getTabData().getFolder().unfoldAll();
         // Check whether the buffer is well formed.
         int result;
         if( !analyzer.wellFormed(htmlText) ){
