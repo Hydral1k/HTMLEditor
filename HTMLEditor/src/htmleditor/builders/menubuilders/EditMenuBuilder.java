@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package htmleditor.builders.menubuilders;
 
 import htmleditor.HTMLEditor;
@@ -64,11 +59,6 @@ public class EditMenuBuilder implements Builder {
         redoItem.setOnAction(new MyEventHandler(new RedoCommand(editor))) ;
         this.menu.getItems().add(redoItem) ;
 
-        //Objectify ** TEMPORARY **
-        MenuItem objectItem = new MenuItem("Objectify") ;
-        objectItem.setAccelerator(new KeyCodeCombination(KeyCode.J, KeyCombination.CONTROL_DOWN)) ;
-        objectItem.setOnAction(new MyEventHandler(new ObjectCommand(editor))) ;
-        this.menu.getItems().add(objectItem) ;
     }
     
     

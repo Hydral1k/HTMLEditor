@@ -6,7 +6,6 @@
 package htmleditor.builders;
 
 import htmleditor.HTMLEditor;
-import javafx.scene.control.Menu;
 
 /**
  *
