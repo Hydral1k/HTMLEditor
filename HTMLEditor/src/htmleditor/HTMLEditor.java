@@ -13,45 +13,29 @@ package htmleditor;
 
 
 import htmleditor.builders.menubuilders.MenuBuilder;
-import htmleditor.commands.MyEventHandler;
-import htmleditor.texteditor.CloseListener;
 import htmleditor.commands.*;
+import htmleditor.texteditor.CloseListener;
 import htmleditor.texteditor.TabData;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import javafx.stage.*;
-import javafx.scene.Group;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 // Main class
 public class HTMLEditor extends Application {
@@ -126,6 +110,7 @@ public class HTMLEditor extends Application {
         for (int i = 1; i <= 8; i++) {
             final MenuItem indentTypeNumbers = new MenuItem(i + " Spaces"); 
             indentTypeNumbers.setOnAction(new EventHandler<ActionEvent>(){
+                @Override
                 public void handle(ActionEvent t){
                     int width = Integer.parseInt(indentTypeNumbers.getText().substring(0,1)); // because js is cooler
                     indentMenu.setText("Auto Indent (On: " + width + " Spaces)");
@@ -160,22 +145,6 @@ public class HTMLEditor extends Application {
         }
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
   
-        /*
-        this.tabPane.getSelectionModel().selectedItemProperty().
-                addListener(
-            new ChangeListener<Tab>() {
-                @Override
-                public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                    TextArea ta = HTMLEditor.getInstance().getText();
-                    MenuItem wrapMenu = HTMLEditor.getInstance().wrapText;
-                    if(ta.isWrapText())
-                        wrapMenu.setText("Wrap Text (On)");
-                    else{
-                        wrapMenu.setText("Wrap Text (Off)");
-                    }
-                }
-            }
-        );*/
         this.linkView = new LinkViewPane( this, LinkViewPane.IN_ORDER );
         
         this.canvas.setTop(this.menuBar);
@@ -469,7 +438,8 @@ public class HTMLEditor extends Application {
         
         // user can still name the file "Untitled"
         /*
-        if(tab.getText().equals("Untitled") && !thisTA.getText().equals("")){
+        if(tab.getText().r.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, "bufferedReader was never instantiated.", ex);
+            }equals("Untitled") && !thisTA.getText().equals("")){
             changedText = true;
         }*/
         String newText = thisTA.getText();
@@ -491,9 +461,12 @@ public class HTMLEditor extends Application {
         } finally {
             try {
                 bufferedReader.close();
-            } catch (IOException | NullPointerException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(HTMLEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch( NullPointerException ex){
+                //file is new, hasn't been saved yet anyway
             }
+          
         }
         String oldText = stringBuffer.toString();
         if(!oldText.equals(newText))
